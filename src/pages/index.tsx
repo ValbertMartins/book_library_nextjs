@@ -1,3 +1,5 @@
+import BookList from "@/components"
+
 export default function Home() {
   return (
     <main className="bg-primary-color p-8">
@@ -19,7 +21,7 @@ export default function Home() {
         <div className="bg-white rounded-sm px-2 ">Alunos cadastrados</div>
       </section>
 
-      <section className="bg-white">all books</section>
+      <BookList />
     </main>
   )
 }
