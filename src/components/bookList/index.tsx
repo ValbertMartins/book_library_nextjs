@@ -19,7 +19,9 @@ const BookList = ({ bookList }: Props) => {
               />
             </div>
             <p className="font-bold px-1 pt-1">{book.name}</p>
-            <p className="px-1 text-xs text-zinc-400">Quantidade: {book.quantity_available}</p>
+            <p className="px-1 text-xs text-slate-400">
+              Quantidade: {book.quantity_available}
+            </p>
           </div>
         ))}
       </div>
