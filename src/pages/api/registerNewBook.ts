@@ -3,7 +3,9 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-export async function registerNewBook(req: NextApiRequest, res: NextApiResponse) {
+export default async function registerNewBook(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") return res.status(400).json({ message: "invalid request" })
+
   const { name, quantity_available } = req.body
 
   if (!name || typeof name !== "string")
