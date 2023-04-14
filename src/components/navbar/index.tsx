@@ -1,6 +1,13 @@
-import { MdPersonAdd, MdDashboard, MdBookmarkAdd, MdPersonSearch } from "react-icons/md"
+import {
+  MdPersonAdd,
+  MdDashboard,
+  MdBookmarkAdd,
+  MdPersonSearch,
+  MdPersonAddAlt1,
+} from "react-icons/md"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useState } from "react"
 
 const menuItens = [
   {
@@ -14,7 +21,7 @@ const menuItens = [
   },
 
   {
-    path: "/registerStudent",
+    path: "/registerBook",
     icon: (color: string) => (
       <MdBookmarkAdd
         className={`${color} hover:text-cyan-500 transition-colors`}
@@ -26,27 +33,31 @@ const menuItens = [
     path: "/listStudents",
     icon: (color: string) => (
       <MdPersonSearch
-        className={`${color} hover:text-cyan-500 transition-colors`}
+        className={`${color} hover:text-cyan-500 transition-colors ml-1`}
         size={30}
       />
     ),
   },
   {
-    path: "/registerBook",
+    path: "/registerStudent",
     icon: (color: string) => (
-      <MdPersonAdd
-        className={`${color} hover:text-cyan-500 transition-colors`}
+      <MdPersonAddAlt1
+        className={`${color} hover:text-cyan-500 transition-colors ml-1`}
         size={30}
       />
     ),
   },
 ]
 
-const Navbar = () => {
+const Navbar = ({ openNavbarMobile }: { openNavbarMobile?: boolean }) => {
   const { pathname } = useRouter()
 
   return (
-    <section className="p-6 flex flex-col gap-5">
+    <section
+      className={`bg-white fixed h-screen ${
+        openNavbarMobile ? "translate-x-0" : "-translate-x-10"
+      }  md:relative md:translate-x-0 opacity-100 md:opacity-100 transition-all flex px-2 lg:px-6 flex-col gap-5 pt-10`}
+    >
       {menuItens.map(menuItem => (
         <Link
           href={menuItem.path}
@@ -58,6 +69,7 @@ const Navbar = () => {
         </Link>
       ))}
     </section>
+    // {openNavbarMobile && <div className="bg-black/30 flex-1 md:hidden " />}
   )
 }
 

@@ -14,6 +14,9 @@ module.exports = {
       backgroundColor: {
         "primary-color": "rgba(250,250,250,255)",
       },
+      maxWidth: {
+        xxs: "240px",
+      },
     },
   },
   plugins: [],

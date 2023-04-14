@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar"
 import "@/styles/globals.css"
 import type { AppProps } from "next/app"
 import { Inter } from "next/font/google"
@@ -14,7 +15,12 @@ export default function App({ Component, pageProps }: AppProps) {
           font-family: ${inter.style.fontFamily};
         }
       `}</style>
-      <Component {...pageProps} />
+
+      <main className="flex">
+        <Navbar />
+
+        <Component {...pageProps} />
+      </main>
     </>
   )
 }

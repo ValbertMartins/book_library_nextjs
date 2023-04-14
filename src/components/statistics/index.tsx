@@ -2,7 +2,7 @@ import React from "react"
 import { MdMenuBook, MdPerson, MdBook } from "react-icons/md"
 const Statistics = () => {
   return (
-    <section className="grid grid-cols-2 my-10 gap-6 ">
+    <section className="grid grid-cols-2 lg:grid-cols-3 my-10 gap-6 ">
       <div className="bg-white rounded-lg px-2 flex items-center py-3 cursor-pointer">
         <div className="bg-cyan-500 rounded-full p-3 mx-2">
           <MdPerson
