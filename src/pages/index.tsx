@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const prisma = new PrismaClient()
 
   const bookList = await prisma.book.findMany()
-  console.log(bookList)
+
   return {
     props: {
       bookList,

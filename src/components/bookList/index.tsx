@@ -1,4 +1,5 @@
 import { Book } from "@/interfaces"
+import Link from "next/link"
 
 interface Props {
   bookList: Book[]
@@ -10,7 +11,10 @@ const BookList = ({ bookList }: Props) => {
       <p className="font-bold mx-3 mt-4 text-xl ">All books</p>
       <div className="mx-4 py-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  xl:grid-cols-5 gap-8 lg:gap-20">
         {bookList.map(book => (
-          <div key={book.id}>
+          <Link
+            href={`book/${book.id}`}
+            key={book.id}
+          >
             <div className="rounded-xl overflow-hidden flex max-w-xxs">
               <img
                 className="object-cover w-full"
@@ -22,7 +26,7 @@ const BookList = ({ bookList }: Props) => {
             <p className="px-1 text-xs text-slate-400">
               Quantidade: {book.quantity_available}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

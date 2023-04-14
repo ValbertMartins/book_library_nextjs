@@ -11,29 +11,31 @@ datasource db {
 }
 
 model Student {
-  id              String            @id @default(uuid())
+  id              String          @id @default(uuid())
   name            String
   class_age       Int
   class_letter    String
-  studentWithBook StudentWithBook[]
+  studentWithBook BookOnStudent[]
 
   @@map("students")
 }
 
 model Book {
-  id                 String            @id @default(uuid())
+  id                 String          @id @default(uuid())
   name               String
   quantity_available Int
-  studentWithBook    StudentWithBook[]
+  studentWithBook    BookOnStudent[]
 
   @@map("books")
 }
 
-model StudentWithBook {
+model BookOnStudent {
   id String @id @default(uuid())
 
   book      Book    @relation(fields: [bookId], references: [id])
   bookId    String
   student   Student @relation(fields: [studentId], references: [id])
   studentId String
+
+  @@map("booksOnStudent")
 }
