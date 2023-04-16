@@ -2,16 +2,26 @@ import { PrismaClient } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next"
 const prisma = new PrismaClient()
 export default async function registerNewStudent(req: NextApiRequest, res: NextApiResponse) {
-  await prisma.student.create({
-    data: {
-      name: "Michael Jackson",
-      gender: "F",
-      class_age: 3,
-      class_letter: "B",
-    },
-  })
-  const listStudent = await prisma.student.findMany()
-  res.revalidate("/listStudents")
+  if (req.method !== "POST") return res.status(400).json({ message: "invalid request" })
 
-  return res.status(200).json({ message: listStudent })
+  try {
+    await prisma.student.create({
+      data: {
+        name: "Biro Biro",
+        gender: "F",
+        class_age: 3,
+        class_letter: "B",
+      },
+    })
+    const listStudent = await prisma.student.findMany()
+    res.revalidate("/listStudents")
+    return res.status(200).json({ listStudent })
+  } catch (error) {
+    return res.status(400).json({
+      error: {
+        message: "erro, tente novamente",
+        status: 400,
+      },
+    })
+  }
 }

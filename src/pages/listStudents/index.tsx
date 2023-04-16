@@ -1,32 +1,33 @@
-import { GetServerSideProps, GetStaticProps } from "next"
+import { GetStaticProps } from "next"
 import { PrismaClient } from "@prisma/client"
 import { Student } from "@/interfaces"
 import Table from "@/components/table"
 import Button from "antd/lib/button"
-import { MdPersonAddAlt1 } from "react-icons/md"
 import { useState } from "react"
+import axios from "axios"
+import ErrorMessage from "@/components/errorMessage"
+import Modal from "antd/lib/modal"
+import Input from "antd/lib/input"
+import Select from "antd/lib/select"
+import RegisterStudent from "@/components/registerStudent"
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
 
-  let allStudents
   try {
-    const students = await prisma.student.findMany()
-    allStudents = students
-  } catch (error) {
-    console.log(error)
-  }
-
-  if (allStudents) {
+    const allStudents = await prisma.student.findMany()
     return {
       props: {
         allStudents,
       },
     }
-  } else {
+  } catch (error) {
     return {
       props: {
-        allStudents,
+        apiError: {
+          message: "Falha ao listar estudantes",
+          status: 500,
+        },
       },
     }
   }
@@ -34,37 +35,25 @@ export const getStaticProps: GetStaticProps = async () => {
 
 interface Props {
   allStudents: Student[]
+  apiError?: any
 }
 
-const ListStudents = ({ allStudents }: Props) => {
+const ListStudents = ({ allStudents, apiError }: Props) => {
   const [studentList, setStudentList] = useState(allStudents)
-
-  async function registerNewStudent() {
-    const response = await fetch("/api/registerNewStudent")
-    const data = await response.json()
-    setStudentList(data.message)
-  }
+  const [error, setError] = useState(false)
 
   return (
     <section className="p-8 flex-1 ">
       <div className="bg-white p-4 rounded-xl">
         <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
-        <div className="">
-          <Button
-            type="primary"
-            className="mb-4 mt-8 flex items-center justify-around"
-            onClick={registerNewStudent}
-          >
-            Cadastrar estudante
-            <MdPersonAddAlt1
-              size={20}
-              className="ml-2"
-            />
-          </Button>
-        </div>
+        <RegisterStudent />
 
-        <Table sourceData={studentList} />
+        {apiError ? (
+          <ErrorMessage message="Erro ao listar estudantes" />
+        ) : (
+          <Table sourceData={studentList} />
+        )}
       </div>
     </section>
   )
