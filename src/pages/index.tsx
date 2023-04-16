@@ -1,5 +1,4 @@
 import BookList from "@/components/bookList"
-import Navbar from "@/components/navbar"
 import Statistics from "@/components/statistics"
 import { Book } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
@@ -26,7 +25,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
 export default function Home({
   bookList,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [openNavbarMobile, setOpenNavbarMobile] = useState(false)
   return (
     <section className="bg-primary-color p-8">
       <header className="flex items-center justify-between">
@@ -43,8 +41,6 @@ export default function Home({
             className=" py-1 px-3 outline-none border-none placeholder:text-sm"
           />
         </div>
-
-        {/* <button onClick={() => setOpenNavbarMobile(prevState => !prevState)}>x</button> */}
       </header>
 
       <Statistics />

@@ -9,4 +9,5 @@ export interface Student {
   name: string
   class_letter: string
   class_age: number
+  gender: "F" | "M"
 }
