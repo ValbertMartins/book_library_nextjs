@@ -38,15 +38,6 @@ const menuItens = [
       />
     ),
   },
-  {
-    path: "/registerStudent",
-    icon: (color: string) => (
-      <MdPersonAddAlt1
-        className={`${color} hover:text-cyan-500 transition-colors ml-1`}
-        size={30}
-      />
-    ),
-  },
 ]
 
 const Navbar = ({ openNavbarMobile }: { openNavbarMobile?: boolean }) => {

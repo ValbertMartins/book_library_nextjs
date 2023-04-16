@@ -15,6 +15,7 @@ model Student {
   name            String
   class_age       Int
   class_letter    String
+  gender          String
   studentWithBook BookOnStudent[]
 
   @@map("students")
