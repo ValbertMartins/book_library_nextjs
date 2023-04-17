@@ -47,7 +47,7 @@ const ListStudents = ({ allStudents, apiError }: Props) => {
       <div className="bg-white p-4 rounded-xl">
         <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
-        <RegisterStudent />
+        <RegisterStudent setStudentList={setStudentList} />
 
         {apiError ? (
           <ErrorMessage message="Erro ao listar estudantes" />

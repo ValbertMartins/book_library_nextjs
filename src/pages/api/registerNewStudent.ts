@@ -7,9 +7,9 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
   try {
     await prisma.student.create({
       data: {
-        name: "Biro Biro",
-        gender: "F",
-        class_age: 3,
+        name: "Joe Biden",
+        gender: "M",
+        class_age: 1,
         class_letter: "B",
       },
     })
