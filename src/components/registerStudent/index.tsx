@@ -4,6 +4,7 @@ import axios from "axios"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import RegisterStudentForm from "../forms/registerStudent"
+import { useForm } from "react-hook-form"
 
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -11,6 +12,7 @@ interface Props {
 
 const RegisterStudent = ({ setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
+  const { register, handleSubmit } = useForm()
 
   async function registerNewStudent(name: string) {
     try {
@@ -21,7 +23,6 @@ const RegisterStudent = ({ setStudentList }: Props) => {
     } finally {
     }
   }
-
   return (
     <div>
       <Button
@@ -36,11 +37,13 @@ const RegisterStudent = ({ setStudentList }: Props) => {
         title={<h1 className="font-bold text-xl">Cadastrar estudante</h1>}
         open={openModal}
         onCancel={() => setOpenModal(false)}
-        okText="Salvar"
         cancelText="Cancelar"
-        onOk={() => registerNewStudent("2")}
+        footer={null}
       >
-        <RegisterStudentForm />
+        <RegisterStudentForm
+          register={register}
+          handleSubmit={handleSubmit}
+        />
       </ModalAntd>
     </div>
   )

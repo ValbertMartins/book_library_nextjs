@@ -4,7 +4,6 @@ import { Book } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import { MdSearch } from "react-icons/md"
-import { useState } from "react"
 
 interface Props {
   bookList: Book[]
@@ -28,7 +27,7 @@ export default function Home({
   return (
     <section className="bg-primary-color p-8">
       <header className="flex items-center justify-between">
-        <div className="text-2xl font-bold">Dashboard</div>
+        <div className="text-2xl font-bold">Biblioteca</div>
 
         <div className="flex items-center bg-white pl-3 rounded-lg py-1">
           <MdSearch
