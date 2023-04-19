@@ -6,23 +6,45 @@ import Button from "antd/lib/button"
 import { Student, ErrorApi } from "@/interfaces"
 import { Dispatch, SetStateAction } from "react"
 import { registerNewStudent } from "@/utils/handlerStudent"
+import { useForm } from "antd/lib/form/Form"
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>
   loading: boolean
   setStudentList: Dispatch<SetStateAction<Student[]>>
   setError: Dispatch<SetStateAction<ErrorApi | null>>
+  setOpenModal: Dispatch<SetStateAction<boolean>>
 }
 
-const RegisterStudentForm = ({ loading, setLoading, setStudentList, setError }: Props) => {
+const RegisterStudentForm = ({
+  loading,
+  setLoading,
+  setStudentList,
+  setError,
+  setOpenModal,
+}: Props) => {
+  const [form] = useForm()
+
+  async function handleSubmit(studentData: Omit<Student, "id">) {
+    const { ok, studentListUpdated } = await registerNewStudent(studentData, {
+      setLoading,
+      setError,
+    })
+
+    if (ok && studentListUpdated) {
+      setStudentList(studentListUpdated)
+      form.resetFields()
+      setOpenModal(false)
+    }
+  }
+
   return (
     <div>
       <Form
+        form={form}
         className="mt-10 flex flex-col"
         autoComplete="off"
-        onFinish={(studentData: Omit<Student, "id">) =>
-          registerNewStudent(studentData, { setLoading, setError, setStudentList })
-        }
+        onFinish={handleSubmit}
       >
         <Form.Item
           name="name"

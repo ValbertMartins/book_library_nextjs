@@ -10,7 +10,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
     name: z.string(),
     gender: z.string().length(1).toUpperCase(),
     grade: z.number(),
-    class: z.string().length(1).toUpperCase(),
+    class: z.string().toUpperCase(),
   })
 
   try {
@@ -30,7 +30,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
   } catch (error) {
     return res.status(500).json({
       error: {
-        message: "erro ao cadastar estudante, tente novamente",
+        message: "Erro ao cadastar estudante, tente novamente",
         status: 500,
       },
     })

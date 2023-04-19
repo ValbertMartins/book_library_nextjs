@@ -1,11 +1,9 @@
 import Button from "antd/lib/button"
 import React, { Dispatch, SetStateAction, useState } from "react"
-import axios, { AxiosError } from "axios"
 import { ErrorApi, Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import RegisterStudentForm from "../forms/registerStudent"
 import ErrorMessage from "../errorMessage"
-import { registerNewStudent } from "@/utils/handlerStudent"
 
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -38,6 +36,7 @@ const RegisterStudent = ({ setStudentList }: Props) => {
           loading={loading}
           setStudentList={setStudentList}
           setError={setError}
+          setOpenModal={setOpenModal}
         />
 
         {error && <ErrorMessage message={error.message} />}
