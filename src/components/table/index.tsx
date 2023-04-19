@@ -11,13 +11,13 @@ const Table = ({ sourceData }: Props) => {
           <p className="ml-4 my-4 font-bold">Nome</p>
         </div>
         <div className=" bg-primary-color">
-          <p className="ml-4 my-4 font-bold">Classe</p>
-        </div>
-        <div className=" bg-primary-color">
-          <p className="ml-4 my-4 font-bold">Ano</p>
-        </div>
-        <div className=" bg-primary-color">
           <p className="ml-4 my-4 font-bold">Gênero</p>
+        </div>
+        <div className=" bg-primary-color">
+          <p className="ml-4 my-4 font-bold">Série</p>
+        </div>
+        <div className=" bg-primary-color">
+          <p className="ml-4 my-4 font-bold">Turma</p>
         </div>
       </div>
 
@@ -30,10 +30,10 @@ const Table = ({ sourceData }: Props) => {
             <p className="my-4 ml-4">{student.name}</p>
           </div>
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
-            <p className="my-4 ml-4">{student.class_letter}</p>
+            <p className="my-4 ml-4">{student.class}</p>
           </div>
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
-            <p className="my-4 ml-4">{student.class_age}</p>
+            <p className="my-4 ml-4">{student.grade}</p>
           </div>
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
             <p className="my-4 ml-4">{student.gender}</p>

@@ -13,8 +13,8 @@ datasource db {
 model Student {
   id              String          @id @default(uuid())
   name            String
-  class_age       Int
-  class_letter    String
+  grade           Int
+  class           String
   gender          String
   studentWithBook BookOnStudent[]
 

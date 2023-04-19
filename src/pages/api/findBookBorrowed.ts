@@ -21,8 +21,8 @@ export default async function findBookBorrowed(req: NextApiRequest, res: NextApi
       student: {
         select: {
           name: true,
-          class_letter: true,
-          class_age: true,
+          class: true,
+          grade: true,
         },
       },
       book: {

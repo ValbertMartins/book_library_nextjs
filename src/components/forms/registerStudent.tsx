@@ -3,21 +3,26 @@ import InputNumber from "antd/lib/input-number"
 import Select from "antd/lib/select"
 import Form from "antd/lib/form"
 import Button from "antd/lib/button"
-
-import { FieldValues, UseFormHandleSubmit, UseFormRegister } from "react-hook-form"
+import { Student, ErrorApi } from "@/interfaces"
+import { Dispatch, SetStateAction } from "react"
+import { registerNewStudent } from "@/utils/handlerStudent"
 
 interface Props {
-  register: UseFormRegister<FieldValues>
-  handleSubmit: UseFormHandleSubmit<FieldValues>
+  setLoading: Dispatch<SetStateAction<boolean>>
+  loading: boolean
+  setStudentList: Dispatch<SetStateAction<Student[]>>
+  setError: Dispatch<SetStateAction<ErrorApi | null>>
 }
 
-const RegisterStudentForm = ({ register, handleSubmit }: Props) => {
+const RegisterStudentForm = ({ loading, setLoading, setStudentList, setError }: Props) => {
   return (
     <div>
       <Form
         className="mt-10 flex flex-col"
         autoComplete="off"
-        onFinish={(values: any) => console.log(values)}
+        onFinish={(studentData: Omit<Student, "id">) =>
+          registerNewStudent(studentData, { setLoading, setError, setStudentList })
+        }
       >
         <Form.Item
           name="name"
@@ -40,7 +45,7 @@ const RegisterStudentForm = ({ register, handleSubmit }: Props) => {
 
         <div className="flex justify-between">
           <Form.Item
-            name="class_age"
+            name="grade"
             rules={[{ required: true, message: "Este campo é obrigatório." }]}
           >
             <InputNumber
@@ -52,7 +57,7 @@ const RegisterStudentForm = ({ register, handleSubmit }: Props) => {
           </Form.Item>
 
           <Form.Item
-            name="class_letter"
+            name="class"
             rules={[{ required: true, message: "Este campo é obrigatório." }]}
           >
             <Input placeholder="Turma" />
@@ -63,6 +68,7 @@ const RegisterStudentForm = ({ register, handleSubmit }: Props) => {
               className="w-full"
               type="primary"
               htmlType="submit"
+              loading={loading}
             >
               Salvar
             </Button>

@@ -1,10 +1,11 @@
 import Button from "antd/lib/button"
 import React, { Dispatch, SetStateAction, useState } from "react"
-import axios from "axios"
-import { Student } from "@/interfaces"
+import axios, { AxiosError } from "axios"
+import { ErrorApi, Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import RegisterStudentForm from "../forms/registerStudent"
-import { useForm } from "react-hook-form"
+import ErrorMessage from "../errorMessage"
+import { registerNewStudent } from "@/utils/handlerStudent"
 
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -12,17 +13,9 @@ interface Props {
 
 const RegisterStudent = ({ setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
-  const { register, handleSubmit } = useForm()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<null | ErrorApi>(null)
 
-  async function registerNewStudent(name: string) {
-    try {
-      const { data } = await axios.post<{ listStudent: Student[] }>("/api/registerNewStudent")
-      setStudentList(data.listStudent)
-    } catch (error) {
-      // setError(true)
-    } finally {
-    }
-  }
   return (
     <div>
       <Button
@@ -41,9 +34,13 @@ const RegisterStudent = ({ setStudentList }: Props) => {
         footer={null}
       >
         <RegisterStudentForm
-          register={register}
-          handleSubmit={handleSubmit}
+          setLoading={setLoading}
+          loading={loading}
+          setStudentList={setStudentList}
+          setError={setError}
         />
+
+        {error && <ErrorMessage message={error.message} />}
       </ModalAntd>
     </div>
   )

@@ -7,7 +7,12 @@ export interface Book {
 export interface Student {
   id: string
   name: string
-  class_letter: string
-  class_age: number
+  class: string
+  grade: number
   gender: "F" | "M"
+}
+
+export interface ErrorApi {
+  status: number
+  message: string
 }

@@ -12,7 +12,7 @@ export default async function listAllBooks(req: NextApiRequest, res: NextApiResp
     })
   } catch (error) {
     res.status(500).json({
-      erro: {
+      error: {
         status: 500,
         message: "Erro ao carregar página.",
       },
