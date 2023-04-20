@@ -24,9 +24,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
 
     res.revalidate("/listStudents")
 
-    setTimeout(() => {
-      return res.status(200).json({ studentListUpdated })
-    }, 4000)
+    return res.status(200).json({ studentListUpdated })
   } catch (error) {
     return res.status(500).json({
       error: {

@@ -8,7 +8,7 @@ interface Props {
 const BookList = ({ bookList }: Props) => {
   return (
     <section className="bg-white rounded-xl py-2 px-4">
-      <p className="font-bold mx-3 mt-4 text-xl ">All books</p>
+      <p className="font-bold mx-3 mt-4 text-xl ">Todos os livros</p>
       <div className="mx-4 py-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  xl:grid-cols-5 gap-8 lg:gap-20">
         {bookList.map(book => (
           <Link

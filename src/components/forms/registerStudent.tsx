@@ -4,7 +4,7 @@ import Select from "antd/lib/select"
 import Form from "antd/lib/form"
 import Button from "antd/lib/button"
 import { Student, ErrorApi } from "@/interfaces"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { registerNewStudent } from "@/utils/handlerStudent"
 import { useForm } from "antd/lib/form/Form"
 
@@ -23,6 +23,7 @@ const RegisterStudentForm = ({
   setError,
   setOpenModal,
 }: Props) => {
+  const [successMessage, setSucessMessage] = useState<string | null>(null)
   const [form] = useForm()
 
   async function handleSubmit(studentData: Omit<Student, "id">) {
@@ -33,8 +34,13 @@ const RegisterStudentForm = ({
 
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
+      setSucessMessage("Estudante cadastrado com sucesso!")
       form.resetFields()
-      setOpenModal(false)
+
+      setTimeout(() => {
+        setSucessMessage(null)
+        setOpenModal(false)
+      }, 3000)
     }
   }
 
@@ -45,6 +51,7 @@ const RegisterStudentForm = ({
         className="mt-10 flex flex-col"
         autoComplete="off"
         onFinish={handleSubmit}
+        role="form-register-student"
       >
         <Form.Item
           name="name"
@@ -59,13 +66,13 @@ const RegisterStudentForm = ({
           <Select
             placeholder="Sexo"
             options={[
-              { value: "F", label: "Feminino" },
               { value: "M", label: "Masculino" },
+              { value: "F", label: "Feminino" },
             ]}
           />
         </Form.Item>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-2">
           <Form.Item
             name="grade"
             rules={[{ required: true, message: "Este campo é obrigatório." }]}
@@ -85,9 +92,8 @@ const RegisterStudentForm = ({
             <Input placeholder="Turma" />
           </Form.Item>
 
-          <Form.Item className="">
+          <Form.Item>
             <Button
-              className="w-full"
               type="primary"
               htmlType="submit"
               loading={loading}
@@ -97,6 +103,10 @@ const RegisterStudentForm = ({
           </Form.Item>
         </div>
       </Form>
+
+      {successMessage && (
+        <p className="text-blue-500 font-semibold text-md text-end">{successMessage}</p>
+      )}
     </div>
   )
 }

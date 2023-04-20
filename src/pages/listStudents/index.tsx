@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next"
 import { PrismaClient } from "@prisma/client"
-import { Student } from "@/interfaces"
+import { ErrorApi, Student } from "@/interfaces"
 import Table from "@/components/table"
 import Button from "antd/lib/button"
 import { useState } from "react"
@@ -35,12 +35,11 @@ export const getStaticProps: GetStaticProps = async () => {
 
 interface Props {
   allStudents: Student[]
-  apiError?: any
+  apiError?: ErrorApi
 }
 
 const ListStudents = ({ allStudents, apiError }: Props) => {
   const [studentList, setStudentList] = useState(allStudents)
-  const [error, setError] = useState(false)
 
   return (
     <section className="p-8 flex-1 ">
