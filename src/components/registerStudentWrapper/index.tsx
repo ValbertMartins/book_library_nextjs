@@ -2,7 +2,7 @@ import Button from "antd/lib/button"
 import React, { Dispatch, SetStateAction, useState } from "react"
 import { ErrorApi, Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
-import RegisterStudentForm from "../forms/Student"
+import StudentForm from "../forms/Student"
 import ErrorMessage from "../errorMessage"
 import { registerNewStudent } from "@/utils/handlerStudent"
 import { useForm } from "antd/lib/form/Form"
@@ -52,7 +52,7 @@ const RegisterStudent = ({ setStudentList }: Props) => {
         cancelText="Cancelar"
         footer={null}
       >
-        <RegisterStudentForm
+        <StudentForm
           loading={loading}
           handleSubmitForm={handleSubmitForm}
           formRef={formRef}

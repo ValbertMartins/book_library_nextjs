@@ -48,6 +48,7 @@ const Table = ({ sourceData, setStudentList }: Props) => {
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
             <p className="my-4 ml-4">{student.class}</p>
           </div>
+
           <div className=" bg-white mb-[1px] group-hover:bg-primary-color flex items-center gap-3 px-4">
             <EditStudentWrapper
               student={student}
@@ -58,7 +59,7 @@ const Table = ({ sourceData, setStudentList }: Props) => {
               title="Excluir"
               color="red"
             >
-              <button className="bg-white">
+              <button>
                 <MdDelete
                   size={25}
                   className="text-red-500"

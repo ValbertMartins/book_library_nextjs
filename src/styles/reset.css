@@ -219,6 +219,10 @@ button,
   background-image: none; /* 2 */
 }
 
+button {
+  background-color: transparent;
+}
+
 /*
 Use the modern Firefox focus style for all focusable elements.
 */
