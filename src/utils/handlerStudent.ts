@@ -33,3 +33,5 @@ export async function registerNewStudent(studentData: Omit<Student, "id">, state
     state.setLoading(false)
   }
 }
+
+export async function updateStudentInfo() {}

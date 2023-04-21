@@ -16,13 +16,12 @@ const RegisterStudent = ({ setStudentList }: Props) => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        className="mb-4 mt-8 flex items-center justify-around"
+      <button
+        className="mb-4 mt-8 flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-4 py-2 hover:bg-blue-400 transition-all"
         onClick={() => setOpenModal(prevState => !prevState)}
       >
         Cadastrar estudante
-      </Button>
+      </button>
 
       <ModalAntd
         title={<h1 className="font-bold text-xl">Cadastrar estudante</h1>}

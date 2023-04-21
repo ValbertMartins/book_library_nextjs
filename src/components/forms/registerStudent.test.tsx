@@ -33,7 +33,7 @@ describe("Register student form", () => {
     expect(registerStudentForm).toBeInTheDocument()
   })
 
-  it("should able to update input fields when type", async () => {
+  it("should able to update form fields when type & display inputs in screen", async () => {
     render(
       <RegisterStudentForm
         loading={false}

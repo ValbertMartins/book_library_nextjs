@@ -9,9 +9,5 @@ describe("Register student form", () => {
         sourceData={[{ class: "C", gender: "M", grade: 1, name: "jonh", id: "2230230203" }]}
       />
     )
-
-    // const registerStudentForm = screen.getByRole("form-register-student")
-
-    expect(1 + 2).toBe(3)
   })
 })
