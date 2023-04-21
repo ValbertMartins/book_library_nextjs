@@ -2,8 +2,10 @@ import Button from "antd/lib/button"
 import React, { Dispatch, SetStateAction, useState } from "react"
 import { ErrorApi, Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
-import RegisterStudentForm from "../forms/registerStudent"
+import RegisterStudentForm from "../forms/Student"
 import ErrorMessage from "../errorMessage"
+import { registerNewStudent } from "@/utils/handlerStudent"
+import { useForm } from "antd/lib/form/Form"
 
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -13,6 +15,26 @@ const RegisterStudent = ({ setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<null | ErrorApi>(null)
+  const [successMessage, setSucessMessage] = useState<string | null>(null)
+  const [formRef] = useForm()
+
+  async function handleSubmitForm(studentData: Omit<Student, "id">) {
+    const { ok, studentListUpdated } = await registerNewStudent(studentData, {
+      setLoading,
+      setError,
+    })
+
+    if (ok && studentListUpdated) {
+      setStudentList(studentListUpdated)
+      setSucessMessage("Estudante cadastrado com sucesso!")
+      formRef.resetFields()
+
+      setTimeout(() => {
+        setSucessMessage(null)
+        setOpenModal(false)
+      }, 3000)
+    }
+  }
 
   return (
     <div>
@@ -31,12 +53,14 @@ const RegisterStudent = ({ setStudentList }: Props) => {
         footer={null}
       >
         <RegisterStudentForm
-          setLoading={setLoading}
           loading={loading}
-          setStudentList={setStudentList}
-          setError={setError}
-          setOpenModal={setOpenModal}
+          handleSubmitForm={handleSubmitForm}
+          formRef={formRef}
         />
+
+        {successMessage && (
+          <p className="text-blue-500 font-semibold text-md text-end">{successMessage}</p>
+        )}
 
         {error && <ErrorMessage message={error.message} />}
       </ModalAntd>

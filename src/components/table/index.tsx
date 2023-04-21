@@ -2,12 +2,15 @@ import { Student } from "@/interfaces"
 import Tooltip from "antd/lib/tooltip"
 
 import { MdDelete, MdModeEditOutline } from "react-icons/md"
+import EditStudentWrapper from "../editStudentWrapper"
+import { Dispatch, SetStateAction } from "react"
 
 interface Props {
   sourceData: Student[]
+  setStudentList: Dispatch<SetStateAction<Student[]>>
 }
 
-const Table = ({ sourceData }: Props) => {
+const Table = ({ sourceData, setStudentList }: Props) => {
   return (
     <div className="border-x border-t border-zinc-100 bg-white rounded-lg overflow-hidden">
       <div className="grid grid-cols-5  gap-[1px] bg-zinc-100">
@@ -37,26 +40,20 @@ const Table = ({ sourceData }: Props) => {
             <p className="my-4 ml-4">{student.name}</p>
           </div>
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
-            <p className="my-4 ml-4">{student.class}</p>
+            <p className="my-4 ml-4">{student.gender}</p>
           </div>
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
             <p className="my-4 ml-4">{student.grade}</p>
           </div>
           <div className=" bg-white mb-[1px]  group-hover:bg-primary-color">
-            <p className="my-4 ml-4">{student.gender}</p>
+            <p className="my-4 ml-4">{student.class}</p>
           </div>
           <div className=" bg-white mb-[1px] group-hover:bg-primary-color flex items-center gap-3 px-4">
-            <Tooltip
-              title="Editar"
-              color="blue"
-            >
-              <button className="bg-white">
-                <MdModeEditOutline
-                  size={25}
-                  className="text-blue-500"
-                />
-              </button>
-            </Tooltip>
+            <EditStudentWrapper
+              student={student}
+              setStudentList={setStudentList}
+            />
+
             <Tooltip
               title="Excluir"
               color="red"

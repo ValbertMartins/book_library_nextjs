@@ -9,7 +9,7 @@ import ErrorMessage from "@/components/errorMessage"
 import Modal from "antd/lib/modal"
 import Input from "antd/lib/input"
 import Select from "antd/lib/select"
-import RegisterStudent from "@/components/registerStudent"
+import RegisterStudentWrapper from "@/components/registerStudentWrapper"
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
@@ -46,12 +46,15 @@ const ListStudents = ({ allStudents, apiError }: Props) => {
       <div className="bg-white p-4 rounded-xl">
         <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
-        <RegisterStudent setStudentList={setStudentList} />
+        <RegisterStudentWrapper setStudentList={setStudentList} />
 
         {apiError ? (
           <ErrorMessage message="Erro ao listar estudantes" />
         ) : (
-          <Table sourceData={studentList} />
+          <Table
+            sourceData={studentList}
+            setStudentList={setStudentList}
+          />
         )}
       </div>
     </section>
