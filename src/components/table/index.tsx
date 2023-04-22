@@ -1,9 +1,11 @@
 import { Student } from "@/interfaces"
 import Tooltip from "antd/lib/tooltip"
 
-import { MdDelete, MdModeEditOutline } from "react-icons/md"
+import { MdDelete } from "react-icons/md"
 import EditStudentWrapper from "../editStudentWrapper"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
+import { deleteStudent } from "@/utils/handlerStudent"
+import Modal from "antd/lib/modal"
 
 interface Props {
   sourceData: Student[]
@@ -59,7 +61,14 @@ const Table = ({ sourceData, setStudentList }: Props) => {
               title="Excluir"
               color="red"
             >
-              <button>
+              <button
+                onClick={async () => {
+                  const { ok, studentListUpdated } = await deleteStudent(student.id)
+                  if (ok && studentListUpdated) {
+                    setStudentList(studentListUpdated)
+                  }
+                }}
+              >
                 <MdDelete
                   size={25}
                   className="text-red-500"

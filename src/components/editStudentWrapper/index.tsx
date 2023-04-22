@@ -2,39 +2,44 @@ import React, { Dispatch, SetStateAction, useState } from "react"
 import { MdModeEditOutline } from "react-icons/md"
 import StudentForm from "../forms/Student"
 import { useForm } from "antd/lib/form/Form"
-import { ErrorApi, Student } from "@/interfaces"
+import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import { updateStudentInfo } from "@/utils/handlerStudent"
 import Tooltip from "antd/lib/tooltip"
-import ErrorMessage from "../errorMessage"
+import message from "antd/lib/message"
 
 interface Props {
   student: Student
   setStudentList: Dispatch<SetStateAction<Student[]>>
 }
 
-const EditStudent = ({ student, setStudentList }: Props) => {
+const EditStudentWrapper = ({ student, setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [formRef] = useForm()
-  const [error, setError] = useState<null | ErrorApi>(null)
-  const [successMessage, setSucessMessage] = useState<string | null>(null)
+  const [toast, toastContextHolder] = message.useMessage()
 
   async function handleSubmitForm(studentInputFields: Omit<Student, "id">) {
+    toast.open({
+      key: "toastEditModal",
+      type: "loading",
+      content: "Atualizando estudante...",
+      duration: 0,
+    })
+
     const { ok, studentListUpdated } = await updateStudentInfo(
       student.id,
       studentInputFields,
-      { setError, setLoading }
+      setLoading
     )
 
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
-      setSucessMessage("Estudante atualizado com sucesso.")
-
-      setTimeout(() => {
-        setSucessMessage(null)
-        setOpenModal(false)
-      }, 3000)
+      setOpenModal(false)
+      toast.destroy()
+      message.success("Estudante atualizado com sucesso")
+    } else {
+      message.error("Erro ao atualizar estudante,tente novamente")
     }
   }
 
@@ -52,31 +57,26 @@ const EditStudent = ({ student, setStudentList }: Props) => {
         </button>
       </Tooltip>
 
-      {openModal && (
-        <ModalAntd
-          title={<h1 className="font-bold text-xl">Atualizar estudante</h1>}
-          open={openModal}
-          onCancel={() => setOpenModal(false)}
-          cancelText="Cancelar"
-          footer={null}
-        >
-          <StudentForm
-            loading={loading}
-            formRef={formRef}
-            handleSubmitForm={handleSubmitForm}
-            student={student}
-            openInEdictMode
-          />
+      <ModalAntd
+        title={<h1 className="font-bold text-xl">Atualizar estudante</h1>}
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+        cancelText="Cancelar"
+        destroyOnClose
+        footer={null}
+      >
+        <StudentForm
+          loading={loading}
+          formRef={formRef}
+          handleSubmitForm={handleSubmitForm}
+          student={student}
+          openInEdictMode
+        />
 
-          {successMessage && (
-            <p className="text-blue-500 font-semibold text-md text-end">{successMessage}</p>
-          )}
-
-          {error && <ErrorMessage message={error.message} />}
-        </ModalAntd>
-      )}
+        {toastContextHolder}
+      </ModalAntd>
     </>
   )
 }
 
-export default EditStudent
+export default EditStudentWrapper

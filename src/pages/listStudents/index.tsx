@@ -2,13 +2,9 @@ import { GetStaticProps } from "next"
 import { PrismaClient } from "@prisma/client"
 import { ErrorApi, Student } from "@/interfaces"
 import Table from "@/components/table"
-import Button from "antd/lib/button"
 import { useState } from "react"
-import axios from "axios"
 import ErrorMessage from "@/components/errorMessage"
-import Modal from "antd/lib/modal"
-import Input from "antd/lib/input"
-import Select from "antd/lib/select"
+
 import RegisterStudentWrapper from "@/components/registerStudentWrapper"
 
 export const getStaticProps: GetStaticProps = async () => {

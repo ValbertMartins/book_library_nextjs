@@ -16,8 +16,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
       student: {
         select: {
           name: true,
-          class_letter: true,
-          class_age: true,
+          grade: true,
+          class: true,
         },
       },
       book: {

@@ -1,38 +1,39 @@
-import Button from "antd/lib/button"
 import React, { Dispatch, SetStateAction, useState } from "react"
-import { ErrorApi, Student } from "@/interfaces"
+import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import StudentForm from "../forms/Student"
-import ErrorMessage from "../errorMessage"
 import { registerNewStudent } from "@/utils/handlerStudent"
 import { useForm } from "antd/lib/form/Form"
-
+import message from "antd/lib/message"
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
 }
 
-const RegisterStudent = ({ setStudentList }: Props) => {
+const RegisterStudentWrapper = ({ setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<null | ErrorApi>(null)
-  const [successMessage, setSucessMessage] = useState<string | null>(null)
+  const [toast, toastContextHolder] = message.useMessage()
   const [formRef] = useForm()
 
   async function handleSubmitForm(studentData: Omit<Student, "id">) {
+    toast.open({
+      key: "toastRegisterModal",
+      type: "loading",
+      content: "Cadastrando estudante...",
+      duration: 0,
+    })
     const { ok, studentListUpdated } = await registerNewStudent(studentData, {
       setLoading,
-      setError,
     })
 
     if (ok && studentListUpdated) {
-      setStudentList(studentListUpdated)
-      setSucessMessage("Estudante cadastrado com sucesso!")
       formRef.resetFields()
-
-      setTimeout(() => {
-        setSucessMessage(null)
-        setOpenModal(false)
-      }, 3000)
+      setStudentList(studentListUpdated)
+      setOpenModal(false)
+      toast.destroy()
+      message.success("Estudante cadastrado com sucesso")
+    } else {
+      message.error("Falha ao cadastrar estudante, tente novamente")
     }
   }
 
@@ -51,6 +52,7 @@ const RegisterStudent = ({ setStudentList }: Props) => {
         onCancel={() => setOpenModal(false)}
         cancelText="Cancelar"
         footer={null}
+        destroyOnClose
       >
         <StudentForm
           loading={loading}
@@ -58,14 +60,10 @@ const RegisterStudent = ({ setStudentList }: Props) => {
           formRef={formRef}
         />
 
-        {successMessage && (
-          <p className="text-blue-500 font-semibold text-md text-end">{successMessage}</p>
-        )}
-
-        {error && <ErrorMessage message={error.message} />}
+        {toastContextHolder}
       </ModalAntd>
     </div>
   )
 }
 
-export default RegisterStudent
+export default RegisterStudentWrapper

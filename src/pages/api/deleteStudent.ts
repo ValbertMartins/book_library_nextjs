@@ -4,23 +4,19 @@ import { z } from "zod"
 const prisma = new PrismaClient()
 
 export default async function registerNewStudent(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "PATCH") return res.status(400).json({ message: "invalid request" })
+  if (req.method !== "POST") return res.status(400).json({ message: "invalid request" })
 
-  const studentDataSchema = z.object({
-    name: z.string().optional(),
-    gender: z.string().length(1).toUpperCase().optional(),
-    grade: z.number().optional(),
-    class: z.string().toUpperCase().optional(),
+  const studentIdSchema = z.object({
     id: z.string().nonempty(),
   })
 
   try {
-    const { id, ...studentData } = studentDataSchema.parse(req.body)
-    await prisma.student.update({
+    const { id } = studentIdSchema.parse(req.body)
+
+    await prisma.student.delete({
       where: {
-        id: id,
+        id,
       },
-      data: studentData,
     })
 
     res.revalidate("/listStudents")
@@ -31,7 +27,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
   } catch (error) {
     return res.status(500).json({
       error: {
-        message: "Erro ao editar informações do estudante, tente novamente",
+        message: "Erro ao deletar informações do estudante, tente novamente",
         status: 500,
       },
     })

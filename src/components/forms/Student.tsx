@@ -78,7 +78,7 @@ const StudentForm = ({
             <Button
               type="primary"
               htmlType="submit"
-              loading={loading}
+              disabled={loading}
             >
               Salvar
             </Button>
