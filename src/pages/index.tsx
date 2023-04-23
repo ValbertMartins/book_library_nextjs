@@ -12,8 +12,9 @@ interface Props {
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const prisma = new PrismaClient()
 
-  const bookList = await prisma.book.findMany()
+  let bookList = await prisma.book.findMany()
 
+  bookList = JSON.parse(JSON.stringify(bookList))
   return {
     props: {
       bookList,

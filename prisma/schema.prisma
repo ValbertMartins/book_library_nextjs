@@ -17,6 +17,7 @@ model Student {
   class           String
   gender          String
   studentWithBook BookOnStudent[]
+  created_at      DateTime        @default(now())
 
   @@map("students")
 }
@@ -26,6 +27,7 @@ model Book {
   name               String
   quantity_available Int
   studentWithBook    BookOnStudent[]
+  created_at         DateTime        @default(now())
 
   @@map("books")
 }

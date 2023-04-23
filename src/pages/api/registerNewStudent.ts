@@ -19,9 +19,12 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
     await prisma.student.create({
       data: studentData,
     })
-
-    const studentListUpdated = await prisma.student.findMany()
-
+    let studentListUpdated = await prisma.student.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+    })
+    studentListUpdated = JSON.parse(JSON.stringify(studentListUpdated))
     res.revalidate("/listStudents")
 
     return res.status(200).json({ studentListUpdated })
