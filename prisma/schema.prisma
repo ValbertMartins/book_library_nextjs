@@ -11,13 +11,14 @@ datasource db {
 }
 
 model Student {
-  id              String          @id @default(uuid())
+  id              String           @id @default(uuid())
   name            String
   grade           Int
   class           String
   gender          String
   studentWithBook BookOnStudent[]
-  created_at      DateTime        @default(now())
+  created_at      DateTime         @default(now())
+  studentProgress StudentProgress?
 
   @@map("students")
 }
@@ -41,4 +42,15 @@ model BookOnStudent {
   studentId String
 
   @@map("booksOnStudent")
+}
+
+model StudentProgress {
+  id String @id @default(uuid())
+
+  collected_books Int
+  returned_books  Int
+  student         Student @relation(fields: [studentId], references: [id])
+  studentId       String  @unique
+
+  @@map("studentProgress")
 }

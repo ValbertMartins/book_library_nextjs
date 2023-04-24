@@ -27,6 +27,11 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
       orderBy: {
         created_at: "desc",
       },
+      include: {
+        StudentProgress: {
+          select: { returned_books: true, collected_books: true },
+        },
+      },
     })
     studentListUpdated = JSON.parse(JSON.stringify(studentListUpdated))
 

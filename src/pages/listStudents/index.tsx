@@ -4,9 +4,7 @@ import { ErrorApi, Student } from "@/interfaces"
 import Table from "@/components/table"
 import { useState } from "react"
 import ErrorMessage from "@/components/errorMessage"
-
 import RegisterStudentWrapper from "@/components/registerStudentWrapper"
-import { useRouter } from "next/router"
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
@@ -16,8 +14,17 @@ export const getStaticProps: GetStaticProps = async () => {
       orderBy: {
         created_at: "desc",
       },
+      include: {
+        studentProgress: {
+          select: {
+            returned_books: true,
+            collected_books: true,
+          },
+        },
+      },
     })
 
+    console.log(initialStudentList)
     initialStudentList = JSON.parse(JSON.stringify(initialStudentList))
 
     return {
@@ -44,9 +51,7 @@ interface Props {
 
 const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [studentList, setStudentList] = useState(initialStudentList)
-  const { isFallback } = useRouter()
 
-  console.log(isFallback)
   return (
     <section className="p-8 flex-1 ">
       <div className="bg-white p-4 rounded-xl">

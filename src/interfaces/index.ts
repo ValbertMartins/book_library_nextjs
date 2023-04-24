@@ -4,12 +4,19 @@ export interface Book {
   quantity_available: number
 }
 
+export interface StudentProgress {
+  studentId: string
+  collected_books: number
+  returned_books: number
+}
+
 export interface Student {
   id: string
   name: string
   class: string
   grade: number
   gender: "F" | "M"
+  studentProgress: StudentProgress
 }
 
 export interface ErrorApi {
