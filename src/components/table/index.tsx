@@ -1,4 +1,4 @@
-import { Student, StudentProgress } from "@/interfaces"
+import { Student } from "@/interfaces"
 import EditStudentWrapper from "../editStudentWrapper"
 import { Dispatch, Fragment, SetStateAction } from "react"
 import DeleteStudentWrapper from "../deleteStudentWrapper"
@@ -9,7 +9,6 @@ interface Props {
 }
 
 const Table = ({ sourceData, setStudentList }: Props) => {
-  console.log(sourceData)
   return (
     <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-12 overflow-x-scroll md:overflow-hidden  bg-primary-color">
       <div className="border-b-[1px] border-r-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold col-start-1 col-end-5">

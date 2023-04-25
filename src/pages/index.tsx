@@ -1,4 +1,4 @@
-import BookList from "@/components/bookList"
+import BooksWrapper from "@/components/booksWrapper"
 import Statistics from "@/components/statistics"
 import { Book } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
@@ -9,7 +9,7 @@ interface Props {
   bookList: Book[]
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const prisma = new PrismaClient()
 
   let bookList = await prisma.book.findMany()
@@ -44,7 +44,7 @@ export default function Home({
       </header>
 
       <Statistics />
-      <BookList bookList={bookList} />
+      <BooksWrapper bookList={bookList} />
     </section>
   )
 }

@@ -28,7 +28,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
         created_at: "desc",
       },
       include: {
-        StudentProgress: {
+        studentProgress: {
           select: { returned_books: true, collected_books: true },
         },
       },

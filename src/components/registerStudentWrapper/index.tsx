@@ -52,6 +52,7 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
         onCancel={() => setOpenModal(false)}
         cancelText="Cancelar"
         footer={null}
+        centered
         destroyOnClose
       >
         <StudentForm

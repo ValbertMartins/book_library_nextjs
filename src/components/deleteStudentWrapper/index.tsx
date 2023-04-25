@@ -1,8 +1,7 @@
 import { deleteStudent } from "@/utils/handlerStudent"
 import { Student } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
-import Tooltip from "antd/lib/tooltip"
-import React, { Dispatch, SetStateAction, useState } from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import { MdDelete } from "react-icons/md"
 
 interface Props {

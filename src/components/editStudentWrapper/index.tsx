@@ -62,6 +62,7 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
         open={openModal}
         onCancel={() => setOpenModal(false)}
         cancelText="Cancelar"
+        centered
         destroyOnClose
         footer={null}
       >

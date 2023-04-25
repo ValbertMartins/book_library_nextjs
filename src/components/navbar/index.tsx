@@ -1,7 +1,6 @@
-import { MdDashboard, MdBookmarkAdd, MdPersonSearch } from "react-icons/md"
+import { MdDashboard, MdPersonSearch } from "react-icons/md"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
 
 const menuItens = [
   {
@@ -14,15 +13,6 @@ const menuItens = [
     ),
   },
 
-  {
-    path: "/registerBook",
-    icon: (color: string) => (
-      <MdBookmarkAdd
-        className={`${color} hover:text-cyan-500 transition-colors`}
-        size={30}
-      />
-    ),
-  },
   {
     path: "/listStudents",
     icon: (color: string) => (

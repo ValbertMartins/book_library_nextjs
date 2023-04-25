@@ -2,6 +2,7 @@ export interface Book {
   id: string
   name: string
   quantity_available: number
+  cover?: string
 }
 
 export interface StudentProgress {

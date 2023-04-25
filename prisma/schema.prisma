@@ -28,6 +28,7 @@ model Book {
   name               String
   quantity_available Int
   studentWithBook    BookOnStudent[]
+  cover              String?
   created_at         DateTime        @default(now())
 
   @@map("books")
