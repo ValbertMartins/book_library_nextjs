@@ -1,31 +1,43 @@
 import BooksWrapper from "@/components/booksWrapper"
 import Statistics from "@/components/statistics"
-import { Book } from "@/interfaces"
+import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
-import { GetServerSideProps, InferGetServerSidePropsType } from "next"
+import { GetServerSideProps, GetStaticProps, InferGetStaticPropsType } from "next"
 import Image from "next/image"
+import { useState } from "react"
 import { MdSearch } from "react-icons/md"
 
 interface Props {
-  bookList: Book[]
+  initialBookList: Book[]
+  apiError?: ErrorApi
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
 
-  let bookList = await prisma.book.findMany()
+  try {
+    let initialBookList = await prisma.book.findMany()
 
-  bookList = JSON.parse(JSON.stringify(bookList))
-  return {
-    props: {
-      bookList,
-    },
+    initialBookList = JSON.parse(JSON.stringify(initialBookList))
+    return {
+      props: {
+        initialBookList,
+      },
+    }
+  } catch (error) {
+    return {
+      props: {
+        apiError: {
+          message: "Falha ao listar estudantes",
+          status: 500,
+        },
+      },
+    }
   }
 }
 
-export default function Home({
-  bookList,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({ initialBookList, apiError }: Props) {
+  const [bookList, setBookList] = useState(initialBookList)
   return (
     <section className="bg-primary-color px-8 pt-6 flex-1 flex">
       <section className="flex-1">
@@ -45,7 +57,10 @@ export default function Home({
           </div>
         </header>
         <Statistics />
-        <BooksWrapper bookList={bookList} />
+        <BooksWrapper
+          bookList={bookList}
+          setBookList={setBookList}
+        />
       </section>
 
       <aside>

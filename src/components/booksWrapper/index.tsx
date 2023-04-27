@@ -1,5 +1,5 @@
 import { Book } from "@/interfaces"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import ModalAntd from "antd/lib/modal"
 import Form from "antd/lib/form"
 import Upload from "antd/lib/upload/Upload"
@@ -8,26 +8,24 @@ import InputNumber from "antd/lib/input-number"
 import Button from "antd/lib/button"
 import { MdFileUpload } from "react-icons/md"
 import BookList from "../bookList"
-import axios from "axios"
-import { convertImageToBase64 } from "@/utils/convertImageToBase64"
+import { registerNewBook } from "@/utils/handlerBook"
 
 interface Props {
   bookList: Book[]
+  setBookList: Dispatch<SetStateAction<Book[]>>
 }
 
-const BooksWrapper = ({ bookList }: Props) => {
+const BooksWrapper = ({ bookList, setBookList }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [bookCover, setBookCover] = useState<File | null>(null)
 
   async function handleSubmitForm(formInputFields: any) {
-    if (bookCover) {
-      const bookCoverBase64 = await convertImageToBase64(bookCover)
-      const response = await axios.post("/api/registerNewBook", {
-        ...formInputFields,
-        cover: bookCoverBase64,
-      })
+    const { ok, bookListUpdated } = await registerNewBook(formInputFields, bookCover)
+    console.log(bookListUpdated)
+
+    if (ok && bookListUpdated) {
+      setBookList(bookListUpdated)
     } else {
-      const response = await axios.post("/api/registerNewBook", formInputFields)
     }
   }
 

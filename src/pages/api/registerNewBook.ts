@@ -36,12 +36,13 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
       },
     })
 
-    res.revalidate("/")
+    await res.revalidate("/")
+
+    const bookListUpdated = await prisma.book.findMany()
 
     res.status(200).json({
-      book: {
-        registeredBook,
-      },
+      registeredBook,
+      bookListUpdated,
     })
   } catch (error) {
     res.status(500).json({

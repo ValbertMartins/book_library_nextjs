@@ -1,3 +1,5 @@
+const { fontFamily } = require("tailwindcss/defaultTheme")
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   corePlugins: {
@@ -17,8 +19,9 @@ module.exports = {
       backgroundColor: {
         "primary-color": "rgba(250,250,250,255)",
       },
-      maxWidth: {
-        xxs: "240px",
+
+      fontFamily: {
+        sans: ["var(--font-inter)", ...fontFamily.sans],
       },
     },
   },

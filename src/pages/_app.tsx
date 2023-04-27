@@ -4,24 +4,15 @@ import "@/styles/globals.css"
 import type { AppProps } from "next/app"
 import { Inter } from "next/font/google"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <style
-        jsx
-        global
-      >{`
-        html {
-          font-family: ${inter.style.fontFamily};
-        }
-      `}</style>
-
-      <main className="flex">
-        <Navbar />
-
-        <Component {...pageProps} />
-      </main>
-    </>
+    <main className={`${inter.variable} font-sans flex`}>
+      <Navbar />
+      <Component {...pageProps} />
+    </main>
   )
 }

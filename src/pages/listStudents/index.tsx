@@ -24,7 +24,6 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     })
 
-    console.log(initialStudentList)
     initialStudentList = JSON.parse(JSON.stringify(initialStudentList))
 
     return {

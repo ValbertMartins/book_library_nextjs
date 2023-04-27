@@ -35,7 +35,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
     })
     studentListUpdated = JSON.parse(JSON.stringify(studentListUpdated))
 
-    res.revalidate("/listStudents")
+    await res.revalidate("/listStudents")
     return res.status(200).json({ studentListUpdated })
   } catch (error) {
     return res.status(500).json({
