@@ -378,7 +378,9 @@ audio,
 iframe,
 embed,
 object {
-  display: block; /* 1 */
+  display: block;
+  height: auto;
+  /* 1 */
   /* 2 */
 }
 
@@ -389,10 +391,14 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 img,
 video {
   max-width: 100%;
-  height: auto;
 }
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 [hidden] {
+  display: none;
+}
+
+/* hidden-scroll-bar */
+::-webkit-scrollbar {
   display: none;
 }

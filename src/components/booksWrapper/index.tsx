@@ -9,6 +9,7 @@ import Button from "antd/lib/button"
 import { MdFileUpload } from "react-icons/md"
 import BookList from "../bookList"
 import axios from "axios"
+import { convertImageToBase64 } from "@/utils/convertImageToBase64"
 
 interface Props {
   bookList: Book[]
@@ -16,27 +17,22 @@ interface Props {
 
 const BooksWrapper = ({ bookList }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
-  const [bookCover, setBookCover] = useState<any>(null)
+  const [bookCover, setBookCover] = useState<File | null>(null)
 
   async function handleSubmitForm(formInputFields: any) {
-    const convertImageToBase64 = (file: File) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = reject
+    if (bookCover) {
+      const bookCoverBase64 = await convertImageToBase64(bookCover)
+      const response = await axios.post("/api/registerNewBook", {
+        ...formInputFields,
+        cover: bookCoverBase64,
       })
-
-    const bookCoverBase64 = await convertImageToBase64(bookCover)
-
-    await axios.post("/api/registerNewBook", {
-      ...formInputFields,
-      cover: bookCoverBase64,
-    })
+    } else {
+      const response = await axios.post("/api/registerNewBook", formInputFields)
+    }
   }
 
   return (
-    <section className="bg-white rounded-xl py-2 px-4">
+    <section className="bg-white rounded-xl py-2 px-4 ">
       <div className="flex items-center justify-between">
         <p className="font-bold mx-3 mt-4 text-xl ">Todos os livros</p>
         <button

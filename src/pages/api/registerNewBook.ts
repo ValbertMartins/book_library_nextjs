@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next"
+import { NextApiRequest, NextApiResponse, PageConfig } from "next"
 import { PrismaClient } from "@prisma/client"
 import { v2 as cloudinary } from "cloudinary"
 import { z } from "zod"
@@ -20,18 +20,10 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
     cover: z.string().optional(),
   })
 
-  // const convertImageToBase64 = (file: File) =>
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader()
-  //     reader.readAsDataURL(file)
-  //     reader.onload = () => resolve(reader.result)
-  //     reader.onerror = reject
-  //   })
-
   try {
     const { cover, name, quantity_available } = bookSchema.parse(req.body)
-
     let bookCoverCloudinaryData
+
     if (cover) {
       bookCoverCloudinaryData = await cloudinary.uploader.upload(cover)
     }
@@ -40,9 +32,12 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
       data: {
         name,
         quantity_available,
-        cover: bookCoverCloudinaryData ? bookCoverCloudinaryData.url : null,
+        cover: bookCoverCloudinaryData ? bookCoverCloudinaryData.secure_url : null,
       },
     })
+
+    res.revalidate("/")
+
     res.status(200).json({
       book: {
         registeredBook,
@@ -56,4 +51,12 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
       },
     })
   }
+}
+
+export const config: PageConfig = {
+  api: {
+    bodyParser: {
+      sizeLimit: "4mb",
+    },
+  },
 }

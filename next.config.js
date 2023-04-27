@@ -6,6 +6,10 @@ const nextConfig = {
       transform: "react-icons/md/{{member}}",
     },
   },
+
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
 }
 
 module.exports = nextConfig
