@@ -37,9 +37,10 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       setStudentList(studentListUpdated)
       setOpenModal(false)
       toast.destroy()
-      message.success("Estudante atualizado com sucesso")
+      toast.success("Estudante atualizado com sucesso")
     } else {
-      message.error("Erro ao atualizar estudante,tente novamente")
+      toast.destroy()
+      toast.error("Erro ao atualizar estudante,tente novamente")
     }
   }
 

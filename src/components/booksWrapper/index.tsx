@@ -9,6 +9,7 @@ import Button from "antd/lib/button"
 import { MdFileUpload } from "react-icons/md"
 import BookList from "../bookList"
 import { registerNewBook } from "@/utils/handlerBook"
+import message from "antd/lib/message"
 
 interface Props {
   bookList: Book[]
@@ -18,14 +19,23 @@ interface Props {
 const BooksWrapper = ({ bookList, setBookList }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [bookCover, setBookCover] = useState<File | null>(null)
-
+  const [toast, toastContextHolder] = message.useMessage()
   async function handleSubmitForm(formInputFields: any) {
+    toast.open({
+      content: "Cadastrando livro",
+      type: "loading",
+      duration: 0,
+    })
     const { ok, bookListUpdated } = await registerNewBook(formInputFields, bookCover)
     console.log(bookListUpdated)
 
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)
+      toast.destroy()
+      toast.success("Livro cadastrado com sucesso.")
     } else {
+      toast.destroy()
+      toast.error("Não foi possível cadastrar o livro, tente novamente")
     }
   }
 
@@ -93,6 +103,7 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
             </Button>
           </Form.Item>
         </Form>
+        {toastContextHolder}
       </ModalAntd>
 
       <BookList bookList={bookList} />

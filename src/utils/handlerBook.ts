@@ -21,7 +21,6 @@ export async function registerNewBook(formInputFields: any, bookCover?: File | n
         formInputFields
       )
 
-      console.log(data, "foo")
       return {
         ok: true,
         bookListUpdated: data.bookListUpdated,

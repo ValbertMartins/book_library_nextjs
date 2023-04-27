@@ -1,4 +1,5 @@
 import BooksWrapper from "@/components/booksWrapper"
+import ErrorMessage from "@/components/errorMessage"
 import Statistics from "@/components/statistics"
 import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
@@ -57,10 +58,15 @@ export default function Home({ initialBookList, apiError }: Props) {
           </div>
         </header>
         <Statistics />
-        <BooksWrapper
-          bookList={bookList}
-          setBookList={setBookList}
-        />
+
+        {apiError ? (
+          <ErrorMessage message="Falha ao carregar a lista de Livros" />
+        ) : (
+          <BooksWrapper
+            bookList={bookList}
+            setBookList={setBookList}
+          />
+        )}
       </section>
 
       <aside>

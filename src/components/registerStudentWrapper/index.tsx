@@ -31,9 +31,10 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
       setStudentList(studentListUpdated)
       setOpenModal(false)
       toast.destroy()
-      message.success("Estudante cadastrado com sucesso")
+      toast.success("Estudante cadastrado com sucesso")
     } else {
-      message.error("Falha ao cadastrar estudante, tente novamente")
+      toast.destroy()
+      toast.error("Falha ao cadastrar estudante, tente novamente")
     }
   }
 
