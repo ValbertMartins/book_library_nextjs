@@ -1,16 +1,13 @@
 import { Book } from "@/interfaces"
 import { Dispatch, SetStateAction, useState } from "react"
 import ModalAntd from "antd/lib/modal"
-import Form from "antd/lib/form"
-import Upload from "antd/lib/upload/Upload"
-import Input from "antd/lib/input"
-import InputNumber from "antd/lib/input-number"
-import Button from "antd/lib/button"
-import { MdFileUpload } from "react-icons/md"
+
 import BookList from "../bookList"
 import { registerNewBook } from "@/utils/handlerBook"
 import message from "antd/lib/message"
 import Image from "next/image"
+import { useForm } from "antd/lib/form/Form"
+import BookForm from "../forms/Book"
 
 interface Props {
   bookList: Book[]
@@ -21,6 +18,7 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [bookCover, setBookCover] = useState<File | null>(null)
   const [toast, toastContextHolder] = message.useMessage()
+  const [formRef] = useForm()
 
   async function handleSubmitForm(formInputFields: any) {
     toast.open({
@@ -35,13 +33,14 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
       toast.destroy()
       toast.success("Livro cadastrado com sucesso.")
       setOpenModalRegisterBook(false)
+      setBookCover(null)
+      formRef.resetFields()
     } else {
       toast.destroy()
       toast.error("Não foi possível cadastrar o livro, tente novamente")
     }
   }
 
-  console.log(openModalRegisterBook)
   return (
     <section className="bg-white rounded-xl py-2 px-4 ">
       <div className="flex items-center justify-between">
@@ -60,56 +59,18 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
         width={800}
         footer={null}
         destroyOnClose
-        onCancel={() => setOpenModalRegisterBook(false)}
+        onCancel={() => {
+          setBookCover(null)
+          setOpenModalRegisterBook(false)
+          formRef.resetFields()
+        }}
       >
         <div className="grid grid-cols-2 gap-x-10">
-          <Form
-            onFinish={handleSubmitForm}
-            className="mt-10"
-          >
-            <Form.Item
-              name="name"
-              rules={[{ required: true, message: "Esse campo é obrigatório" }]}
-            >
-              <Input placeholder="Nome do livro" />
-            </Form.Item>
-
-            <Form.Item
-              name="quantity_available"
-              rules={[{ required: true, message: "Esse campo é obrigatório" }]}
-            >
-              <InputNumber
-                placeholder="Quantidade disponível"
-                min={1}
-                className="w-full"
-              />
-            </Form.Item>
-
-            <Upload
-              maxCount={1}
-              beforeUpload={bookCover => {
-                setBookCover(bookCover)
-                return false
-              }}
-              onRemove={() => setBookCover(null)}
-            >
-              <Button
-                icon={<MdFileUpload />}
-                className="flex items-center gap-2"
-              >
-                Enviar capa
-              </Button>
-            </Upload>
-            <Form.Item>
-              <Button
-                type="primary"
-                className="mt-6"
-                htmlType="submit"
-              >
-                salvar
-              </Button>
-            </Form.Item>
-          </Form>
+          <BookForm
+            formRef={formRef}
+            setBookCover={setBookCover}
+            handleSubmitForm={handleSubmitForm}
+          />
 
           <div className="rounded-md overflow-hidden">
             <Image
