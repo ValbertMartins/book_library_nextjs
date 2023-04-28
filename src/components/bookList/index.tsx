@@ -2,6 +2,7 @@ import { Book } from "@/interfaces"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+
 interface Props {
   bookList: Book[]
 }
@@ -9,14 +10,14 @@ interface Props {
 const BookList = ({ bookList }: Props) => {
   const [imagesLoading, setImagesLoading] = useState(true)
   return (
-    <div className="mx-4 mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8  md:gap-x-4 md:gap-y-10 xl:grid-cols-5  overflow-y-scroll max-h-[65vh] ">
+    <div className="mx-4 mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8  md:gap-x-4 md:gap-y-10 xl:grid-cols-5  overflow-y-scroll max-h-[65vh] 2xl:gap-x-9">
       {bookList.map(book => (
         <Link
           href={`book/${book.id}`}
           key={book.id}
-          className="flex flex-col "
+          className="flex flex-col"
         >
-          <div className="h-[260px] sm:h-[250px] lg:h-[300px] xl:h-[320px] 2xl:h-[380px]  rounded-xl overflow-hidden max-w-[250px]">
+          <div className="h-[260px] sm:h-[250px] lg:h-[300px] xl:h-[320px] 2xl:h-[380px]  rounded-xl overflow-hidden ">
             <Image
               className={`object-cover h-full w-full ${
                 imagesLoading ? "blur-md scale-100" : "grayscale-0 blur-0 scale-100"

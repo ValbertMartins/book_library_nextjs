@@ -71,7 +71,7 @@ export default function Home({ initialBookList, apiError }: Props) {
 
       <aside>
         <div>
-          <p className="hidden 2xl:block mx-5">Ranking da comunidade</p>
+          <p className="hidden 2xl:block mx-5">Ranking</p>
         </div>
       </aside>
     </section>
