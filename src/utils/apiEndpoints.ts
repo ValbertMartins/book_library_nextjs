@@ -5,4 +5,11 @@ export const endpoints = {
   editStudent: {
     url: "/api/editStudent",
   },
+  deleteStudent: {
+    url: "/api/deleteStudent",
+  },
+
+  registerNewBook: {
+    url: "/api/registerNewBook",
+  },
 }

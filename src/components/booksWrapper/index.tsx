@@ -20,7 +20,7 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
   const [toast, toastContextHolder] = message.useMessage()
   const [formRef] = useForm()
 
-  async function handleSubmitForm(formInputFields: any) {
+  async function handleSubmitForm(formInputFields: Omit<Book, "id" | "cover">) {
     toast.open({
       content: "Cadastrando livro",
       type: "loading",

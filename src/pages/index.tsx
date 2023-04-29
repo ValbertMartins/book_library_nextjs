@@ -11,6 +11,9 @@ import { MdSearch } from "react-icons/md"
 interface Props {
   initialBookList: Book[]
   apiError?: ErrorApi
+  registeredStudentsCounter: number
+  registeredBooksCounter: number
+  booksBorrowedCounter: number
 }
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -18,11 +21,20 @@ export const getStaticProps: GetStaticProps = async () => {
 
   try {
     let initialBookList = await prisma.book.findMany()
-
     initialBookList = JSON.parse(JSON.stringify(initialBookList))
+
+    const [registeredBooksCounter, registeredStudentsCounter, booksBorrowedCounter] =
+      await Promise.all([
+        prisma.book.count(),
+        prisma.student.count(),
+        prisma.bookOnStudent.count(),
+      ])
     return {
       props: {
         initialBookList,
+        registeredStudentsCounter,
+        registeredBooksCounter,
+        booksBorrowedCounter,
       },
     }
   } catch (error) {
@@ -37,7 +49,13 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 }
 
-export default function Home({ initialBookList, apiError }: Props) {
+export default function Home({
+  initialBookList,
+  apiError,
+  registeredStudentsCounter,
+  registeredBooksCounter,
+  booksBorrowedCounter,
+}: Props) {
   const [bookList, setBookList] = useState(initialBookList)
   return (
     <section className="bg-primary-color px-8 pt-6 flex-1 flex">
@@ -57,7 +75,11 @@ export default function Home({ initialBookList, apiError }: Props) {
             />
           </div>
         </header>
-        <Statistics />
+        <Statistics
+          registeredStudentsCounter={registeredStudentsCounter}
+          registeredBooksCounter={registeredBooksCounter}
+          booksBorrowedCounter={booksBorrowedCounter}
+        />
 
         {apiError ? (
           <ErrorMessage message="Falha ao carregar a lista de Livros" />

@@ -1,4 +1,4 @@
-import { ErrorApi, Student } from "@/interfaces"
+import { Student } from "@/interfaces"
 import axios, { AxiosError } from "axios"
 import { Dispatch, SetStateAction } from "react"
 import { endpoints } from "./apiEndpoints"
@@ -76,6 +76,5 @@ export async function deleteStudent(studentId: string) {
       ok: false,
       studentListUpdated: null,
     }
-  } finally {
   }
 }

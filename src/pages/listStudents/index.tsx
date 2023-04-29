@@ -50,7 +50,6 @@ interface Props {
 
 const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [studentList, setStudentList] = useState(initialStudentList)
-
   return (
     <section className="p-8 flex-1 ">
       <div className="bg-white p-4 rounded-xl">

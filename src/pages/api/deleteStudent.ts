@@ -13,19 +13,40 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
   try {
     const { id } = studentIdSchema.parse(req.body)
 
-    await prisma.student.delete({
+    const deleteStudentProgress = prisma.studentProgress.delete({
+      where: {
+        studentId: id,
+      },
+    })
+
+    const deleteStudentPersonalInfo = prisma.student.delete({
       where: {
         id,
       },
     })
 
+    const deleteStudentTransaction = await prisma.$transaction([
+      deleteStudentProgress,
+      deleteStudentPersonalInfo,
+    ])
+
     let studentListUpdated = await prisma.student.findMany({
       orderBy: {
         created_at: "desc",
       },
+
+      include: {
+        studentProgress: {
+          select: {
+            collected_books: true,
+            returned_books: true,
+          },
+        },
+      },
     })
+
     studentListUpdated = JSON.parse(JSON.stringify(studentListUpdated))
-    res.revalidate("/listStudents")
+    await res.revalidate("/listStudents")
     return res.status(200).json({ studentListUpdated })
   } catch (error) {
     return res.status(500).json({
