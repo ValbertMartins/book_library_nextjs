@@ -1,19 +1,30 @@
-import { PrismaClient } from "@prisma/client"
-import { GetServerSideProps } from "next"
-import React from "react"
+import { getStatistics } from "@/utils/handlerStatistics"
+import React, { useEffect, useState } from "react"
 import { MdMenuBook, MdPerson, MdBook } from "react-icons/md"
 
 interface Props {
-  registeredStudentsCounter: number
-  registeredBooksCounter: number
-  booksBorrowedCounter: number
+  updateStatistics: boolean
 }
 
-const Statistics = ({
-  registeredStudentsCounter,
-  registeredBooksCounter,
-  booksBorrowedCounter,
-}: Props) => {
+const StatisticsWrapper = ({ updateStatistics }: Props) => {
+  const [registeredStudentsCounter, setRegisteredStudentsCounter] = useState(0)
+  const [registeredBooksCounter, setRegisteredBooksCounter] = useState(0)
+  const [booksBorrowedCounter, setBooksBorrowedCounter] = useState(0)
+
+  useEffect(() => {
+    async function handlerStatistics() {
+      const { ok, data } = await getStatistics()
+
+      if (ok && data) {
+        setRegisteredStudentsCounter(data.registeredStudentsCounter)
+        setRegisteredBooksCounter(data.registeredBooksCounter)
+        setBooksBorrowedCounter(data.booksBorrowedCounter)
+      }
+    }
+
+    handlerStatistics()
+  }, [updateStatistics])
+
   return (
     <section className="grid grid-cols-2 lg:grid-cols-3 my-10 gap-6 ">
       <div className="bg-white rounded-lg px-2 flex items-center py-3 cursor-pointer">
@@ -58,4 +69,4 @@ const Statistics = ({
   )
 }
 
-export default Statistics
+export default StatisticsWrapper

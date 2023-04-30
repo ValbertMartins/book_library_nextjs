@@ -1,10 +1,9 @@
 import BooksWrapper from "@/components/booksWrapper"
 import ErrorMessage from "@/components/errorMessage"
-import Statistics from "@/components/statistics"
+import StatisticsWrapper from "@/components/statisticsWrapper"
 import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
-import { GetServerSideProps, GetStaticProps, InferGetStaticPropsType } from "next"
-import Image from "next/image"
+import { GetStaticProps } from "next"
 import { useState } from "react"
 import { MdSearch } from "react-icons/md"
 
@@ -23,18 +22,9 @@ export const getStaticProps: GetStaticProps = async () => {
     let initialBookList = await prisma.book.findMany()
     initialBookList = JSON.parse(JSON.stringify(initialBookList))
 
-    const [registeredBooksCounter, registeredStudentsCounter, booksBorrowedCounter] =
-      await Promise.all([
-        prisma.book.count(),
-        prisma.student.count(),
-        prisma.bookOnStudent.count(),
-      ])
     return {
       props: {
         initialBookList,
-        registeredStudentsCounter,
-        registeredBooksCounter,
-        booksBorrowedCounter,
       },
     }
   } catch (error) {
@@ -49,14 +39,9 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 }
 
-export default function Home({
-  initialBookList,
-  apiError,
-  registeredStudentsCounter,
-  registeredBooksCounter,
-  booksBorrowedCounter,
-}: Props) {
+export default function Home({ initialBookList, apiError }: Props) {
   const [bookList, setBookList] = useState(initialBookList)
+  const [updateStatistics, setUpdateStatistics] = useState(false)
   return (
     <section className="bg-primary-color px-8 pt-6 flex-1 flex">
       <section className="flex-1">
@@ -75,11 +60,7 @@ export default function Home({
             />
           </div>
         </header>
-        <Statistics
-          registeredStudentsCounter={registeredStudentsCounter}
-          registeredBooksCounter={registeredBooksCounter}
-          booksBorrowedCounter={booksBorrowedCounter}
-        />
+        <StatisticsWrapper updateStatistics={updateStatistics} />
 
         {apiError ? (
           <ErrorMessage message="Falha ao carregar a lista de Livros" />
@@ -87,6 +68,7 @@ export default function Home({
           <BooksWrapper
             bookList={bookList}
             setBookList={setBookList}
+            setUpdateStatistics={setUpdateStatistics}
           />
         )}
       </section>

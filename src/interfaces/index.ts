@@ -24,3 +24,9 @@ export interface ErrorApi {
   status: number
   message: string
 }
+
+export interface Statistics {
+  registeredStudentsCounter: number
+  registeredBooksCounter: number
+  booksBorrowedCounter: number
+}

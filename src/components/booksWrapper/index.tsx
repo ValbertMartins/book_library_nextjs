@@ -12,9 +12,10 @@ import BookForm from "../forms/Book"
 interface Props {
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
+  setUpdateStatistics: Dispatch<SetStateAction<boolean>>
 }
 
-const BooksWrapper = ({ bookList, setBookList }: Props) => {
+const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [bookCover, setBookCover] = useState<File | null>(null)
   const [toast, toastContextHolder] = message.useMessage()
@@ -35,6 +36,7 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
       setOpenModalRegisterBook(false)
       setBookCover(null)
       formRef.resetFields()
+      setUpdateStatistics(prevState => !prevState)
     } else {
       toast.destroy()
       toast.error("Não foi possível cadastrar o livro, tente novamente")
