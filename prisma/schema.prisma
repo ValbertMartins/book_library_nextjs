@@ -37,10 +37,11 @@ model Book {
 model BookOnStudent {
   id String @id @default(uuid())
 
-  book      Book    @relation(fields: [bookId], references: [id])
-  bookId    String
-  student   Student @relation(fields: [studentId], references: [id])
-  studentId String
+  book       Book     @relation(fields: [bookId], references: [id])
+  bookId     String
+  student    Student  @relation(fields: [studentId], references: [id])
+  studentId  String
+  created_at DateTime @default(now())
 
   @@map("booksOnStudent")
 }

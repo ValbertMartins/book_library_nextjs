@@ -8,8 +8,16 @@ export const endpoints = {
   deleteStudent: {
     url: "/api/deleteStudent",
   },
-
   registerNewBook: {
     url: "/api/registerNewBook",
+  },
+  getStatistics: {
+    url: "/api/getStatistics",
+  },
+  getStudentsAndBooks: {
+    url: "/api/getStudentsAndBooks",
+  },
+  registerNewBorrowBook: {
+    url: "/api/registerNewBorrowBook",
   },
 }
