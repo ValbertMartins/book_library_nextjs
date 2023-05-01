@@ -37,10 +37,10 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       setStudentList(studentListUpdated)
       setOpenModal(false)
       toast.destroy()
-      toast.success("Estudante atualizado com sucesso")
+      message.success("Estudante atualizado com sucesso")
     } else {
       toast.destroy()
-      toast.error("Erro ao atualizar estudante,tente novamente")
+      message.error("Erro ao atualizar estudante,tente novamente")
     }
   }
 
@@ -50,7 +50,7 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
         title="Editar"
         color="blue"
       >
-        <button onClick={() => setOpenModal(prevState => !prevState)}>
+        <button onClick={() => setOpenModal(true)}>
           <MdModeEditOutline
             size={25}
             className="text-blue-500"

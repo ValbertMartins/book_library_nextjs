@@ -30,3 +30,8 @@ export interface Statistics {
   registeredBooksCounter: number
   booksBorrowedCounter: number
 }
+
+export interface BookOnStudent {
+  created_at: string
+  student: Student
+}

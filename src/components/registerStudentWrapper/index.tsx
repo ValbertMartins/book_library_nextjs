@@ -31,10 +31,10 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
       setStudentList(studentListUpdated)
       setOpenModal(false)
       toast.destroy()
-      toast.success("Estudante cadastrado com sucesso")
+      message.success("Estudante cadastrado com sucesso")
     } else {
       toast.destroy()
-      toast.error("Falha ao cadastrar estudante, tente novamente")
+      message.error("Falha ao cadastrar estudante, tente novamente")
     }
   }
 
@@ -42,7 +42,7 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
     <div>
       <button
         className="mb-4 mt-8 flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-4 py-2 hover:bg-blue-400 transition-all"
-        onClick={() => setOpenModal(prevState => !prevState)}
+        onClick={() => setOpenModal(true)}
       >
         Cadastrar estudante
       </button>

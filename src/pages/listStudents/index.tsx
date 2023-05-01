@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next"
 import { PrismaClient } from "@prisma/client"
 import { ErrorApi, Student } from "@/interfaces"
-import Table from "@/components/table"
+import TableStudents from "@/components/table/Students"
 import { useState } from "react"
 import ErrorMessage from "@/components/errorMessage"
 import RegisterStudentWrapper from "@/components/registerStudentWrapper"
@@ -60,7 +60,7 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
         {apiError ? (
           <ErrorMessage message="Erro ao listar estudantes" />
         ) : (
-          <Table
+          <TableStudents
             sourceData={studentList}
             setStudentList={setStudentList}
           />

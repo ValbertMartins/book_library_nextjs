@@ -6,6 +6,7 @@ import { MessageInstance } from "antd/lib/message/interface"
 import Select from "antd/lib/select"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import message from "antd/lib/message"
+import { previewData } from "next/dist/client/components/headers"
 interface formInputValues {
   bookId: string
   bookName: string
@@ -17,9 +18,15 @@ interface Props {
   formRef: FormInstance<any>
   toast: MessageInstance
   setOpenModalBorrowBook: Dispatch<SetStateAction<boolean>>
+  setUpdateStatistics: Dispatch<SetStateAction<boolean>>
 }
 
-const BorrowBookForm = ({ formRef, setOpenModalBorrowBook, toast }: Props) => {
+const BorrowBookForm = ({
+  formRef,
+  setOpenModalBorrowBook,
+  toast,
+  setUpdateStatistics,
+}: Props) => {
   const [studentList, setStudentList] = useState([] as Pick<Student, "id" | "name">[])
   const [bookList, setBookList] = useState([] as Pick<Book, "id" | "name">[])
 
@@ -45,8 +52,9 @@ const BorrowBookForm = ({ formRef, setOpenModalBorrowBook, toast }: Props) => {
 
     if (ok) {
       toast.destroy()
-      message.success("Livro cadastrado com sucesso.")
+      message.success("Livro emprestado com sucesso.")
       setOpenModalBorrowBook(false)
+      setUpdateStatistics(prevState => !prevState)
     } else {
       toast.destroy()
       message.error("Não foi possível emprestar o livro, tente novamente")

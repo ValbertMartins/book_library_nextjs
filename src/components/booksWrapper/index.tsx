@@ -17,8 +17,8 @@ interface Props {
 
 const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
-  const [bookCover, setBookCover] = useState<File | null>(null)
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
+  const [bookCover, setBookCover] = useState<File | null>(null)
   const [toast, toastContextHolder] = message.useMessage()
   const [formRefRegisterBook] = useForm()
   const [formRefBorrowBook] = useForm()
@@ -53,14 +53,14 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         <div className="flex">
           <button
             className="mb-4 mt-8 flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-4 py-2 mr-4 hover:bg-blue-400 transition-all"
-            onClick={() => setOpenModalBorrowBook(prevState => !prevState)}
+            onClick={() => setOpenModalBorrowBook(true)}
           >
             Emprestar livro
           </button>
 
           <button
             className="mb-4 mt-8 flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-4 py-2 mr-4 hover:bg-blue-400 transition-all "
-            onClick={() => setOpenModalRegisterBook(prevState => !prevState)}
+            onClick={() => setOpenModalRegisterBook(true)}
           >
             Cadastrar novo livro
           </button>
@@ -79,6 +79,7 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         }}
       >
         <BorrowBookForm
+          setUpdateStatistics={setUpdateStatistics}
           formRef={formRefBorrowBook}
           setOpenModalBorrowBook={setOpenModalBorrowBook}
           toast={toast}

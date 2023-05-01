@@ -35,7 +35,7 @@ export async function registerNewBorrowBook(formInputFields: {
     }
   } catch (error) {
     return {
-      ok: true,
+      ok: false,
     }
   }
 }
