@@ -8,7 +8,6 @@ import { Dispatch, SetStateAction } from "react"
 import { Book } from "@/interfaces"
 
 interface Props {
-  formRef: FormInstance<any>
   handleSubmitForm: (bookData: any) => Promise<void>
   setCoverPreview: Dispatch<SetStateAction<File | string>>
   book?: Book
@@ -16,11 +15,10 @@ interface Props {
 
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
-const BookForm = ({ formRef, handleSubmitForm, setCoverPreview, book }: Props) => {
+const BookForm = ({ handleSubmitForm, setCoverPreview, book }: Props) => {
   console.log(book)
   return (
     <Form
-      form={formRef}
       onFinish={handleSubmitForm}
       className="mt-10"
       preserve={false}

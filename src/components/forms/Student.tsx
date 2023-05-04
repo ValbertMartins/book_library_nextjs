@@ -5,27 +5,18 @@ import Form from "antd/lib/form"
 import Button from "antd/lib/button"
 import { Student } from "@/interfaces"
 
-import { FormInstance } from "antd/lib/form/Form"
-
 interface Props {
   handleSubmitForm: (studentData: Student) => Promise<void>
-  formRef: FormInstance<any>
+
   loading: boolean
   openInEdictMode?: boolean
   student?: Student
 }
 
-const StudentForm = ({
-  loading,
-  handleSubmitForm,
-  formRef,
-  openInEdictMode,
-  student,
-}: Props) => {
+const StudentForm = ({ loading, handleSubmitForm, openInEdictMode, student }: Props) => {
   return (
     <div>
       <Form
-        form={formRef}
         className="mt-10 flex flex-col"
         autoComplete="off"
         onFinish={handleSubmitForm}

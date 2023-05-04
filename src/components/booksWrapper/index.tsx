@@ -5,7 +5,6 @@ import BookList from "../bookList"
 import { registerNewBook } from "@/utils/handlerBook"
 import message from "antd/lib/message"
 import Image from "next/image"
-import { useForm } from "antd/lib/form/Form"
 import BookForm from "../forms/Book"
 import BorrowBookForm from "../forms/BorrowBook"
 
@@ -22,8 +21,6 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
-  const [formRefRegisterBook] = useForm()
-  const [formRefBorrowBook] = useForm()
 
   async function handleSubmitFormRegisterNewBook(formBookInputFields: FormBookInputFields) {
     toast.open({
@@ -38,7 +35,6 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
       message.success("Livro cadastrado com sucesso.")
       setOpenModalRegisterBook(false)
       setCoverPreview(coverPreviewPlaceholder)
-      formRefRegisterBook.resetFields()
       setUpdateStatistics(prevState => !prevState)
     } else {
       toast.destroy()
@@ -80,7 +76,6 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
       >
         <BorrowBookForm
           setUpdateStatistics={setUpdateStatistics}
-          formRef={formRefBorrowBook}
           setOpenModalBorrowBook={setOpenModalBorrowBook}
           toast={toast}
         />
@@ -95,14 +90,12 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         footer={null}
         destroyOnClose
         onCancel={() => {
-          formRefRegisterBook.resetFields()
           setCoverPreview(coverPreviewPlaceholder)
           setOpenModalRegisterBook(false)
         }}
       >
         <div className="grid grid-cols-2 gap-x-10">
           <BookForm
-            formRef={formRefRegisterBook}
             setCoverPreview={setCoverPreview}
             handleSubmitForm={handleSubmitFormRegisterNewBook}
           />

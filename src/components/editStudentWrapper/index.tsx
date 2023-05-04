@@ -1,7 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react"
 import { MdModeEditOutline } from "react-icons/md"
 import StudentForm from "../forms/Student"
-import { useForm } from "antd/lib/form/Form"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import { updateStudentInfo } from "@/utils/handlerStudent"
@@ -16,7 +15,6 @@ interface Props {
 const EditStudentWrapper = ({ student, setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [formRef] = useForm()
   const [toast, toastContextHolder] = message.useMessage()
 
   async function handleSubmitForm(studentInputFields: Omit<Student, "id">) {
@@ -71,7 +69,6 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       >
         <StudentForm
           loading={loading}
-          formRef={formRef}
           handleSubmitForm={handleSubmitForm}
           student={student}
           openInEdictMode

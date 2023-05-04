@@ -3,7 +3,6 @@ import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import StudentForm from "../forms/Student"
 import { registerNewStudent } from "@/utils/handlerStudent"
-import { useForm } from "antd/lib/form/Form"
 import message from "antd/lib/message"
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -13,7 +12,6 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
-  const [formRef] = useForm()
 
   async function handleSubmitForm(studentData: Omit<Student, "id">) {
     toast.open({
@@ -27,7 +25,6 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
     })
 
     if (ok && studentListUpdated) {
-      formRef.resetFields()
       setStudentList(studentListUpdated)
       setOpenModal(false)
       toast.destroy()
@@ -59,7 +56,6 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
         <StudentForm
           loading={loading}
           handleSubmitForm={handleSubmitForm}
-          formRef={formRef}
         />
 
         {toastContextHolder}

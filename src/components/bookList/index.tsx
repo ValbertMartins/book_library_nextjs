@@ -5,7 +5,6 @@ import Image from "next/image"
 import { useState } from "react"
 import TableStudentsOnBook from "../table/StudentsOnBook"
 import BookForm from "../forms/Book"
-import { useForm } from "antd/lib/form/Form"
 
 interface Props {
   bookList: Book[]
@@ -19,7 +18,6 @@ const BookList = ({ bookList }: Props) => {
   const [openModalBookDetails, setOpenModalBookDetails] = useState(false)
   const [book, setBook] = useState<Book | undefined>(undefined)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
-  const [formRefEditBook] = useForm()
 
   async function getBookDetails(book: Book) {
     setBook(book)
@@ -85,7 +83,6 @@ const BookList = ({ bookList }: Props) => {
           <BookForm
             book={book}
             handleSubmitForm={async () => {}}
-            formRef={formRefEditBook}
             setCoverPreview={setCoverPreview}
           />
 

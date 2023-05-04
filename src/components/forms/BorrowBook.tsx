@@ -1,7 +1,7 @@
 import { Book, Student } from "@/interfaces"
 import { getStudentsAndBooksNames, registerNewBorrowBook } from "@/utils/handlerBorrowBook"
 import Button from "antd/lib/button"
-import Form, { FormInstance } from "antd/lib/form"
+import Form from "antd/lib/form"
 import { MessageInstance } from "antd/lib/message/interface"
 import Select from "antd/lib/select"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
@@ -15,18 +15,12 @@ interface formInputValues {
 }
 
 interface Props {
-  formRef: FormInstance<any>
   toast: MessageInstance
   setOpenModalBorrowBook: Dispatch<SetStateAction<boolean>>
   setUpdateStatistics: Dispatch<SetStateAction<boolean>>
 }
 
-const BorrowBookForm = ({
-  formRef,
-  setOpenModalBorrowBook,
-  toast,
-  setUpdateStatistics,
-}: Props) => {
+const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setUpdateStatistics }: Props) => {
   const [studentList, setStudentList] = useState([] as Pick<Student, "id" | "name">[])
   const [bookList, setBookList] = useState([] as Pick<Book, "id" | "name">[])
 
@@ -63,7 +57,6 @@ const BorrowBookForm = ({
 
   return (
     <Form
-      form={formRef}
       className="mt-10"
       onFinish={handleSubmitForm}
     >
