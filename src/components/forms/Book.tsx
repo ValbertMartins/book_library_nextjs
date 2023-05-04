@@ -5,22 +5,29 @@ import InputNumber from "antd/lib/input-number"
 import Button from "antd/lib/button"
 import { MdFileUpload } from "react-icons/md"
 import { Dispatch, SetStateAction } from "react"
+import { Book } from "@/interfaces"
 
 interface Props {
   formRef: FormInstance<any>
   handleSubmitForm: (bookData: any) => Promise<void>
-  setBookCover: Dispatch<SetStateAction<File | null>>
+  setCoverPreview: Dispatch<SetStateAction<File | string>>
+  book?: Book
 }
 
-const BookForm = ({ formRef, handleSubmitForm, setBookCover }: Props) => {
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
+
+const BookForm = ({ formRef, handleSubmitForm, setCoverPreview, book }: Props) => {
+  console.log(book)
   return (
     <Form
       form={formRef}
       onFinish={handleSubmitForm}
       className="mt-10"
+      preserve={false}
     >
       <Form.Item
         name="name"
+        initialValue={book && book.name}
         rules={[{ required: true, message: "Esse campo é obrigatório" }]}
       >
         <Input placeholder="Nome do livro" />
@@ -28,31 +35,43 @@ const BookForm = ({ formRef, handleSubmitForm, setBookCover }: Props) => {
 
       <Form.Item
         name="quantity_available"
+        initialValue={book && book.quantity_available}
         rules={[{ required: true, message: "Esse campo é obrigatório" }]}
       >
         <InputNumber
-          placeholder="Quantidade disponível"
+          placeholder="Quantidade"
           min={1}
           className="w-full"
         />
       </Form.Item>
 
-      <Upload
-        maxCount={1}
-        accept=".jpg,.png"
-        beforeUpload={bookCover => {
-          setBookCover(bookCover)
-          return false
+      <Form.Item
+        valuePropName="fileList"
+        name="coverList"
+        getValueFromEvent={(e: any) => {
+          if (Array.isArray(e)) {
+            return e
+          }
+          return e?.fileList
         }}
-        onRemove={() => setBookCover(null)}
       >
-        <Button
-          icon={<MdFileUpload />}
-          className="flex items-center gap-2"
+        <Upload
+          maxCount={1}
+          accept=".jpg,.png"
+          beforeUpload={cover => {
+            setCoverPreview(cover)
+            return false
+          }}
+          onRemove={() => setCoverPreview(coverPreviewPlaceholder)}
         >
-          Enviar capa
-        </Button>
-      </Upload>
+          <Button
+            icon={<MdFileUpload />}
+            className="flex items-center gap-2"
+          >
+            Enviar capa
+          </Button>
+        </Upload>
+      </Form.Item>
       <Form.Item>
         <Button
           type="primary"

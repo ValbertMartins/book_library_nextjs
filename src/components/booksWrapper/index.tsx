@@ -1,4 +1,4 @@
-import { Book } from "@/interfaces"
+import { Book, FormBookInputFields } from "@/interfaces"
 import { Dispatch, SetStateAction, useState } from "react"
 import ModalAntd from "antd/lib/modal"
 import BookList from "../bookList"
@@ -15,28 +15,29 @@ interface Props {
   setUpdateStatistics: Dispatch<SetStateAction<boolean>>
 }
 
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
+
 const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
-  const [bookCover, setBookCover] = useState<File | null>(null)
+  const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
   const [formRefRegisterBook] = useForm()
   const [formRefBorrowBook] = useForm()
 
-  async function handleSubmitFormRegisterNewBook(formInputFields: Omit<Book, "id" | "cover">) {
+  async function handleSubmitFormRegisterNewBook(formBookInputFields: FormBookInputFields) {
     toast.open({
       content: "Cadastrando livro",
       type: "loading",
       duration: 0,
     })
-    const { ok, bookListUpdated } = await registerNewBook(formInputFields, bookCover)
-
+    const { ok, bookListUpdated } = await registerNewBook(formBookInputFields)
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)
       toast.destroy()
       message.success("Livro cadastrado com sucesso.")
       setOpenModalRegisterBook(false)
-      setBookCover(null)
+      setCoverPreview(coverPreviewPlaceholder)
       formRefRegisterBook.resetFields()
       setUpdateStatistics(prevState => !prevState)
     } else {
@@ -75,7 +76,6 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         destroyOnClose
         onCancel={() => {
           setOpenModalBorrowBook(false)
-          formRefBorrowBook.resetFields()
         }}
       >
         <BorrowBookForm
@@ -95,15 +95,15 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         footer={null}
         destroyOnClose
         onCancel={() => {
-          setBookCover(null)
-          setOpenModalRegisterBook(false)
           formRefRegisterBook.resetFields()
+          setCoverPreview(coverPreviewPlaceholder)
+          setOpenModalRegisterBook(false)
         }}
       >
         <div className="grid grid-cols-2 gap-x-10">
           <BookForm
             formRef={formRefRegisterBook}
-            setBookCover={setBookCover}
+            setCoverPreview={setCoverPreview}
             handleSubmitForm={handleSubmitFormRegisterNewBook}
           />
 
@@ -112,7 +112,11 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
               width={240}
               height={340}
               className="w-full h-full"
-              src={bookCover ? URL.createObjectURL(bookCover) : "/book_cover_placeholder.png"}
+              src={
+                typeof coverPreview == "string"
+                  ? coverPreview
+                  : URL.createObjectURL(coverPreview)
+              }
               alt=""
             />
           </div>

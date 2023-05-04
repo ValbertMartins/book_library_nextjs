@@ -61,7 +61,9 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       <ModalAntd
         title={<h1 className="font-bold text-xl">Atualizar estudante</h1>}
         open={openModal}
-        onCancel={() => setOpenModal(false)}
+        onCancel={() => {
+          setOpenModal(false)
+        }}
         cancelText="Cancelar"
         centered
         destroyOnClose

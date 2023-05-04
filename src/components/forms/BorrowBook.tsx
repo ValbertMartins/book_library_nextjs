@@ -6,7 +6,7 @@ import { MessageInstance } from "antd/lib/message/interface"
 import Select from "antd/lib/select"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import message from "antd/lib/message"
-import { previewData } from "next/dist/client/components/headers"
+
 interface formInputValues {
   bookId: string
   bookName: string
@@ -100,7 +100,7 @@ const BorrowBookForm = ({
           type="primary"
           htmlType="submit"
         >
-          Emprestar livro
+          Salvar
         </Button>
       </Form.Item>
     </Form>

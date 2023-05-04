@@ -6,7 +6,6 @@ import { Fragment } from "react"
 function formatDate(date: string) {
   const dateFormatted = dayjs(date)
   const day = dateFormatted.date()
-  console.log(day)
   const month = dateFormatted.month()
   const year = dateFormatted.year()
   return `${day < 10 ? `0${day}` : day}-${month < 10 ? `0${month}` : month}-${year}`
@@ -50,6 +49,7 @@ const TableStudentsOnBook = ({ bookOnStudents }: { bookOnStudents: BookOnStudent
             <Button
               className="my-4 ml-4"
               type="primary"
+              size="small"
             >
               Entregar
             </Button>

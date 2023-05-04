@@ -1,3 +1,5 @@
+import { UploadFile } from "antd/lib/upload"
+
 export interface Book {
   id: string
   name: string
@@ -34,4 +36,10 @@ export interface Statistics {
 export interface BookOnStudent {
   created_at: string
   student: Student
+}
+
+export interface FormBookInputFields {
+  name: string
+  quantity: number
+  coverList?: UploadFile[]
 }

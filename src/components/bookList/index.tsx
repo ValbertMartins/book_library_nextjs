@@ -1,31 +1,45 @@
-import { Book, BookOnStudent, Student } from "@/interfaces"
+import { Book, BookOnStudent } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import axios from "axios"
 import Image from "next/image"
 import { useState } from "react"
 import TableStudentsOnBook from "../table/StudentsOnBook"
+import BookForm from "../forms/Book"
+import { useForm } from "antd/lib/form/Form"
 
 interface Props {
   bookList: Book[]
 }
 
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
+
 const BookList = ({ bookList }: Props) => {
   const [imagesLoading, setImagesLoading] = useState(true)
   const [bookOnStudents, setBookOnStudents] = useState<BookOnStudent[] | null>(null)
   const [openModalBookDetails, setOpenModalBookDetails] = useState(false)
+  const [book, setBook] = useState<Book | undefined>(undefined)
+  const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
+  const [formRefEditBook] = useForm()
+
+  async function getBookDetails(book: Book) {
+    setBook(book)
+    setOpenModalBookDetails(true)
+    if (book.cover) {
+      setCoverPreview(book.cover)
+    }
+
+    const { data } = await axios.post<BookOnStudent[]>("/api/getStudentsOnBook", {
+      bookId: book.id,
+    })
+    setBookOnStudents(data)
+  }
 
   return (
     <div className="mx-4 mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8  md:gap-x-4 md:gap-y-10 xl:grid-cols-5  overflow-y-scroll max-h-[65vh] 2xl:gap-x-9">
       {bookList.map(book => (
         <div
-          onClick={async () => {
-            setOpenModalBookDetails(true)
-
-            const { data } = await axios.post<BookOnStudent[]>("/api/getStudentsOnBook", {
-              bookId: book.id,
-            })
-
-            setBookOnStudents(data)
+          onClick={() => {
+            getBookDetails(book)
           }}
           key={book.id}
           className="flex flex-col cursor-pointer"
@@ -38,7 +52,7 @@ const BookList = ({ bookList }: Props) => {
               width="300"
               height="100"
               priority
-              src={book.cover ? book.cover : "/book_cover_placeholder.png"}
+              src={book.cover ? book.cover : coverPreviewPlaceholder}
               onLoadingComplete={() => setImagesLoading(false)}
               alt={`Capa do livro ${book.name} `}
             />
@@ -52,16 +66,44 @@ const BookList = ({ bookList }: Props) => {
           </div>
         </div>
       ))}
+
       <ModalAntd
         open={openModalBookDetails}
-        width={1200}
+        width={1000}
+        style={{
+          top: 0,
+        }}
         onCancel={() => {
+          setBook(undefined)
           setOpenModalBookDetails(false)
           setBookOnStudents(null)
         }}
+        destroyOnClose
         footer={null}
       >
-        {bookOnStudents && <TableStudentsOnBook bookOnStudents={bookOnStudents} />}
+        <div className="grid grid-cols-2 gap-x-10 mt-10">
+          <BookForm
+            book={book}
+            handleSubmitForm={async () => {}}
+            formRef={formRefEditBook}
+            setCoverPreview={setCoverPreview}
+          />
+
+          <div className="rounded-xl overflow-hidden max-h-96">
+            <Image
+              width={300}
+              height={300}
+              className="w-full h-auto"
+              src={
+                typeof coverPreview == "string"
+                  ? coverPreview
+                  : URL.createObjectURL(coverPreview)
+              }
+              alt=""
+            />
+          </div>
+        </div>
+        <div>{bookOnStudents && <TableStudentsOnBook bookOnStudents={bookOnStudents} />}</div>
       </ModalAntd>
     </div>
   )

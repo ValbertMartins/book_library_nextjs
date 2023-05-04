@@ -30,6 +30,7 @@ const StudentForm = ({
         autoComplete="off"
         onFinish={handleSubmitForm}
         role="form-register-student"
+        preserve={false}
       >
         <Form.Item
           name="name"

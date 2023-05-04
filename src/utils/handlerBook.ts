@@ -1,18 +1,18 @@
 import axios from "axios"
 import { convertImageToBase64 } from "./convertImageToBase64"
-import { Book } from "@/interfaces"
+import { Book, FormBookInputFields } from "@/interfaces"
 import { endpoints } from "./apiEndpoints"
 
-export async function registerNewBook(
-  formInputFields: Omit<Book, "id" | "cover">,
-  bookCover?: File | null
-) {
+export async function registerNewBook(formBookInputFields: FormBookInputFields) {
+  const { coverList } = formBookInputFields
+
   try {
-    if (bookCover) {
-      const bookCoverBase64 = await convertImageToBase64(bookCover)
+    if (coverList) {
+      const cover = coverList[0].originFileObj
+      const coverBase64 = await convertImageToBase64(cover as File)
       const { data } = await axios.post<{ bookListUpdated: Book[] }>("/api/registerNewBook", {
-        ...formInputFields,
-        cover: bookCoverBase64,
+        ...formBookInputFields,
+        cover: coverBase64,
       })
 
       return {
@@ -22,7 +22,7 @@ export async function registerNewBook(
     } else {
       const { data } = await axios.post<{ bookListUpdated: Book[] }>(
         endpoints.registerNewBook.url,
-        formInputFields
+        formBookInputFields
       )
 
       return {

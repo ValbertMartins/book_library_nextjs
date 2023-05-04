@@ -43,7 +43,7 @@ model BookOnStudent {
   studentId  String
   created_at DateTime @default(now())
 
-  @@map("booksOnStudent")
+  @@map("booksOnStudents")
 }
 
 model StudentProgress {
