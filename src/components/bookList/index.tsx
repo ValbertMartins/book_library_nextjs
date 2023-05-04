@@ -1,10 +1,8 @@
 import { Book, BookOnStudent } from "@/interfaces"
-import ModalAntd from "antd/lib/modal"
 import axios from "axios"
 import Image from "next/image"
 import { useState } from "react"
-import TableStudentsOnBook from "../table/StudentsOnBook"
-import BookForm from "../forms/Book"
+import { BookDetails } from "../bookDetails"
 
 interface Props {
   bookList: Book[]
@@ -65,43 +63,16 @@ const BookList = ({ bookList }: Props) => {
         </div>
       ))}
 
-      <ModalAntd
-        open={openModalBookDetails}
-        width={1000}
-        style={{
-          top: 0,
-        }}
-        onCancel={() => {
-          setBook(undefined)
-          setOpenModalBookDetails(false)
-          setBookOnStudents(null)
-        }}
-        destroyOnClose
-        footer={null}
-      >
-        <div className="grid grid-cols-2 gap-x-10 mt-10">
-          <BookForm
-            book={book}
-            handleSubmitForm={async () => {}}
-            setCoverPreview={setCoverPreview}
-          />
-
-          <div className="rounded-xl overflow-hidden max-h-96">
-            <Image
-              width={300}
-              height={300}
-              className="w-full h-auto"
-              src={
-                typeof coverPreview == "string"
-                  ? coverPreview
-                  : URL.createObjectURL(coverPreview)
-              }
-              alt=""
-            />
-          </div>
-        </div>
-        <div>{bookOnStudents && <TableStudentsOnBook bookOnStudents={bookOnStudents} />}</div>
-      </ModalAntd>
+      <BookDetails
+        book={book}
+        setBook={setBook}
+        bookOnStudents={bookOnStudents}
+        setBookOnStudents={setBookOnStudents}
+        openModalBookDetails={openModalBookDetails}
+        setOpenModalBookDetails={setOpenModalBookDetails}
+        coverPreview={coverPreview}
+        setCoverPreview={setCoverPreview}
+      ></BookDetails>
     </div>
   )
 }

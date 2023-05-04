@@ -13,7 +13,7 @@ function formatDate(date: string) {
 
 const TableStudentsOnBook = ({ bookOnStudents }: { bookOnStudents: BookOnStudent[] }) => {
   return (
-    <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color mt-10">
+    <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color ">
       <div className="border-b-[1px] border-r-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold col-start-1 col-end-5">
         Nome
       </div>

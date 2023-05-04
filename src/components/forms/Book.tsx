@@ -16,7 +16,6 @@ interface Props {
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 const BookForm = ({ handleSubmitForm, setCoverPreview, book }: Props) => {
-  console.log(book)
   return (
     <Form
       onFinish={handleSubmitForm}
@@ -73,7 +72,6 @@ const BookForm = ({ handleSubmitForm, setCoverPreview, book }: Props) => {
       <Form.Item>
         <Button
           type="primary"
-          className="mt-6"
           htmlType="submit"
         >
           salvar
