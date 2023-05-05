@@ -59,7 +59,7 @@ export default function Home({ initialBookList, apiError }: Props) {
             />
             <input
               type="text"
-              placeholder="Search book here"
+              placeholder="Procurar livro"
               className=" py-1 px-3 outline-none border-none placeholder:text-sm"
             />
           </div>

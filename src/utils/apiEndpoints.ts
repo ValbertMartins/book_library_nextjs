@@ -1,29 +1,29 @@
 export const endpoints = {
   registerNewStudent: {
-    url: "/api/registerNewStudent",
+    url: "/api/student/registerNewStudent",
   },
   editStudent: {
-    url: "/api/editStudent",
+    url: "/api/student/editStudent",
   },
   deleteStudent: {
-    url: "/api/deleteStudent",
-  },
-  registerNewBook: {
-    url: "/api/registerNewBook",
-  },
-  editBook: {
-    url: "/api/editBook",
+    url: "/api/student/deleteStudent",
   },
   getStudentsOnBook: {
-    url: "/api/getStudentsOnBook",
+    url: "/api/student/getStudentsOnBook",
+  },
+  registerNewBook: {
+    url: "/api/book/registerNewBook",
+  },
+  editBook: {
+    url: "/api/book/editBook",
+  },
+  registerNewBorrowBook: {
+    url: "/api/book/registerNewBorrowBook",
   },
   getStatistics: {
     url: "/api/getStatistics",
   },
   getStudentsAndBooks: {
     url: "/api/getStudentsAndBooks",
-  },
-  registerNewBorrowBook: {
-    url: "/api/registerNewBorrowBook",
   },
 }
