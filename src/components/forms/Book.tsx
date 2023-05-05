@@ -1,4 +1,4 @@
-import Form, { FormInstance } from "antd/lib/form"
+import Form from "antd/lib/form"
 import Upload from "antd/lib/upload/Upload"
 import Input from "antd/lib/input"
 import InputNumber from "antd/lib/input-number"
@@ -25,7 +25,7 @@ const BookForm = ({ handleSubmitForm, setCoverPreview, book }: Props) => {
       <Form.Item
         name="name"
         initialValue={book && book.name}
-        rules={[{ required: true, message: "Esse campo é obrigatório" }]}
+        rules={[{ required: false, message: "Esse campo é obrigatório" }]}
       >
         <Input placeholder="Nome do livro" />
       </Form.Item>
@@ -54,12 +54,16 @@ const BookForm = ({ handleSubmitForm, setCoverPreview, book }: Props) => {
       >
         <Upload
           maxCount={1}
-          accept=".jpg,.png"
+          accept=".jpg,.png,.jpeg"
           beforeUpload={cover => {
             setCoverPreview(cover)
             return false
           }}
-          onRemove={() => setCoverPreview(coverPreviewPlaceholder)}
+          onRemove={() =>
+            book?.cover
+              ? setCoverPreview(book.cover)
+              : setCoverPreview(coverPreviewPlaceholder)
+          }
         >
           <Button
             icon={<MdFileUpload />}

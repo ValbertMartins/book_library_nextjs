@@ -38,8 +38,13 @@ export interface BookOnStudent {
   student: Student
 }
 
-export interface FormBookInputFields {
+export interface FormRegisterBookInputFields {
   name: string
   quantity: number
+  coverList?: UploadFile[]
+}
+export interface FormEditBookInputFields {
+  name?: string
+  quantity?: number
   coverList?: UploadFile[]
 }

@@ -11,6 +11,9 @@ export const endpoints = {
   registerNewBook: {
     url: "/api/registerNewBook",
   },
+  editBook: {
+    url: "/api/editBook",
+  },
   getStatistics: {
     url: "/api/getStatistics",
   },

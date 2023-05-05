@@ -4,6 +4,7 @@ import BookForm from "../forms/Book"
 import { Dispatch, SetStateAction, useState } from "react"
 import { Book, BookOnStudent } from "@/interfaces"
 import Image from "next/image"
+import { editBook } from "@/utils/handlerBook"
 
 interface Props {
   setOpenModalBookDetails: Dispatch<SetStateAction<boolean>>
@@ -15,6 +16,8 @@ interface Props {
   setCoverPreview: Dispatch<SetStateAction<string | File>>
   coverPreview: string | File
 }
+
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 export const BookDetails = ({
   setOpenModalBookDetails,
@@ -28,6 +31,12 @@ export const BookDetails = ({
 }: Props) => {
   const [loadingCover, setLoadingCover] = useState(true)
 
+  async function handleSubmitFormEditBook(formInputFields: any) {
+    console.log(formInputFields)
+
+    await editBook({ ...formInputFields, id: book?.id })
+  }
+
   return (
     <ModalAntd
       open={openModalBookDetails}
@@ -39,6 +48,7 @@ export const BookDetails = ({
         setBook(undefined)
         setOpenModalBookDetails(false)
         setBookOnStudents(null)
+        setCoverPreview(coverPreviewPlaceholder)
       }}
       destroyOnClose
       footer={null}
@@ -47,15 +57,6 @@ export const BookDetails = ({
       <div>{bookOnStudents && <TableStudentsOnBook bookOnStudents={bookOnStudents} />}</div>
 
       <div className="grid grid-cols-2 gap-x-10 mt-10">
-        <div>
-          <h1 className="font-bold text-xl">Editar Livro</h1>
-          <BookForm
-            book={book}
-            handleSubmitForm={async () => {}}
-            setCoverPreview={setCoverPreview}
-          />
-        </div>
-
         <div className="rounded-xl overflow-hidden">
           <Image
             width={300}
@@ -70,6 +71,14 @@ export const BookDetails = ({
             }
             onLoadingComplete={() => setLoadingCover(false)}
             alt=""
+          />
+        </div>
+        <div>
+          <h1 className="font-bold text-xl">Editar Livro</h1>
+          <BookForm
+            book={book}
+            handleSubmitForm={handleSubmitFormEditBook}
+            setCoverPreview={setCoverPreview}
           />
         </div>
       </div>

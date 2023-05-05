@@ -1,4 +1,4 @@
-import { Book, FormBookInputFields } from "@/interfaces"
+import { Book, FormRegisterBookInputFields } from "@/interfaces"
 import { Dispatch, SetStateAction, useState } from "react"
 import ModalAntd from "antd/lib/modal"
 import BookList from "../bookList"
@@ -22,7 +22,9 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
 
-  async function handleSubmitFormRegisterNewBook(formBookInputFields: FormBookInputFields) {
+  async function handleSubmitFormRegisterNewBook(
+    formBookInputFields: FormRegisterBookInputFields
+  ) {
     toast.open({
       content: "Cadastrando livro",
       type: "loading",

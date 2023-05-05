@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 const prisma = new PrismaClient()
 
-export default async function registerNewStudent(req: NextApiRequest, res: NextApiResponse) {
+export default async function editStudent(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "PATCH") return res.status(400).json({ message: "invalid request" })
 
   const studentDataSchema = z.object({
