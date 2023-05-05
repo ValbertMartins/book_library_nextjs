@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { v2 as cloudinary } from "cloudinary"
 import { PrismaClient } from "@prisma/client"
+import { getPublicIdFromUrl } from "@/utils/getPublicIdFromImageUrl"
 
 const prisma = new PrismaClient()
 cloudinary.config({
@@ -10,23 +11,7 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 })
 
-function getPublicIdFromUrl(photoUrl: string) {
-  const photoUrlArrayReverse = photoUrl.split("").reverse()
-
-  const indexLast = photoUrlArrayReverse.findIndex(element => element == "/")
-
-  const indexInitial = photoUrlArrayReverse.findIndex(element => element == ".")
-
-  const publicId = photoUrlArrayReverse
-    .slice(indexInitial + 1, indexLast)
-    .reverse()
-    .join("")
-
-  return publicId
-}
-
 export default async function editBook(req: NextApiRequest, res: NextApiResponse) {
-  console.log(req.body)
   const editBookSchema = z.object({
     name: z.string().optional(),
     quantity_available: z.number().optional(),
@@ -44,13 +29,11 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
         },
       })
       const newBookCoverCloudinaryData = await cloudinary.uploader.upload(cover)
-
       if (book?.cover) {
         const deleteOldBookCover = await cloudinary.uploader.destroy(
-          getPublicIdFromUrl(book?.cover)
+          getPublicIdFromUrl(book.cover)
         )
       }
-
       const bookUpdated = await prisma.book.update({
         where: {
           id: id,
@@ -60,8 +43,16 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
           cover: newBookCoverCloudinaryData.secure_url,
         },
       })
+
+      await res.revalidate("/")
+      const bookListUpdated = await prisma.book.findMany({
+        orderBy: {
+          created_at: "desc",
+        },
+      })
+
       return res.status(200).json({
-        bookUpdated,
+        bookListUpdated,
       })
     }
 
@@ -74,8 +65,15 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
       },
     })
 
+    await res.revalidate("/")
+    const bookListUpdated = await prisma.book.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+    })
+
     return res.status(200).json({
-      bookUpdated,
+      bookListUpdated,
     })
   } catch (error) {
     res.status(500).json({

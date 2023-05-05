@@ -1,41 +1,26 @@
-import { Book, BookOnStudent } from "@/interfaces"
-import axios from "axios"
+import { Book } from "@/interfaces"
 import Image from "next/image"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { BookDetails } from "../bookDetails"
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
   bookList: Book[]
+  setBookList: Dispatch<SetStateAction<Book[]>>
 }
 
-const coverPreviewPlaceholder = "/book_cover_placeholder.png"
-
-const BookList = ({ bookList }: Props) => {
+const BookList = ({ bookList, setBookList }: Props) => {
   const [imagesLoading, setImagesLoading] = useState(true)
-  const [bookOnStudents, setBookOnStudents] = useState<BookOnStudent[] | null>(null)
   const [openModalBookDetails, setOpenModalBookDetails] = useState(false)
   const [book, setBook] = useState<Book | undefined>(undefined)
-  const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
-
-  async function getBookDetails(book: Book) {
-    setBook(book)
-    setOpenModalBookDetails(true)
-    if (book.cover) {
-      setCoverPreview(book.cover)
-    }
-
-    const { data } = await axios.post<BookOnStudent[]>("/api/getStudentsOnBook", {
-      bookId: book.id,
-    })
-    setBookOnStudents(data)
-  }
 
   return (
     <div className="mx-4 mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8  md:gap-x-4 md:gap-y-10 xl:grid-cols-5  overflow-y-scroll max-h-[65vh] 2xl:gap-x-9">
       {bookList.map(book => (
         <div
           onClick={() => {
-            getBookDetails(book)
+            setOpenModalBookDetails(true)
+            setBook(book)
           }}
           key={book.id}
           className="flex flex-col cursor-pointer"
@@ -63,16 +48,15 @@ const BookList = ({ bookList }: Props) => {
         </div>
       ))}
 
-      <BookDetails
-        book={book}
-        setBook={setBook}
-        bookOnStudents={bookOnStudents}
-        setBookOnStudents={setBookOnStudents}
-        openModalBookDetails={openModalBookDetails}
-        setOpenModalBookDetails={setOpenModalBookDetails}
-        coverPreview={coverPreview}
-        setCoverPreview={setCoverPreview}
-      ></BookDetails>
+      {book && (
+        <BookDetails
+          book={book}
+          setBook={setBook}
+          openModalBookDetails={openModalBookDetails}
+          setOpenModalBookDetails={setOpenModalBookDetails}
+          setBookList={setBookList}
+        />
+      )}
     </div>
   )
 }

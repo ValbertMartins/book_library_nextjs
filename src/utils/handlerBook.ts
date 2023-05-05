@@ -1,6 +1,11 @@
 import axios from "axios"
 import { convertImageToBase64 } from "./convertImageToBase64"
-import { Book, FormEditBookInputFields, FormRegisterBookInputFields } from "@/interfaces"
+import {
+  Book,
+  BookOnStudent,
+  FormEditBookInputFields,
+  FormRegisterBookInputFields,
+} from "@/interfaces"
 import { endpoints } from "./apiEndpoints"
 
 export async function registerNewBook(formBookInputFields: FormRegisterBookInputFields) {
@@ -22,16 +27,15 @@ export async function registerNewBook(formBookInputFields: FormRegisterBookInput
         ok: true,
         bookListUpdated: data.bookListUpdated,
       }
-    } else {
-      const { data } = await axios.post<{ bookListUpdated: Book[] }>(
-        endpoints.registerNewBook.url,
-        formBookInputFields
-      )
+    }
+    const { data } = await axios.post<{ bookListUpdated: Book[] }>(
+      endpoints.registerNewBook.url,
+      formBookInputFields
+    )
 
-      return {
-        ok: true,
-        bookListUpdated: data.bookListUpdated,
-      }
+    return {
+      ok: true,
+      bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
     return {
@@ -66,6 +70,25 @@ export async function editBook(formBookInputFields: FormEditBookInputFields) {
     return {
       ok: true,
       bookListUpdated: data.bookListUpdated,
+    }
+  } catch (error) {
+    return {
+      ok: false,
+    }
+  }
+}
+
+export async function getStudentsOnBook(bookId: string) {
+  try {
+    const { data: studentsOnBook } = await axios.post<BookOnStudent[]>(
+      endpoints.getStudentsOnBook.url,
+      {
+        bookId,
+      }
+    )
+    return {
+      ok: true,
+      studentsOnBook,
     }
   } catch (error) {
     return {

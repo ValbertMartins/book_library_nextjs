@@ -118,7 +118,10 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         </div>
         {toastContextHolder}
       </ModalAntd>
-      <BookList bookList={bookList} />
+      <BookList
+        bookList={bookList}
+        setBookList={setBookList}
+      />
     </section>
   )
 }

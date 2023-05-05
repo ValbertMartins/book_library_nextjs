@@ -14,6 +14,9 @@ export const endpoints = {
   editBook: {
     url: "/api/editBook",
   },
+  getStudentsOnBook: {
+    url: "/api/getStudentsOnBook",
+  },
   getStatistics: {
     url: "/api/getStatistics",
   },

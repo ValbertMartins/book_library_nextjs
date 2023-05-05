@@ -1,40 +1,67 @@
 import TableStudentsOnBook from "../table/StudentsOnBook"
 import ModalAntd from "antd/lib/modal"
 import BookForm from "../forms/Book"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Book, BookOnStudent } from "@/interfaces"
 import Image from "next/image"
-import { editBook } from "@/utils/handlerBook"
+import { editBook, getStudentsOnBook } from "@/utils/handlerBook"
+import message from "antd/lib/message"
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
   setOpenModalBookDetails: Dispatch<SetStateAction<boolean>>
   openModalBookDetails: boolean
   setBook: Dispatch<SetStateAction<Book | undefined>>
-  book: Book | undefined
-  setBookOnStudents: Dispatch<SetStateAction<BookOnStudent[] | null>>
-  bookOnStudents: BookOnStudent[] | null
-  setCoverPreview: Dispatch<SetStateAction<string | File>>
-  coverPreview: string | File
+  book: Book
+  setBookList: Dispatch<SetStateAction<Book[]>>
 }
-
-const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 export const BookDetails = ({
   setOpenModalBookDetails,
   openModalBookDetails,
   setBook,
   book,
-  setBookOnStudents,
-  bookOnStudents,
-  setCoverPreview,
-  coverPreview,
+  setBookList,
 }: Props) => {
   const [loadingCover, setLoadingCover] = useState(true)
+  const [bookOnStudents, setBookOnStudents] = useState<BookOnStudent[] | null>(null)
+  const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
+  const [toast, toastContextHolder] = message.useMessage()
+
+  useEffect(() => {
+    async function getBookDetails(book: Book) {
+      if (book.cover) {
+        setCoverPreview(book.cover)
+      }
+
+      const { ok, studentsOnBook } = await getStudentsOnBook(book.id)
+      if (ok && studentsOnBook) {
+        toast.destroy()
+
+        return setBookOnStudents(studentsOnBook)
+      }
+    }
+
+    getBookDetails(book)
+  }, [book])
 
   async function handleSubmitFormEditBook(formInputFields: any) {
-    console.log(formInputFields)
+    toast.open({
+      content: "Atualizando livro, aguarde...",
+      type: "loading",
+      duration: 0,
+    })
 
-    await editBook({ ...formInputFields, id: book?.id })
+    const { ok, bookListUpdated } = await editBook({ ...formInputFields, id: book.id })
+
+    if (ok) {
+      bookListUpdated && setBookList(bookListUpdated)
+      toast.destroy()
+      message.success("Livro atualizado com sucesso")
+    } else {
+      toast.destroy()
+      message.error("Falha ao atualizar o livro")
+    }
   }
 
   return (
@@ -82,6 +109,7 @@ export const BookDetails = ({
           />
         </div>
       </div>
+      {toastContextHolder}
     </ModalAntd>
   )
 }

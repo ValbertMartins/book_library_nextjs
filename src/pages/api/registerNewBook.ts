@@ -38,7 +38,11 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
 
     await res.revalidate("/")
 
-    const bookListUpdated = await prisma.book.findMany()
+    const bookListUpdated = await prisma.book.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+    })
 
     res.status(200).json({
       registeredBook,

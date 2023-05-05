@@ -13,7 +13,7 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
   try {
     const { bookId } = bookIdSchema.parse(req.body)
 
-    const bookOnStudentDetails = await prisma.bookOnStudent.findMany({
+    const studentsOnBook = await prisma.bookOnStudent.findMany({
       where: {
         bookId: {
           equals: bookId,
@@ -32,7 +32,7 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
       },
     })
 
-    res.status(200).json(bookOnStudentDetails)
+    res.status(200).json(studentsOnBook)
   } catch (error) {
     res.status(500).json({
       error: {

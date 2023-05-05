@@ -19,7 +19,11 @@ export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
 
   try {
-    let initialBookList = await prisma.book.findMany()
+    let initialBookList = await prisma.book.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+    })
     initialBookList = JSON.parse(JSON.stringify(initialBookList))
 
     return {
