@@ -2,7 +2,7 @@ import axios from "axios"
 import { convertImageToBase64 } from "./convertImageToBase64"
 import {
   Book,
-  BookOnStudent,
+  StudentBook,
   FormEditBookInputFields,
   FormRegisterBookInputFields,
 } from "@/interfaces"
@@ -80,7 +80,7 @@ export async function editBook(formBookInputFields: FormEditBookInputFields) {
 
 export async function getStudentsOnBook(bookId: string) {
   try {
-    const { data: studentsOnBook } = await axios.post<BookOnStudent[]>(
+    const { data: studentsOnBook } = await axios.post<StudentBook[]>(
       endpoints.getStudentsOnBook.url,
       {
         bookId,

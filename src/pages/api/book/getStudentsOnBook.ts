@@ -11,7 +11,7 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
     try {
       const { bookId } = bookIdSchema.parse(req.body)
 
-      const studentsOnBook = await prisma.bookOnStudent.findMany({
+      const studentsOnBook = await prisma.studentBook.findMany({
         where: {
           bookId: {
             equals: bookId,

@@ -33,7 +33,7 @@ export interface Statistics {
   booksBorrowedCounter: number
 }
 
-export interface BookOnStudent {
+export interface StudentBook {
   created_at: string
   student: Student
 }

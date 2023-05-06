@@ -28,7 +28,7 @@ export async function registerNewBorrowBook(formInputFields: {
   bookId: string
 }) {
   try {
-    await axios.post(endpoints.registerNewBorrowBook.url, formInputFields)
+    await axios.post(endpoints.borrowBook.url, formInputFields)
 
     return {
       ok: true,

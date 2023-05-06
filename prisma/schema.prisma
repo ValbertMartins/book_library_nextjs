@@ -16,7 +16,7 @@ model Student {
   grade           Int
   class           String
   gender          String
-  studentWithBook BookOnStudent[]
+  studentWithBook StudentBook[]
   created_at      DateTime         @default(now())
   studentProgress StudentProgress?
 
@@ -24,17 +24,17 @@ model Student {
 }
 
 model Book {
-  id                 String          @id @default(uuid())
+  id                 String        @id @default(uuid())
   name               String
   quantity_available Int
-  studentWithBook    BookOnStudent[]
+  studentWithBook    StudentBook[]
   cover              String?
-  created_at         DateTime        @default(now())
+  created_at         DateTime      @default(now())
 
   @@map("books")
 }
 
-model BookOnStudent {
+model StudentBook {
   id String @id @default(uuid())
 
   book       Book     @relation(fields: [bookId], references: [id])
@@ -43,7 +43,7 @@ model BookOnStudent {
   studentId  String
   created_at DateTime @default(now())
 
-  @@map("booksOnStudents")
+  @@map("studentsBooks")
 }
 
 model StudentProgress {

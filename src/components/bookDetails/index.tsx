@@ -2,10 +2,11 @@ import TableStudentsOnBook from "../table/StudentsOnBook"
 import ModalAntd from "antd/lib/modal"
 import BookForm from "../forms/Book"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { Book, BookOnStudent } from "@/interfaces"
+import { Book, StudentBook } from "@/interfaces"
 import Image from "next/image"
 import { editBook, getStudentsOnBook } from "@/utils/handlerBook"
 import message from "antd/lib/message"
+import axios from "axios"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
@@ -24,7 +25,7 @@ export const BookDetails = ({
   setBookList,
 }: Props) => {
   const [loadingCover, setLoadingCover] = useState(true)
-  const [bookOnStudents, setBookOnStudents] = useState<BookOnStudent[] | null>(null)
+  const [studentsOnBook, setStudentsOnBook] = useState<StudentBook[] | null>(null)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
 
@@ -35,7 +36,7 @@ export const BookDetails = ({
       }
       const { ok, studentsOnBook } = await getStudentsOnBook(book.id)
       if (ok && studentsOnBook) {
-        return setBookOnStudents(studentsOnBook)
+        return setStudentsOnBook(studentsOnBook)
       }
     }
 
@@ -61,6 +62,12 @@ export const BookDetails = ({
     }
   }
 
+  async function deleteStudentOnBook(studentId: string, bookId: string) {
+    await axios.delete<{ updatedStudentsOnBook: StudentBook[] }>(
+      `/api/borrowBook/${studentId}/${bookId}`
+    )
+  }
+
   return (
     <ModalAntd
       open={openModalBookDetails}
@@ -71,14 +78,14 @@ export const BookDetails = ({
       onCancel={() => {
         setBook(undefined)
         setOpenModalBookDetails(false)
-        setBookOnStudents(null)
+        setStudentsOnBook(null)
         setCoverPreview(coverPreviewPlaceholder)
       }}
       destroyOnClose
       footer={null}
     >
       <h1 className="font-bold text-xl my-6">Alunos com o livro</h1>
-      <div>{bookOnStudents && <TableStudentsOnBook bookOnStudents={bookOnStudents} />}</div>
+      <div>{studentsOnBook && <TableStudentsOnBook studentsOnBook={studentsOnBook} />}</div>
 
       <div className="grid grid-cols-2 gap-x-10 mt-10">
         <div className="rounded-xl overflow-hidden">

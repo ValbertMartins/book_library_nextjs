@@ -10,7 +10,7 @@ export default async function getStatistics(req: NextApiRequest, res: NextApiRes
       await Promise.all([
         prisma.book.count(),
         prisma.student.count(),
-        prisma.bookOnStudent.count(),
+        prisma.studentBook.count(),
       ])
     res.status(200).json({
       registeredBooksCounter,
