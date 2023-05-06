@@ -36,6 +36,19 @@ export interface Statistics {
 export interface StudentBook {
   created_at: string
   student: Student
+  book: Book
+}
+
+export interface StudentBookByBook {
+  created_at: string
+  student: Student
+  bookId: string
+}
+
+export interface StudentBookByStudent {
+  created_at: string
+  book: Book
+  studentId: string
 }
 
 export interface FormRegisterBookInputFields {

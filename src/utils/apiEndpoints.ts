@@ -9,7 +9,7 @@ export const endpoints = {
     url: "/api/student/deleteStudent",
   },
   getStudentsOnBook: {
-    url: "/api/book/getStudentsOnBook",
+    url: "/api/book/getStudentsByBook",
   },
   registerNewBook: {
     url: "/api/book/registerNewBook",

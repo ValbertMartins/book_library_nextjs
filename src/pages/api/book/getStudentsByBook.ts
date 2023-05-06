@@ -19,14 +19,8 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
         },
         select: {
           created_at: true,
-          student: {
-            select: {
-              name: true,
-              class: true,
-              grade: true,
-              id: true,
-            },
-          },
+          bookId: true,
+          student: true,
         },
       })
 

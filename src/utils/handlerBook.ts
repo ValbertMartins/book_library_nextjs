@@ -5,6 +5,7 @@ import {
   StudentBook,
   FormEditBookInputFields,
   FormRegisterBookInputFields,
+  StudentBookByBook,
 } from "@/interfaces"
 import { endpoints } from "./apiEndpoints"
 
@@ -78,9 +79,9 @@ export async function editBook(formBookInputFields: FormEditBookInputFields) {
   }
 }
 
-export async function getStudentsOnBook(bookId: string) {
+export async function getStudentBookByBook(bookId: string) {
   try {
-    const { data: studentsOnBook } = await axios.post<StudentBook[]>(
+    const { data: studentsOnBook } = await axios.post<StudentBookByBook[]>(
       endpoints.getStudentsOnBook.url,
       {
         bookId,

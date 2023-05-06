@@ -60,7 +60,7 @@ export async function updateStudentInfo(
 export async function deleteStudent(studentId: string) {
   try {
     const { data } = await axios.post<{ studentListUpdated: Student[] }>(
-      "/api/deleteStudent",
+      endpoints.deleteStudent.url,
       {
         id: studentId,
       }

@@ -2,11 +2,10 @@ import TableStudentsOnBook from "../table/StudentsOnBook"
 import ModalAntd from "antd/lib/modal"
 import BookForm from "../forms/Book"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { Book, StudentBook } from "@/interfaces"
+import { Book, StudentBookByBook } from "@/interfaces"
 import Image from "next/image"
-import { editBook, getStudentsOnBook } from "@/utils/handlerBook"
+import { editBook, getStudentBookByBook } from "@/utils/handlerBook"
 import message from "antd/lib/message"
-import axios from "axios"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
@@ -25,7 +24,7 @@ export const BookDetails = ({
   setBookList,
 }: Props) => {
   const [loadingCover, setLoadingCover] = useState(true)
-  const [studentsOnBook, setStudentsOnBook] = useState<StudentBook[] | null>(null)
+  const [studentsOnBook, setStudentsOnBook] = useState<StudentBookByBook[] | null>(null)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
 
@@ -34,7 +33,7 @@ export const BookDetails = ({
       if (book.cover) {
         setCoverPreview(book.cover)
       }
-      const { ok, studentsOnBook } = await getStudentsOnBook(book.id)
+      const { ok, studentsOnBook } = await getStudentBookByBook(book.id)
       if (ok && studentsOnBook) {
         return setStudentsOnBook(studentsOnBook)
       }
@@ -62,12 +61,6 @@ export const BookDetails = ({
     }
   }
 
-  async function deleteStudentOnBook(studentId: string, bookId: string) {
-    await axios.delete<{ updatedStudentsOnBook: StudentBook[] }>(
-      `/api/borrowBook/${studentId}/${bookId}`
-    )
-  }
-
   return (
     <ModalAntd
       open={openModalBookDetails}
@@ -85,7 +78,14 @@ export const BookDetails = ({
       footer={null}
     >
       <h1 className="font-bold text-xl my-6">Alunos com o livro</h1>
-      <div>{studentsOnBook && <TableStudentsOnBook studentsOnBook={studentsOnBook} />}</div>
+      <div>
+        {studentsOnBook && (
+          <TableStudentsOnBook
+            studentsOnBook={studentsOnBook}
+            setStudentsOnBook={setStudentsOnBook}
+          />
+        )}
+      </div>
 
       <div className="grid grid-cols-2 gap-x-10 mt-10">
         <div className="rounded-xl overflow-hidden">

@@ -61,10 +61,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const [studentId, bookId] = req.query.params as [string, string]
 
     try {
-      await prisma.studentBook.deleteMany({
+      const doneBookBorrow = await prisma.studentBook.deleteMany({
         where: {
           studentId,
           bookId,
+        },
+      })
+
+      await prisma.studentProgress.update({
+        where: {
+          studentId,
+        },
+        data: {
+          collected_books: { decrement: 1 },
+          returned_books: { increment: 1 },
         },
       })
 
