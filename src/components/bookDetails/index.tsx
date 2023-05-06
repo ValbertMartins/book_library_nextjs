@@ -33,11 +33,8 @@ export const BookDetails = ({
       if (book.cover) {
         setCoverPreview(book.cover)
       }
-
       const { ok, studentsOnBook } = await getStudentsOnBook(book.id)
       if (ok && studentsOnBook) {
-        toast.destroy()
-
         return setBookOnStudents(studentsOnBook)
       }
     }

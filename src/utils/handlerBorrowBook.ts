@@ -1,5 +1,5 @@
-import { Book, Student } from "@/interfaces"
-import axios from "axios"
+import { Book, ErrorApi, Student } from "@/interfaces"
+import axios, { AxiosError } from "axios"
 import { endpoints } from "./apiEndpoints"
 
 interface Props {
@@ -32,10 +32,19 @@ export async function registerNewBorrowBook(formInputFields: {
 
     return {
       ok: true,
+      errorMessage: false,
     }
   } catch (error) {
+    let message
+
+    if (error instanceof AxiosError) {
+      const { error: ErrorApi } = error.response?.data as { error: ErrorApi }
+
+      message = ErrorApi.message
+    }
     return {
       ok: false,
+      errorMessage: message ? message : "Não foi possível emprestar o livro ao estudante.",
     }
   }
 }

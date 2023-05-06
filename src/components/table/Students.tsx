@@ -51,10 +51,10 @@ const StudentsTable = ({ sourceData, setStudentList }: Props) => {
           </div>
 
           <div className=" border-b-[1px] group-hover:bg-primary-color col-start-8 col-end-10">
-            <p className="my-4 ml-4">{student.studentProgress.returned_books} </p>
+            <p className="my-4 ml-4">{student.studentProgress.collected_books} </p>
           </div>
           <div className=" border-b-[1px] group-hover:bg-primary-color  col-start-10 col-end-12">
-            <p className="my-4 ml-4">{student.studentProgress.collected_books}</p>
+            <p className="my-4 ml-4">{student.studentProgress.returned_books}</p>
           </div>
 
           <div className="border-b-[1px] group-hover:bg-primary-color flex items-center gap-3 px-4 ">

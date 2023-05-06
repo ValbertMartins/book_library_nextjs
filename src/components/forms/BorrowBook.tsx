@@ -42,8 +42,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setUpdateStatistics }: 
       duration: 0,
     })
 
-    const { ok } = await registerNewBorrowBook(formInputValues)
-
+    const { ok, errorMessage } = await registerNewBorrowBook(formInputValues)
     if (ok) {
       toast.destroy()
       message.success("Livro emprestado com sucesso.")
@@ -51,7 +50,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setUpdateStatistics }: 
       setUpdateStatistics(prevState => !prevState)
     } else {
       toast.destroy()
-      message.error("Não foi possível emprestar o livro, tente novamente")
+      message.error(errorMessage)
     }
   }
 
