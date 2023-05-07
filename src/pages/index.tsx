@@ -1,6 +1,7 @@
 import BooksWrapper from "@/components/booksWrapper"
 import ErrorMessage from "@/components/errorMessage"
 import StatisticsWrapper from "@/components/statisticsWrapper"
+import { StatisticsProvider } from "@/contexts/StatisticsProvider"
 import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
@@ -45,43 +46,44 @@ export const getStaticProps: GetStaticProps = async () => {
 
 export default function Home({ initialBookList, apiError }: Props) {
   const [bookList, setBookList] = useState(initialBookList)
-  const [updateStatistics, setUpdateStatistics] = useState(false)
+
   return (
-    <section className="bg-primary-color px-8 pt-6 flex-1 flex">
-      <section className="flex-1">
-        <header className="flex items-center justify-between">
-          <div className="text-2xl font-bold">Biblioteca</div>
+    <StatisticsProvider>
+      <section className="bg-primary-color px-8 pt-6 flex-1 flex">
+        <section className="flex-1">
+          <header className="flex items-center justify-between">
+            <div className="text-2xl font-bold">Biblioteca</div>
 
-          <div className="flex items-center bg-white pl-3 rounded-lg py-1">
-            <MdSearch
-              size={22}
-              color="#a1a1aa"
+            <div className="flex items-center bg-white pl-3 rounded-lg py-1">
+              <MdSearch
+                size={22}
+                color="#a1a1aa"
+              />
+              <input
+                type="text"
+                placeholder="Procurar livro"
+                className=" py-1 px-3 outline-none border-none placeholder:text-sm"
+              />
+            </div>
+          </header>
+          <StatisticsWrapper />
+
+          {apiError ? (
+            <ErrorMessage message="Falha ao carregar a lista de Livros" />
+          ) : (
+            <BooksWrapper
+              bookList={bookList}
+              setBookList={setBookList}
             />
-            <input
-              type="text"
-              placeholder="Procurar livro"
-              className=" py-1 px-3 outline-none border-none placeholder:text-sm"
-            />
+          )}
+        </section>
+
+        <aside>
+          <div>
+            <p className="hidden 2xl:block mx-5">Ranking</p>
           </div>
-        </header>
-        <StatisticsWrapper updateStatistics={updateStatistics} />
-
-        {apiError ? (
-          <ErrorMessage message="Falha ao carregar a lista de Livros" />
-        ) : (
-          <BooksWrapper
-            bookList={bookList}
-            setBookList={setBookList}
-            setUpdateStatistics={setUpdateStatistics}
-          />
-        )}
+        </aside>
       </section>
-
-      <aside>
-        <div>
-          <p className="hidden 2xl:block mx-5">Ranking</p>
-        </div>
-      </aside>
-    </section>
+    </StatisticsProvider>
   )
 }

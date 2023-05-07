@@ -4,8 +4,9 @@ import Button from "antd/lib/button"
 import Form from "antd/lib/form"
 import { MessageInstance } from "antd/lib/message/interface"
 import Select from "antd/lib/select"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import message from "antd/lib/message"
+import { StatisticsContext } from "@/contexts/StatisticsProvider"
 
 interface formInputValues {
   bookId: string
@@ -17,12 +18,12 @@ interface formInputValues {
 interface Props {
   toast: MessageInstance
   setOpenModalBorrowBook: Dispatch<SetStateAction<boolean>>
-  setUpdateStatistics: Dispatch<SetStateAction<boolean>>
 }
 
-const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setUpdateStatistics }: Props) => {
+const BorrowBookForm = ({ setOpenModalBorrowBook, toast }: Props) => {
   const [studentList, setStudentList] = useState([] as Pick<Student, "id" | "name">[])
   const [bookList, setBookList] = useState([] as Pick<Book, "id" | "name">[])
+  const { updateStatistics } = useContext(StatisticsContext)
 
   useEffect(() => {
     async function getSelectValues() {
@@ -47,7 +48,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setUpdateStatistics }: 
       toast.destroy()
       message.success("Livro emprestado com sucesso.")
       setOpenModalBorrowBook(false)
-      setUpdateStatistics(prevState => !prevState)
+      updateStatistics()
     } else {
       toast.destroy()
       message.error(errorMessage)

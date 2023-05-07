@@ -1,5 +1,5 @@
 import { Book, FormRegisterBookInputFields } from "@/interfaces"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import ModalAntd from "antd/lib/modal"
 import BookList from "../bookList"
 import { registerNewBook } from "@/utils/handlerBook"
@@ -7,20 +7,21 @@ import message from "antd/lib/message"
 import Image from "next/image"
 import BookForm from "../forms/Book"
 import BorrowBookForm from "../forms/BorrowBook"
+import { StatisticsContext } from "@/contexts/StatisticsProvider"
 
 interface Props {
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
-  setUpdateStatistics: Dispatch<SetStateAction<boolean>>
 }
 
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
-const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => {
+const BooksWrapper = ({ bookList, setBookList }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
+  const { updateStatistics } = useContext(StatisticsContext)
 
   async function handleSubmitFormRegisterNewBook(
     formBookInputFields: FormRegisterBookInputFields
@@ -37,7 +38,7 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
       message.success("Livro cadastrado com sucesso.")
       setOpenModalRegisterBook(false)
       setCoverPreview(coverPreviewPlaceholder)
-      setUpdateStatistics(prevState => !prevState)
+      updateStatistics()
     } else {
       toast.destroy()
       message.error("Não foi possível cadastrar o livro, tente novamente")
@@ -77,7 +78,6 @@ const BooksWrapper = ({ bookList, setBookList, setUpdateStatistics }: Props) => 
         }}
       >
         <BorrowBookForm
-          setUpdateStatistics={setUpdateStatistics}
           setOpenModalBorrowBook={setOpenModalBorrowBook}
           toast={toast}
         />

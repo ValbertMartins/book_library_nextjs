@@ -1,8 +1,9 @@
+import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import { StudentBookByBook } from "@/interfaces"
 import { formatDate } from "@/utils/formatDate"
 import Button from "antd/lib/button"
 import axios from "axios"
-import { Dispatch, Fragment, SetStateAction } from "react"
+import { Dispatch, Fragment, SetStateAction, useContext } from "react"
 
 interface Props {
   studentsOnBook: StudentBookByBook[]
@@ -10,12 +11,15 @@ interface Props {
 }
 
 const TableStudentsOnBook = ({ studentsOnBook, setStudentsOnBook }: Props) => {
+  const { updateStatistics } = useContext(StatisticsContext)
+
   async function markDoneBorrowBook(studentId: string, bookId: string) {
     const { data } = await axios.delete<{ updatedStudentsOnBook: StudentBookByBook[] }>(
       `/api/book/borrowBook/${studentId}/${bookId}`
     )
 
     setStudentsOnBook(data.updatedStudentsOnBook)
+    updateStatistics()
   }
 
   return (

@@ -1,16 +1,13 @@
+import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import { getStatistics } from "@/utils/handlerStatistics"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { MdMenuBook, MdPerson, MdBook } from "react-icons/md"
 
-interface Props {
-  updateStatistics: boolean
-}
-
-const StatisticsWrapper = ({ updateStatistics }: Props) => {
+const StatisticsWrapper = () => {
   const [registeredStudentsCounter, setRegisteredStudentsCounter] = useState(0)
   const [registeredBooksCounter, setRegisteredBooksCounter] = useState(0)
   const [booksBorrowedCounter, setBooksBorrowedCounter] = useState(0)
-
+  const { updatedStatistics } = useContext(StatisticsContext)
   useEffect(() => {
     async function handlerStatistics() {
       const { ok, data } = await getStatistics()
@@ -23,7 +20,7 @@ const StatisticsWrapper = ({ updateStatistics }: Props) => {
     }
 
     handlerStatistics()
-  }, [updateStatistics])
+  }, [updatedStatistics])
 
   return (
     <section className="grid grid-cols-2 lg:grid-cols-3 my-10 gap-6 ">
