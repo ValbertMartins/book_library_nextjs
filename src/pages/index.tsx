@@ -1,5 +1,6 @@
 import BooksWrapper from "@/components/booksWrapper"
 import ErrorMessage from "@/components/errorMessage"
+import SearchBook from "@/components/searchBook"
 import StatisticsWrapper from "@/components/statisticsWrapper"
 import { StatisticsProvider } from "@/contexts/StatisticsProvider"
 import { Book, ErrorApi } from "@/interfaces"
@@ -46,7 +47,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 export default function Home({ initialBookList, apiError }: Props) {
   const [bookList, setBookList] = useState(initialBookList)
-
+  const [loading, setLoading] = useState(false)
   return (
     <StatisticsProvider>
       <section className="bg-primary-color px-8 pt-6 flex-1 flex">
@@ -54,17 +55,10 @@ export default function Home({ initialBookList, apiError }: Props) {
           <header className="flex items-center justify-between">
             <div className="text-2xl font-bold">Biblioteca</div>
 
-            <div className="flex items-center bg-white pl-3 rounded-lg py-1">
-              <MdSearch
-                size={22}
-                color="#a1a1aa"
-              />
-              <input
-                type="text"
-                placeholder="Procurar livro"
-                className=" py-1 px-3 outline-none border-none placeholder:text-sm"
-              />
-            </div>
+            <SearchBook
+              setBookList={setBookList}
+              setLoading={setLoading}
+            />
           </header>
           <StatisticsWrapper />
 
@@ -74,6 +68,7 @@ export default function Home({ initialBookList, apiError }: Props) {
             <BooksWrapper
               bookList={bookList}
               setBookList={setBookList}
+              loading={loading}
             />
           )}
         </section>

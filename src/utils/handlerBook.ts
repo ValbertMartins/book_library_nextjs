@@ -97,3 +97,20 @@ export async function getStudentBookByBook(bookId: string) {
     }
   }
 }
+
+export async function getBooksByName(inputBookName: string) {
+  try {
+    const { data } = await axios.post<{ books: Book[] }>(endpoints.getBooksByName.url, {
+      bookName: inputBookName.trim(),
+    })
+
+    return {
+      ok: true,
+      bookList: data.books,
+    }
+  } catch (error) {
+    return {
+      ok: false,
+    }
+  }
+}

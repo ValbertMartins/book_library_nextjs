@@ -8,15 +8,17 @@ import Image from "next/image"
 import BookForm from "../forms/Book"
 import BorrowBookForm from "../forms/BorrowBook"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
+import Loading from "../loading"
 
 interface Props {
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
+  loading: boolean
 }
 
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
-const BooksWrapper = ({ bookList, setBookList }: Props) => {
+const BooksWrapper = ({ bookList, setBookList, loading }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
@@ -118,10 +120,15 @@ const BooksWrapper = ({ bookList, setBookList }: Props) => {
         </div>
         {toastContextHolder}
       </ModalAntd>
-      <BookList
-        bookList={bookList}
-        setBookList={setBookList}
-      />
+
+      {loading ? (
+        <Loading>Carregando livros</Loading>
+      ) : (
+        <BookList
+          bookList={bookList}
+          setBookList={setBookList}
+        />
+      )}
     </section>
   )
 }
