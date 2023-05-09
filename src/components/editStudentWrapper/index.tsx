@@ -3,7 +3,7 @@ import { MdModeEditOutline } from "react-icons/md"
 import StudentForm from "../forms/Student"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
-import { updateStudentInfo } from "@/utils/handlerStudent"
+import { updateStudent } from "@/utils/handlerStudent"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
 
@@ -24,12 +24,8 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       content: "Atualizando estudante...",
       duration: 0,
     })
-
-    const { ok, studentListUpdated } = await updateStudentInfo(
-      student.id,
-      studentInputFields,
-      setLoading
-    )
+    setLoading(true)
+    const { ok, studentListUpdated } = await updateStudent(student.id, studentInputFields)
 
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
@@ -40,6 +36,8 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       toast.destroy()
       message.error("Erro ao atualizar estudante,tente novamente")
     }
+
+    setLoading(false)
   }
 
   return (

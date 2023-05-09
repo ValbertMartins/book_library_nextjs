@@ -29,12 +29,10 @@ export async function registerNewStudent(studentData: Omit<Student, "id">, state
   }
 }
 
-export async function updateStudentInfo(
+export async function updateStudent(
   studentId: string,
-  studentInputFields: Omit<Student, "id">,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  studentInputFields: Omit<Student, "id">
 ) {
-  setLoading(true)
   try {
     const { data } = await axios.patch<{ studentListUpdated: Student[] }>(
       endpoints.editStudent.url,
@@ -52,8 +50,6 @@ export async function updateStudentInfo(
       ok: false,
       studentListUpdated: null,
     }
-  } finally {
-    setLoading(false)
   }
 }
 
@@ -70,8 +66,6 @@ export async function deleteStudent(studentId: string) {
       studentListUpdated: data.studentListUpdated,
     }
   } catch (error) {
-    if (error instanceof AxiosError) {
-    }
     return {
       ok: false,
       studentListUpdated: null,

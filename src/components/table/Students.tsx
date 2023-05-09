@@ -25,7 +25,7 @@ const StudentsTable = ({ sourceData, setStudentList }: Props) => {
       </div>
 
       <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold col-start-8 col-end-10">
-        Livros coletados
+        Livros em andamento
       </div>
       <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold col-start-10 col-end-12">
         Livros devolvidos

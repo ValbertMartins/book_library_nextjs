@@ -7,7 +7,6 @@ import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
 import { useState } from "react"
-import { MdSearch } from "react-icons/md"
 
 interface Props {
   initialBookList: Book[]

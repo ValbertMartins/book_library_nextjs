@@ -16,14 +16,15 @@ export default async function editStudent(req: NextApiRequest, res: NextApiRespo
 
   try {
     const { id, ...studentData } = studentDataSchema.parse(req.body)
-    await prisma.student.update({
+
+    const updateUserQuery = prisma.student.update({
       where: {
         id: id,
       },
       data: studentData,
     })
 
-    let studentListUpdated = await prisma.student.findMany({
+    const studentListUpdatedQuery = prisma.student.findMany({
       orderBy: {
         created_at: "desc",
       },
@@ -33,10 +34,16 @@ export default async function editStudent(req: NextApiRequest, res: NextApiRespo
         },
       },
     })
-    studentListUpdated = JSON.parse(JSON.stringify(studentListUpdated))
+
+    const [_, studentListUpdated] = await prisma.$transaction([
+      updateUserQuery,
+      studentListUpdatedQuery,
+    ])
 
     await res.revalidate("/listStudents")
-    return res.status(200).json({ studentListUpdated })
+    return res
+      .status(200)
+      .json({ studentListUpdated: JSON.parse(JSON.stringify(studentListUpdated)) })
   } catch (error) {
     return res.status(500).json({
       error: {

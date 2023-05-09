@@ -16,7 +16,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
   try {
     const studentData = studentDataSchema.parse(req.body)
 
-    await prisma.student.create({
+    const registerStudentQuery = prisma.student.create({
       data: {
         ...studentData,
         studentProgress: {
@@ -27,7 +27,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
         },
       },
     })
-    let studentListUpdated = await prisma.student.findMany({
+    const updateStudentListQuery = prisma.student.findMany({
       orderBy: {
         created_at: "desc",
       },
@@ -41,10 +41,16 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
       },
     })
 
-    studentListUpdated = JSON.parse(JSON.stringify(studentListUpdated))
+    const [_, studentListUpdated] = await prisma.$transaction([
+      registerStudentQuery,
+      updateStudentListQuery,
+    ])
+
     await res.revalidate("/listStudents")
 
-    return res.status(200).json({ studentListUpdated })
+    return res
+      .status(200)
+      .json({ studentListUpdated: JSON.parse(JSON.stringify(studentListUpdated)) })
   } catch (error) {
     return res.status(500).json({
       error: {
