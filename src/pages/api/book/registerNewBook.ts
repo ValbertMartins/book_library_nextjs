@@ -22,13 +22,14 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
 
   try {
     const { cover, name, quantity_available } = bookSchema.parse(req.body)
+
     let bookCoverCloudinaryData
 
     if (cover) {
       bookCoverCloudinaryData = await cloudinary.uploader.upload(cover)
     }
 
-    const registeredBook = await prisma.book.create({
+    const registerBookQuery = prisma.book.create({
       data: {
         name,
         quantity_available,
@@ -36,14 +37,18 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
       },
     })
 
-    await res.revalidate("/")
-
-    const bookListUpdated = await prisma.book.findMany({
+    const updateBookListQuery = prisma.book.findMany({
       orderBy: {
         created_at: "desc",
       },
     })
 
+    const [registeredBook, bookListUpdated] = await prisma.$transaction([
+      registerBookQuery,
+      updateBookListQuery,
+    ])
+
+    await res.revalidate("/")
     res.status(200).json({
       registeredBook,
       bookListUpdated,

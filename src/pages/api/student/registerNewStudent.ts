@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import { Console } from "console"
 import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 const prisma = new PrismaClient()
@@ -48,9 +49,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
 
     await res.revalidate("/listStudents")
 
-    return res
-      .status(200)
-      .json({ studentListUpdated: JSON.parse(JSON.stringify(studentListUpdated)) })
+    return res.status(200).json({ studentListUpdated })
   } catch (error) {
     return res.status(500).json({
       error: {

@@ -41,9 +41,7 @@ export default async function editStudent(req: NextApiRequest, res: NextApiRespo
     ])
 
     await res.revalidate("/listStudents")
-    return res
-      .status(200)
-      .json({ studentListUpdated: JSON.parse(JSON.stringify(studentListUpdated)) })
+    return res.status(200).json({ studentListUpdated })
   } catch (error) {
     return res.status(500).json({
       error: {

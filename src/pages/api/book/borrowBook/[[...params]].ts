@@ -22,14 +22,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (existentBorrowBookOnStudent.length > 0)
         throw new Error("Este estudante já está com esse livro emprestado.")
 
-      const borrowBookRegister = await prisma.studentBook.create({
+      const registerborrowBookQuery = prisma.studentBook.create({
         data: {
           bookId,
           studentId,
         },
       })
 
-      const increaseCollectedBooksOnStudent = await prisma.studentProgress.update({
+      const increaseCollectedBooksOnStudentQuery = prisma.studentProgress.update({
         where: {
           studentId,
         },
@@ -40,8 +40,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
 
+      const [borrowBookRegistered] = await prisma.$transaction([
+        registerborrowBookQuery,
+        increaseCollectedBooksOnStudentQuery,
+      ])
+
       res.status(200).json({
-        borrowBookRegister,
+        borrowBookRegistered,
       })
     } catch (error) {
       let message
@@ -61,14 +66,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const [studentId, bookId] = req.query.params as [string, string]
 
     try {
-      const doneBookBorrow = await prisma.studentBook.deleteMany({
+      const deleteBorrowBookQuery = prisma.studentBook.deleteMany({
         where: {
           studentId,
           bookId,
         },
       })
 
-      await prisma.studentProgress.update({
+      const updateStudentProgressQuery = prisma.studentProgress.update({
         where: {
           studentId,
         },
@@ -78,11 +83,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
 
-      const updatedStudentsOnBook = await prisma.studentBook.findMany({
+      const updateStudentsOnBookQuery = prisma.studentBook.findMany({
         where: {
           bookId,
         },
+        select: {
+          created_at: true,
+          bookId: true,
+          student: true,
+        },
       })
+
+      const [, _, updatedStudentsOnBook] = await prisma.$transaction([
+        deleteBorrowBookQuery,
+        updateStudentProgressQuery,
+        updateStudentsOnBookQuery,
+      ])
 
       res.status(200).json({ updatedStudentsOnBook })
     } catch (error) {

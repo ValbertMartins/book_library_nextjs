@@ -13,9 +13,7 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
 
       const studentsOnBook = await prisma.studentBook.findMany({
         where: {
-          bookId: {
-            equals: bookId,
-          },
+          bookId,
         },
         select: {
           created_at: true,

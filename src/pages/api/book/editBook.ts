@@ -29,12 +29,13 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
         },
       })
       const newBookCoverCloudinaryData = await cloudinary.uploader.upload(cover)
+
       if (book?.cover) {
         const deleteOldBookCover = await cloudinary.uploader.destroy(
           getPublicIdFromUrl(book.cover)
         )
       }
-      const bookUpdated = await prisma.book.update({
+      const updateBookQuery = prisma.book.update({
         where: {
           id: id,
         },
@@ -44,19 +45,24 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
         },
       })
 
-      await res.revalidate("/")
-      const bookListUpdated = await prisma.book.findMany({
+      const updateBookListQuery = prisma.book.findMany({
         orderBy: {
           created_at: "desc",
         },
       })
 
+      const [_, bookListUpdated] = await prisma.$transaction([
+        updateBookQuery,
+        updateBookListQuery,
+      ])
+
+      await res.revalidate("/")
       return res.status(200).json({
         bookListUpdated,
       })
     }
 
-    const bookUpdated = await prisma.book.update({
+    const updateBookQuery = prisma.book.update({
       where: {
         id,
       },
@@ -65,13 +71,18 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
       },
     })
 
-    await res.revalidate("/")
-    const bookListUpdated = await prisma.book.findMany({
+    const updateBookListQuery = prisma.book.findMany({
       orderBy: {
         created_at: "desc",
       },
     })
 
+    const [_, bookListUpdated] = await prisma.$transaction([
+      updateBookQuery,
+      updateBookListQuery,
+    ])
+
+    await res.revalidate("/")
     return res.status(200).json({
       bookListUpdated,
     })
