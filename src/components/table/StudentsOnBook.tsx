@@ -1,25 +1,36 @@
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
-import { StudentBookByBook } from "@/interfaces"
+import { Book, StudentBookByBook } from "@/interfaces"
 import { formatDate } from "@/utils/formatDate"
+import { getStudentBookByBook } from "@/utils/handlerBook"
+import { finishBorrowBook } from "@/utils/handlerBorrowBook"
 import Button from "antd/lib/button"
-import axios from "axios"
-import { Dispatch, Fragment, SetStateAction, useContext } from "react"
+import { Fragment, useContext, useEffect, useState } from "react"
 
 interface Props {
-  studentsOnBook: StudentBookByBook[]
-  setStudentsOnBook: Dispatch<SetStateAction<StudentBookByBook[] | null>>
+  book: Book
 }
 
-const TableStudentsOnBook = ({ studentsOnBook, setStudentsOnBook }: Props) => {
+const TableStudentsOnBook = ({ book }: Props) => {
   const { updateStatistics } = useContext(StatisticsContext)
+  const [studentsOnBook, setStudentsOnBook] = useState<StudentBookByBook[] | null>(null)
 
-  async function markDoneBorrowBook(studentId: string, bookId: string) {
-    const { data } = await axios.delete<{ updatedStudentsOnBook: StudentBookByBook[] }>(
-      `/api/book/borrowBook/${studentId}/${bookId}`
-    )
+  useEffect(() => {
+    async function handlerGetStudentsOnBook() {
+      const { ok, studentsOnBook } = await getStudentBookByBook(book.id)
+      if (ok && studentsOnBook) {
+        return setStudentsOnBook(studentsOnBook)
+      }
+    }
 
-    setStudentsOnBook(data.updatedStudentsOnBook)
-    updateStatistics()
+    handlerGetStudentsOnBook()
+  }, [])
+
+  async function handlerFinishBorrowBook(studentId: string, bookId: string) {
+    const { ok, updatedStudentsOnBook } = await finishBorrowBook(studentId, bookId)
+    if (ok && updatedStudentsOnBook) {
+      setStudentsOnBook(updatedStudentsOnBook)
+      updateStatistics()
+    }
   }
 
   return (
@@ -40,7 +51,7 @@ const TableStudentsOnBook = ({ studentsOnBook, setStudentsOnBook }: Props) => {
       <div className="border-b-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold">
         Ações
       </div>
-      {studentsOnBook.map(({ created_at, student, bookId }) => (
+      {studentsOnBook?.map(({ created_at, student, bookId }) => (
         <Fragment key={`${student.id}${created_at}`}>
           <div className=" border-b-[1px] group-hover:bg-primary-color col-start-1 col-end-5">
             <p className="my-4 ml-4">{student.name}</p>
@@ -58,7 +69,7 @@ const TableStudentsOnBook = ({ studentsOnBook, setStudentsOnBook }: Props) => {
           <div className=" border-b-[1px] group-hover:bg-primary-color">
             <Button
               onClick={() => {
-                markDoneBorrowBook(student.id, bookId)
+                handlerFinishBorrowBook(student.id, bookId)
               }}
               className="my-4 ml-4"
               type="primary"

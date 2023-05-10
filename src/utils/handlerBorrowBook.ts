@@ -1,4 +1,4 @@
-import { Book, ErrorApi, Student } from "@/interfaces"
+import { Book, ErrorApi, Student, StudentBookByBook } from "@/interfaces"
 import axios, { AxiosError } from "axios"
 import { endpoints } from "./apiEndpoints"
 
@@ -45,6 +45,24 @@ export async function registerNewBorrowBook(formInputFields: {
     return {
       ok: false,
       errorMessage: message ? message : "Não foi possível emprestar o livro ao estudante.",
+    }
+  }
+}
+
+export async function finishBorrowBook(studentId: string, bookId: string) {
+  try {
+    const { data } = await axios.delete<{ updatedStudentsOnBook: StudentBookByBook[] }>(
+      `${endpoints.borrowBook}/${studentId}/${bookId}`
+    )
+
+    return {
+      ok: true,
+      updatedStudentsOnBook: data.updatedStudentsOnBook,
+    }
+  } catch (error) {
+    return {
+      ok: true,
+      updatedStudentsOnBook: null,
     }
   }
 }

@@ -24,23 +24,15 @@ export const BookDetails = ({
   setBookList,
 }: Props) => {
   const [loadingCover, setLoadingCover] = useState(true)
-  const [studentsOnBook, setStudentsOnBook] = useState<StudentBookByBook[] | null>(null)
+
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
 
   useEffect(() => {
-    async function getBookDetails(book: Book) {
-      if (book.cover) {
-        setCoverPreview(book.cover)
-      }
-      const { ok, studentsOnBook } = await getStudentBookByBook(book.id)
-      if (ok && studentsOnBook) {
-        return setStudentsOnBook(studentsOnBook)
-      }
+    if (book.cover) {
+      setCoverPreview(book.cover)
     }
-
-    getBookDetails(book)
-  }, [book])
+  }, [])
 
   async function handleSubmitFormEditBook(formInputFields: any) {
     toast.open({
@@ -71,7 +63,7 @@ export const BookDetails = ({
       onCancel={() => {
         setBook(undefined)
         setOpenModalBookDetails(false)
-        setStudentsOnBook(null)
+        // setStudentsOnBook(null)
         setCoverPreview(coverPreviewPlaceholder)
       }}
       destroyOnClose
@@ -79,12 +71,7 @@ export const BookDetails = ({
     >
       <h1 className="font-bold text-xl my-6">Alunos com o livro</h1>
       <div>
-        {studentsOnBook && (
-          <TableStudentsOnBook
-            studentsOnBook={studentsOnBook}
-            setStudentsOnBook={setStudentsOnBook}
-          />
-        )}
+        <TableStudentsOnBook book={book} />
       </div>
 
       <div className="grid grid-cols-2 gap-x-10 mt-10">
