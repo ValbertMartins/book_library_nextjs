@@ -9,14 +9,13 @@ import BookForm from "../forms/Book"
 import BorrowBookForm from "../forms/BorrowBook"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import Loading from "../loading"
+const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
   loadingBooks: boolean
 }
-
-const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 const BooksWrapper = ({ bookList, setBookList, loadingBooks }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)

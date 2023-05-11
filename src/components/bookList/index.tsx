@@ -55,7 +55,6 @@ const BookList = ({ bookList, setBookList }: Props) => {
           setBook={setBook}
           openModalBookDetails={openModalBookDetails}
           setOpenModalBookDetails={setOpenModalBookDetails}
-          setBookList={setBookList}
         />
       )}
     </div>
