@@ -52,7 +52,7 @@ export async function registerNewBorrowBook(formInputFields: {
 export async function finishBorrowBook(studentId: string, bookId: string) {
   try {
     const { data } = await axios.delete<{ updatedStudentsOnBook: StudentBookByBook[] }>(
-      `${endpoints.borrowBook}/${studentId}/${bookId}`
+      `${endpoints.borrowBook.url}/${studentId}/${bookId}`
     )
 
     return {

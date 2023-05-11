@@ -63,7 +63,6 @@ export const BookDetails = ({
       onCancel={() => {
         setBook(undefined)
         setOpenModalBookDetails(false)
-        // setStudentsOnBook(null)
         setCoverPreview(coverPreviewPlaceholder)
       }}
       destroyOnClose

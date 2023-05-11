@@ -13,12 +13,12 @@ import Loading from "../loading"
 interface Props {
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
-  loading: boolean
+  loadingBooks: boolean
 }
 
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
-const BooksWrapper = ({ bookList, setBookList, loading }: Props) => {
+const BooksWrapper = ({ bookList, setBookList, loadingBooks }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
@@ -121,8 +121,10 @@ const BooksWrapper = ({ bookList, setBookList, loading }: Props) => {
         {toastContextHolder}
       </ModalAntd>
 
-      {loading ? (
-        <Loading>Carregando livros</Loading>
+      {loadingBooks ? (
+        <div className="h-[50vh]">
+          <Loading>Carregando livros</Loading>
+        </div>
       ) : (
         <BookList
           bookList={bookList}

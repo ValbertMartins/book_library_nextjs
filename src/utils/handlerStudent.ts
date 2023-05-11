@@ -72,3 +72,20 @@ export async function deleteStudent(studentId: string) {
     }
   }
 }
+
+export async function getStudentRankingList() {
+  try {
+    const { data } = await axios.get<{ studentsRankingList: Student[] }>(
+      endpoints.getStudentsRankingList.url
+    )
+    return {
+      ok: true,
+      studentsRankingList: data.studentsRankingList,
+    }
+  } catch (error) {
+    return {
+      ok: false,
+      studentsRankingList: null,
+    }
+  }
+}

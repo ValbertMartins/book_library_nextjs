@@ -29,4 +29,7 @@ export const endpoints = {
   getStudentsAndBooks: {
     url: "/api/getStudentsAndBooks",
   },
+  getStudentsRankingList: {
+    url: "/api/student/getStudentsRankingList",
+  },
 }
