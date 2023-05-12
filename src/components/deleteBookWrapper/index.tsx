@@ -10,8 +10,11 @@ interface Props {
   setBookList: Dispatch<SetStateAction<Book[]>>
 }
 
-const DeleteBookWrapper = ({}: Props) => {
-  async function handlerDeleteBook() {}
+const DeleteBookWrapper = ({ setBookList, book }: Props) => {
+  async function handlerDeleteBook() {
+    const { data } = await axios.delete<{ bookListUpdated: Book[] }>(`/api/book/${book.id}`)
+    setBookList(data.bookListUpdated)
+  }
   return (
     <Popconfirm
       title="Tem certeza que deseja excluir esse livro?"
