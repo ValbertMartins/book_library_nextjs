@@ -42,8 +42,9 @@ const BookList = ({ bookList, setBookList }: Props) => {
           <div>
             <p className="font-bold px-1 pt-1 text-sm">{book.name}</p>
             <p className="px-1 text-xs text-slate-400">
-              Quantidade: {book.quantity_available}
+              Quantidade disponível: {book.quantity_available}
             </p>
+            <p className="px-1 text-xs text-slate-400">Quantidade: {book.quantity}</p>
           </div>
         </div>
       ))}
@@ -55,6 +56,7 @@ const BookList = ({ bookList, setBookList }: Props) => {
           setBook={setBook}
           openModalBookDetails={openModalBookDetails}
           setOpenModalBookDetails={setOpenModalBookDetails}
+          setBookList={setBookList}
         />
       )}
     </div>

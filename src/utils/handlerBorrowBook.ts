@@ -28,11 +28,15 @@ export async function registerNewBorrowBook(formInputFields: {
   bookId: string
 }) {
   try {
-    await axios.post(endpoints.borrowBook.url, formInputFields)
+    const { data } = await axios.post<{ bookListUpdated: Book[] }>(
+      endpoints.borrowBook.url,
+      formInputFields
+    )
 
     return {
       ok: true,
       errorMessage: false,
+      bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
     let message
@@ -51,18 +55,19 @@ export async function registerNewBorrowBook(formInputFields: {
 
 export async function finishBorrowBook(studentId: string, bookId: string) {
   try {
-    const { data } = await axios.delete<{ updatedStudentsOnBook: StudentBookByBook[] }>(
-      `${endpoints.borrowBook.url}/${studentId}/${bookId}`
-    )
+    const { data } = await axios.delete<{
+      updatedStudentsOnBook: StudentBookByBook[]
+      bookListUpdated: Book[]
+    }>(`${endpoints.borrowBook.url}/${studentId}/${bookId}`)
 
     return {
       ok: true,
       updatedStudentsOnBook: data.updatedStudentsOnBook,
+      bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
     return {
-      ok: true,
-      updatedStudentsOnBook: null,
+      ok: false,
     }
   }
 }

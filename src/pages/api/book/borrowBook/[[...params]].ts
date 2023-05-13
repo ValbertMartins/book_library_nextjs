@@ -13,12 +13,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { bookId, studentId } = bookStudentSchema.parse(req.body)
 
-      const existentBorrowBookOnStudent = await prisma.studentBook.findMany({
-        where: {
-          studentId,
-          bookId,
-        },
-      })
+      const [existentBorrowBookOnStudent, book] = await prisma.$transaction([
+        prisma.studentBook.findMany({
+          where: {
+            studentId,
+            bookId,
+          },
+        }),
+        prisma.book.findUnique({
+          where: {
+            id: bookId,
+          },
+        }),
+      ])
+
+      if (!book?.quantity_available) {
+        throw new Error("Não tem livros disponiveis.")
+      }
       if (existentBorrowBookOnStudent.length > 0)
         throw new Error("Este estudante já está com esse livro emprestado.")
 
@@ -26,6 +37,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: {
           bookId,
           studentId,
+        },
+      })
+
+      const decreaseQuantityAvailableBookQuery = prisma.book.update({
+        where: {
+          id: bookId,
+        },
+        data: {
+          quantity_available: {
+            decrement: 1,
+          },
         },
       })
 
@@ -40,13 +62,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
 
-      const [borrowBookRegistered] = await prisma.$transaction([
+      const bookListUpdateQuery = prisma.book.findMany({
+        orderBy: {
+          created_at: "desc",
+        },
+      })
+
+      const [borrowBookRegistered, _, bookListUpdated] = await prisma.$transaction([
         registerborrowBookQuery,
+        decreaseQuantityAvailableBookQuery,
+        bookListUpdateQuery,
         increaseCollectedBooksOnStudentQuery,
       ])
 
+      await res.revalidate("/")
       res.status(200).json({
         borrowBookRegistered,
+        bookListUpdated,
       })
     } catch (error) {
       let message
@@ -94,13 +126,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
 
-      const [, _, updatedStudentsOnBook] = await prisma.$transaction([
+      const increaseQuantityAvailableBookQuery = prisma.book.update({
+        where: {
+          id: bookId,
+        },
+        data: {
+          quantity_available: {
+            increment: 1,
+          },
+        },
+      })
+
+      const updateBookListQuery = prisma.book.findMany({
+        orderBy: {
+          created_at: "desc",
+        },
+      })
+
+      const [, _, updatedStudentsOnBook, , bookListUpdated] = await prisma.$transaction([
         deleteBorrowBookQuery,
         updateStudentProgressQuery,
         updateStudentsOnBookQuery,
+        increaseQuantityAvailableBookQuery,
+        updateBookListQuery,
       ])
-
-      res.status(200).json({ updatedStudentsOnBook })
+      await res.revalidate("/")
+      res.status(200).json({ updatedStudentsOnBook, bookListUpdated })
     } catch (error) {
       res.status(500).json({
         error: {

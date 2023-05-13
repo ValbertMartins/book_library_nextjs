@@ -23,11 +23,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
     })
 
     if (student?.collected_books) {
-      await prisma.studentBook.deleteMany({
-        where: {
-          studentId: id,
-        },
-      })
+      throw new Error("Esse estudante não pode ser excluido, ele tem livros em andamento")
     }
 
     const deleteStudentProgressQuery = prisma.studentProgress.delete({
@@ -41,6 +37,7 @@ export default async function registerNewStudent(req: NextApiRequest, res: NextA
         id,
       },
     })
+
     const studentListQuery = prisma.student.findMany({
       orderBy: {
         created_at: "desc",

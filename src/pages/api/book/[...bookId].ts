@@ -9,18 +9,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const bookIdSchema = z.object({
     bookId: z.array(z.string()),
   })
-  console.log(req.query)
 
   try {
     const {
       bookId: [id],
     } = bookIdSchema.parse(req.query)
 
-    // const existentBorrowsInBook = await prisma.studentBook.findMany({
-    //   where: {
-    //     bookId: id,
-    //   },
-    // })
+    const existentBorrowsInBook = await prisma.studentBook.count({
+      where: {
+        bookId: id,
+      },
+    })
+
+    if (existentBorrowsInBook > 0) {
+      throw new Error("Esse livro está com estudantes no momento, não foi possível exclui-lo")
+    }
 
     const deleteBookQuery = prisma.book.delete({
       where: {

@@ -16,12 +16,12 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
 
   const bookSchema = z.object({
     name: z.string(),
-    quantity_available: z.number(),
+    quantity: z.number(),
     cover: z.string().optional(),
   })
 
   try {
-    const { cover, name, quantity_available } = bookSchema.parse(req.body)
+    const { cover, name, quantity } = bookSchema.parse(req.body)
 
     let bookCoverCloudinaryData
 
@@ -32,7 +32,8 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
     const registerBookQuery = prisma.book.create({
       data: {
         name,
-        quantity_available,
+        quantity,
+        quantity_available: quantity,
         cover: bookCoverCloudinaryData ? bookCoverCloudinaryData.secure_url : null,
       },
     })

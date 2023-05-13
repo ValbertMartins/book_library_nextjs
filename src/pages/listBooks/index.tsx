@@ -39,12 +39,15 @@ const ListBooks = ({ initialBookList }: Props) => {
       <div className="bg-white p-4 rounded-xl">
         <p className="text-2xl font-bold pb-5">Livros</p>
 
-        <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-7 overflow-x-scroll md:overflow-hidden  bg-primary-color">
+        <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color">
           <div className="border-b-[1px] border-r-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold col-start-1 col-end-5">
             Nome
           </div>
           <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
             Quantidade
+          </div>
+          <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
+            Disponivel
           </div>
 
           <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
@@ -60,6 +63,11 @@ const ListBooks = ({ initialBookList }: Props) => {
               <div className=" border-b-[1px] group-hover:bg-primary-color col-start-1 col-end-5">
                 <p className="my-4 ml-4">{book.name}</p>
               </div>
+
+              <div className=" border-b-[1px] group-hover:bg-primary-color">
+                <p className="my-4 ml-4">{book.quantity}</p>
+              </div>
+
               <div className=" border-b-[1px] group-hover:bg-primary-color">
                 <p className="my-4 ml-4">{book.quantity_available}</p>
               </div>

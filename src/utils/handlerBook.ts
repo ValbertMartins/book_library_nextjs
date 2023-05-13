@@ -79,6 +79,21 @@ export async function editBook(formBookInputFields: FormEditBookInputFields) {
   }
 }
 
+export async function deleteBook(bookId: string) {
+  try {
+    const { data } = await axios.delete<{ bookListUpdated: Book[] }>(`/api/book/${bookId}`)
+
+    return {
+      ok: true,
+      bookListUpdated: data.bookListUpdated,
+    }
+  } catch (error) {
+    return {
+      ok: false,
+    }
+  }
+}
+
 export async function getStudentBookByBook(bookId: string) {
   try {
     const { data: studentsOnBook } = await axios.post<StudentBookByBook[]>(

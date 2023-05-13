@@ -15,7 +15,7 @@ const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
   useEffect(() => {
     if (student.studentProgress.collected_books > 0)
       setWarningStudentWithBooks(
-        "Esse estudante está com livros em andamento excluir ele confirmará que ele fez a entrega dos livros"
+        "Esse estudante está com livros em andamento, não pode ser deletado."
       )
   }, [])
 
@@ -39,6 +39,7 @@ const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
       }
       okButtonProps={{
         danger: true,
+        disabled: !!warningStudentWithBooks,
       }}
       onConfirm={handlerDeleteStudent}
     >

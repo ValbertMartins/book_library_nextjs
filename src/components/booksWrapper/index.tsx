@@ -81,6 +81,8 @@ const BooksWrapper = ({ bookList, setBookList, loadingBooks }: Props) => {
         <BorrowBookForm
           setOpenModalBorrowBook={setOpenModalBorrowBook}
           toast={toast}
+          bookList={bookList}
+          setBookList={setBookList}
         />
 
         {toastContextHolder}

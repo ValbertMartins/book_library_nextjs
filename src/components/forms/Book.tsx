@@ -31,8 +31,8 @@ const BookForm = ({ handleSubmitForm, setCoverPreview, book }: Props) => {
       </Form.Item>
 
       <Form.Item
-        name="quantity_available"
-        initialValue={book && book.quantity_available}
+        name="quantity"
+        initialValue={book && book.quantity}
         rules={[{ required: true, message: "Esse campo é obrigatório" }]}
       >
         <InputNumber

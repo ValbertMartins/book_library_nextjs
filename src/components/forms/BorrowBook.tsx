@@ -18,18 +18,19 @@ interface formInputValues {
 interface Props {
   toast: MessageInstance
   setOpenModalBorrowBook: Dispatch<SetStateAction<boolean>>
+  bookList: Book[]
+  setBookList: Dispatch<SetStateAction<Book[]>>
 }
 
-const BorrowBookForm = ({ setOpenModalBorrowBook, toast }: Props) => {
+const BorrowBookForm = ({ setOpenModalBorrowBook, toast, bookList, setBookList }: Props) => {
   const [studentList, setStudentList] = useState([] as Pick<Student, "id" | "name">[])
-  const [bookList, setBookList] = useState([] as Pick<Book, "id" | "name">[])
   const { updateStatistics } = useContext(StatisticsContext)
 
   useEffect(() => {
     async function getSelectValues() {
       const { data, ok } = await getStudentsAndBooksNames()
       if (ok && data) {
-        setBookList(data.bookList)
+        // setBookList(data.bookList)
         setStudentList(data.studentList)
       }
     }
@@ -43,11 +44,12 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast }: Props) => {
       duration: 0,
     })
 
-    const { ok, errorMessage } = await registerNewBorrowBook(formInputValues)
-    if (ok) {
+    const { ok, bookListUpdated, errorMessage } = await registerNewBorrowBook(formInputValues)
+    if (ok && bookListUpdated) {
       toast.destroy()
       message.success("Livro emprestado com sucesso.")
       setOpenModalBorrowBook(false)
+      setBookList(bookListUpdated)
       updateStatistics()
     } else {
       toast.destroy()
@@ -70,7 +72,9 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast }: Props) => {
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
           placeholder="Livro"
-          options={bookList.map(book => ({ label: book.name, value: book.id }))}
+          options={bookList
+            .filter(book => book.quantity_available > 0)
+            .map(book => ({ label: book.name, value: book.id }))}
         />
       </Form.Item>
 

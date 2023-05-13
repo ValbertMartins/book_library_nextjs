@@ -1,9 +1,8 @@
-import { deleteStudent } from "@/utils/handlerStudent"
-import { Book, Student } from "@/interfaces"
+import { Book } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { MdDelete } from "react-icons/md"
-import axios from "axios"
+import { deleteBook } from "@/utils/handlerBook"
 
 interface Props {
   book: Book
@@ -11,9 +10,18 @@ interface Props {
 }
 
 const DeleteBookWrapper = ({ setBookList, book }: Props) => {
+  const [warningBookMessage, setWarningBookMessage] = useState<string | null>(null)
+  useEffect(() => {
+    if (book.quantity_available !== book.quantity) {
+      setWarningBookMessage("Esse livro não pode ser deletado, existe alunos com ele.")
+    }
+  }, [])
+
   async function handlerDeleteBook() {
-    const { data } = await axios.delete<{ bookListUpdated: Book[] }>(`/api/book/${book.id}`)
-    setBookList(data.bookListUpdated)
+    const { ok, bookListUpdated } = await deleteBook(book.id)
+    if (ok && bookListUpdated) {
+      setBookList(bookListUpdated)
+    }
   }
   return (
     <Popconfirm
@@ -21,8 +29,14 @@ const DeleteBookWrapper = ({ setBookList, book }: Props) => {
       placement="left"
       okText="Excluir"
       cancelText="Cancelar"
+      description={
+        warningBookMessage && (
+          <p className="text-red-500 font-semibold mr-2">{warningBookMessage}</p>
+        )
+      }
       okButtonProps={{
         danger: true,
+        disabled: !!warningBookMessage,
       }}
       onConfirm={handlerDeleteBook}
     >

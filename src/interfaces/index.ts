@@ -3,6 +3,7 @@ import { UploadFile } from "antd/lib/upload"
 export interface Book {
   id: string
   name: string
+  quantity: number
   quantity_available: number
   cover?: string
 }
