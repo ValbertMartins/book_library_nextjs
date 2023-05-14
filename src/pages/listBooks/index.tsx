@@ -47,7 +47,7 @@ const ListBooks = ({ initialBookList }: Props) => {
             Quantidade
           </div>
           <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
-            Disponivel
+            Disponível
           </div>
 
           <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">

@@ -26,7 +26,15 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
     let bookCoverCloudinaryData
 
     if (cover) {
-      bookCoverCloudinaryData = await cloudinary.uploader.upload(cover)
+      bookCoverCloudinaryData = await cloudinary.uploader.upload(cover, {
+        transformation: {
+          width: 400,
+          height: 450,
+          crop: "fill",
+        },
+      })
+
+      console.log(bookCoverCloudinaryData)
     }
 
     const registerBookQuery = prisma.book.create({

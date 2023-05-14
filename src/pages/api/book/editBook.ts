@@ -13,53 +13,50 @@ cloudinary.config({
 
 export default async function editBook(req: NextApiRequest, res: NextApiResponse) {
   const editBookSchema = z.object({
-    name: z.string().optional(),
-    quantity_available: z.number().optional(),
+    name: z.string(),
+    quantity: z.number(),
     cover: z.string().optional(),
     id: z.string(),
   })
 
   try {
-    const { cover, id, ...restBookFields } = editBookSchema.parse(req.body)
+    const { cover, id, name, quantity } = editBookSchema.parse(req.body)
+
+    const book = await prisma.book.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    const bookBorrowCounter = await prisma.studentBook.count({
+      where: {
+        bookId: id,
+      },
+    })
+
+    if (!book) throw new Error("Livro não encontrado")
+
+    if (quantity < bookBorrowCounter)
+      throw new Error(
+        "A quantidade total não pode ser menor que a quantidade de livros emprestados"
+      )
+
+    let newBookCoverCloudinaryData
 
     if (cover) {
-      const book = await prisma.book.findUnique({
-        where: {
-          id,
+      newBookCoverCloudinaryData = await cloudinary.uploader.upload(cover, {
+        transformation: {
+          width: 400,
+          height: 500,
+          crop: "fill",
         },
       })
-      const newBookCoverCloudinaryData = await cloudinary.uploader.upload(cover)
 
       if (book?.cover) {
         const deleteOldBookCover = await cloudinary.uploader.destroy(
           getPublicIdFromUrl(book.cover)
         )
       }
-      const updateBookQuery = prisma.book.update({
-        where: {
-          id: id,
-        },
-        data: {
-          ...restBookFields,
-          cover: newBookCoverCloudinaryData.secure_url,
-        },
-      })
-
-      const updateBookListQuery = prisma.book.findMany({
-        orderBy: {
-          created_at: "desc",
-        },
-      })
-
-      const [_, bookListUpdated] = await prisma.$transaction([
-        updateBookQuery,
-        updateBookListQuery,
-      ])
-
-      await res.revalidate("/")
-      return res.status(200).json({
-        bookListUpdated,
-      })
     }
 
     const updateBookQuery = prisma.book.update({
@@ -67,7 +64,15 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
         id,
       },
       data: {
-        ...restBookFields,
+        name,
+        quantity,
+        ...(quantity !== book?.quantity && {
+          quantity_available:
+            quantity > book?.quantity
+              ? book?.quantity_available + (quantity - book.quantity)
+              : book?.quantity_available - (book.quantity - quantity),
+        }),
+        ...(newBookCoverCloudinaryData && { cover: newBookCoverCloudinaryData.secure_url }),
       },
     })
 
@@ -89,7 +94,7 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
   } catch (error) {
     res.status(500).json({
       error: {
-        message: "Erro ao editar informações do estudante, tente novamente",
+        message: "Erro ao editar informações do Livro, tente novamente",
         status: 500,
       },
     })

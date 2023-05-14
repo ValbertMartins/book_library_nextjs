@@ -25,7 +25,7 @@ const BookList = ({ bookList, setBookList }: Props) => {
           key={book.id}
           className="flex flex-col cursor-pointer"
         >
-          <div className="h-[260px] sm:h-[250px] lg:h-[300px] xl:h-[320px] 2xl:h-[380px]  rounded-xl overflow-hidden ">
+          <div className="h-[260px] sm:h-[250px] lg:h-[300px] xl:h-[320px] 2xl:h-[400px]  rounded-xl overflow-hidden ">
             <Image
               className={`object-cover h-full w-full ${
                 imagesLoading ? "blur-md scale-100" : "grayscale-0 blur-0 scale-100"
@@ -39,12 +39,16 @@ const BookList = ({ bookList, setBookList }: Props) => {
             />
           </div>
 
-          <div>
-            <p className="font-bold px-1 pt-1 text-sm">{book.name}</p>
-            <p className="px-1 text-xs text-slate-400">
-              Quantidade disponível: {book.quantity_available}
+          <div className="mt-2">
+            <p className="font-bold px-1 text-sm">{book.name}</p>
+            <p className="px-1 text-xs text-slate-400 my-1">Quantidade: {book.quantity}</p>
+            <p
+              className={`px-1 text-xs ${
+                book.quantity_available === 0 ? "text-red-500" : " text-slate-400"
+              }`}
+            >
+              Disponível: {book.quantity_available}
             </p>
-            <p className="px-1 text-xs text-slate-400">Quantidade: {book.quantity}</p>
           </div>
         </div>
       ))}
