@@ -40,56 +40,42 @@ const ListBooks = ({ initialBookList }: Props) => {
       <div className="bg-white p-4 rounded-xl">
         <p className="text-2xl font-bold pb-5">Livros</p>
         <RegisterBookWrapper setBookList={setBookList} />
-        <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color">
-          <div className="border-b-[1px] border-r-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold col-start-1 col-end-5">
-            Nome
-          </div>
-          <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
-            Quantidade
-          </div>
-          <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
-            Disponível
-          </div>
 
-          <div className="border-b-[1px] bg-primary-color border-r-[1px] border-zinc-100 pl-4 py-4 font-bold">
-            Capa
-          </div>
+        <table className="w-full mt-2">
+          <thead>
+            <tr className="bg-primary-color text-left  border-zinc-100 border-[1px]">
+              <th className="rounded-lg p-4">Nome</th>
+              <th className="rounded-lg p-4">Quantidade</th>
+              <th className="rounded-lg p-4">Disponível</th>
+              <th className="rounded-lg p-4">Capa</th>
+              <th className="rounded-lg p-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookList.map(book => (
+              <tr
+                key={book.id}
+                className="border-b-[1px] border-zinc-100"
+              >
+                <td className="p-4">{book.name}</td>
+                <td className="p-4">{book.quantity}</td>
+                <td className="p-4">{book.quantity_available}</td>
+                <td className="p-4">{book.cover ? "✅" : "🚫"}</td>
+                <td className="p-4">
+                  <EditBookWrapper
+                    book={book}
+                    setBookList={setBookList}
+                  />
 
-          <div className="border-b-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold">
-            Ações
-          </div>
-
-          {bookList.map(book => (
-            <Fragment key={book.id}>
-              <div className=" border-b-[1px] group-hover:bg-primary-color col-start-1 col-end-5">
-                <p className="my-4 ml-4">{book.name}</p>
-              </div>
-
-              <div className=" border-b-[1px] group-hover:bg-primary-color">
-                <p className="my-4 ml-4">{book.quantity}</p>
-              </div>
-
-              <div className=" border-b-[1px] group-hover:bg-primary-color">
-                <p className="my-4 ml-4">{book.quantity_available}</p>
-              </div>
-              <div className=" border-b-[1px] group-hover:bg-primary-color">
-                <p className="my-4 ml-4">{book.cover ? "✅" : "🚫"}</p>
-              </div>
-
-              <div className="border-b-[1px] group-hover:bg-primary-color flex items-center gap-3 px-4 ">
-                <EditBookWrapper
-                  book={book}
-                  setBookList={setBookList}
-                />
-
-                <DeleteBookWrapper
-                  book={book}
-                  setBookList={setBookList}
-                />
-              </div>
-            </Fragment>
-          ))}
-        </section>
+                  <DeleteBookWrapper
+                    book={book}
+                    setBookList={setBookList}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   )

@@ -60,7 +60,7 @@ export const BookDetails = ({
     >
       <div>
         <h1 className="font-bold text-xl my-6">Alunos com o livro {book.name}</h1>
-        <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color ">
+        {/* <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color ">
           <div className="border-b-[1px] border-r-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold col-start-1 col-end-5">
             Nome
           </div>
@@ -106,7 +106,43 @@ export const BookDetails = ({
               </div>
             </Fragment>
           ))}
-        </section>
+        </section> */}
+
+        <table className="w-full mt-2">
+          <thead>
+            <tr className="bg-primary-color text-left  border-zinc-100 border-[1px]">
+              <th className="rounded-lg p-4">Nome</th>
+              <th className="rounded-lg p-4">Série</th>
+              <th className="rounded-lg p-4">Turma</th>
+              <th className="rounded-lg p-4">Criado em</th>
+              <th className="rounded-lg p-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {studentsOnBook?.map(({ created_at, student, bookId }) => (
+              <tr
+                key={student.id}
+                className="border-b-[1px] border-zinc-100"
+              >
+                <td className="p-4">{student.name}</td>
+                <td className="p-4">{student.grade}</td>
+                <td className="p-4">{student.class}</td>
+                <td className="p-4">{formatDate(created_at)}</td>
+                <td className="p-4">
+                  <Button
+                    onClick={() => {
+                      handlerFinishBorrowBook(student.id, bookId)
+                    }}
+                    type="primary"
+                    size="small"
+                  >
+                    Entregar
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </ModalAntd>
   )
