@@ -11,6 +11,7 @@ interface Props {
 
 const DeleteBookWrapper = ({ setBookList, book }: Props) => {
   const [warningBookMessage, setWarningBookMessage] = useState<string | null>(null)
+
   useEffect(() => {
     if (book.quantity_available !== book.quantity) {
       setWarningBookMessage("Esse livro não pode ser deletado, existe alunos com ele.")

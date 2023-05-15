@@ -19,6 +19,8 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
     id: z.string(),
   })
 
+  console.log(req.body)
+
   try {
     const { cover, id, name, quantity } = editBookSchema.parse(req.body)
 
@@ -92,9 +94,14 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
       bookListUpdated,
     })
   } catch (error) {
+    let message
+    if (error instanceof Error) {
+      message = error.message
+    }
+
     res.status(500).json({
       error: {
-        message: "Erro ao editar informações do Livro, tente novamente",
+        message: message ? message : "Erro ao editar informações do Livro, tente novamente",
         status: 500,
       },
     })

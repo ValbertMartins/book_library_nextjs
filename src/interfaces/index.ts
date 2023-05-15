@@ -58,7 +58,7 @@ export interface FormRegisterBookInputFields {
   coverList?: UploadFile[]
 }
 export interface FormEditBookInputFields {
-  name?: string
-  quantity?: number
+  name: string
+  quantity: number
   coverList?: UploadFile[]
 }

@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { convertImageToBase64 } from "./convertImageToBase64"
 import {
   Book,
@@ -6,6 +6,7 @@ import {
   FormEditBookInputFields,
   FormRegisterBookInputFields,
   StudentBookByBook,
+  ErrorApi,
 } from "@/interfaces"
 import { endpoints } from "./apiEndpoints"
 
@@ -45,7 +46,7 @@ export async function registerNewBook(formBookInputFields: FormRegisterBookInput
   }
 }
 
-export async function editBook(formBookInputFields: FormEditBookInputFields) {
+export async function editBook(formBookInputFields: FormEditBookInputFields, id: string) {
   const { coverList, ...restFields } = formBookInputFields
 
   try {
@@ -54,6 +55,7 @@ export async function editBook(formBookInputFields: FormEditBookInputFields) {
       const coverBase64 = await convertImageToBase64(cover as File)
       const { data } = await axios.post<{ bookListUpdated: Book[] }>(endpoints.editBook.url, {
         ...restFields,
+        id,
         cover: coverBase64,
       })
 
@@ -63,18 +65,26 @@ export async function editBook(formBookInputFields: FormEditBookInputFields) {
       }
     }
 
-    const { data } = await axios.post<{ bookListUpdated: Book[] }>(
-      endpoints.editBook.url,
-      restFields
-    )
+    const { data } = await axios.post<{ bookListUpdated: Book[] }>(endpoints.editBook.url, {
+      ...restFields,
+      id,
+    })
 
     return {
       ok: true,
       bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
+    let message
+    if (error instanceof AxiosError) {
+      const { error: ErrorApi } = error.response?.data as { error: ErrorApi }
+
+      message = ErrorApi.message
+    }
+
     return {
       ok: false,
+      errorMessage: message ? message : "Não foi possível editar o livro",
     }
   }
 }

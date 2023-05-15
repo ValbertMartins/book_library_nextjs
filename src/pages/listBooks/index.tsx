@@ -1,6 +1,7 @@
 import DeleteBookWrapper from "@/components/deleteBookWrapper"
 import EditBookWrapper from "@/components/editBookWrapper"
 import EditStudentWrapper from "@/components/editStudentWrapper"
+import RegisterBookWrapper from "@/components/registerBookWrapper"
 import { Book } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
@@ -38,7 +39,7 @@ const ListBooks = ({ initialBookList }: Props) => {
     <section className="p-8 flex-1">
       <div className="bg-white p-4 rounded-xl">
         <p className="text-2xl font-bold pb-5">Livros</p>
-
+        <RegisterBookWrapper setBookList={setBookList} />
         <section className="border-x border-t border-zinc-100  bg-white rounded-lg  grid grid-cols-8 overflow-x-scroll md:overflow-hidden  bg-primary-color">
           <div className="border-b-[1px] border-r-[1px] bg-primary-color border-zinc-100 pl-4 py-4 font-bold col-start-1 col-end-5">
             Nome

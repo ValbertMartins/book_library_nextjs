@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { MdModeEditOutline } from "react-icons/md"
-import { Book } from "@/interfaces"
+import { Book, FormEditBookInputFields } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
 import BookForm from "../forms/Book"
-import { editBook } from "@/utils/handlerBook"
+import { editBook, getStudentBookByBook } from "@/utils/handlerBook"
 import Image from "next/image"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
@@ -26,20 +26,25 @@ const EditBookWrapper = ({ book, setBookList }: Props) => {
     }
   }, [])
 
-  async function handleSubmitFormEditBook(formInputFields: any) {
+  async function handleSubmitFormEditBook(formInputFields: FormEditBookInputFields) {
     toast.open({
       content: "Atualizando livro, aguarde...",
       type: "loading",
       duration: 0,
     })
-    const { ok, bookListUpdated } = await editBook({ ...formInputFields, id: book.id })
+
+    const { ok, bookListUpdated, errorMessage } = await editBook(
+      { ...formInputFields },
+      book.id
+    )
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)
       toast.destroy()
       message.success("Livro atualizado com sucesso")
+      setOpenModal(false)
     } else {
       toast.destroy()
-      message.error("Falha ao atualizar o livro")
+      message.error(errorMessage ? errorMessage : "Falha ao atualizar o livro")
     }
   }
 
