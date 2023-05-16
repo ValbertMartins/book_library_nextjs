@@ -7,13 +7,6 @@ export interface Book {
   quantity_available: number
   cover?: string
 }
-
-export interface StudentProgress {
-  studentId: string
-  collected_books: number
-  returned_books: number
-}
-
 export interface Student {
   id: string
   name: string
@@ -21,6 +14,12 @@ export interface Student {
   grade: number
   gender: "F" | "M"
   studentProgress: StudentProgress
+}
+
+export interface StudentProgress {
+  studentId: string
+  collected_books: number
+  returned_books: number
 }
 
 export interface ErrorApi {
@@ -52,12 +51,7 @@ export interface StudentBookByStudent {
   studentId: string
 }
 
-export interface FormRegisterBookInputFields {
-  name: string
-  quantity: number
-  coverList?: UploadFile[]
-}
-export interface FormEditBookInputFields {
+export interface FormBookInputFields {
   name: string
   quantity: number
   coverList?: UploadFile[]

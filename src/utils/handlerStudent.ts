@@ -1,5 +1,5 @@
 import { Student } from "@/interfaces"
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { Dispatch, SetStateAction } from "react"
 import { endpoints } from "./apiEndpoints"
 
@@ -86,6 +86,23 @@ export async function getStudentRankingList() {
     return {
       ok: false,
       studentsRankingList: null,
+    }
+  }
+}
+
+export async function getStudents(pageHandler: number) {
+  try {
+    const { data } = await axios.get<{ studentList: Student[] }>(
+      `/api/student/pagination/${pageHandler}`
+    )
+
+    return {
+      ok: true,
+      studentList: data.studentList,
+    }
+  } catch (error) {
+    return {
+      ok: false,
     }
   }
 }

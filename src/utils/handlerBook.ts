@@ -1,16 +1,9 @@
 import axios, { AxiosError } from "axios"
 import { convertImageToBase64 } from "./convertImageToBase64"
-import {
-  Book,
-  StudentBook,
-  FormEditBookInputFields,
-  FormRegisterBookInputFields,
-  StudentBookByBook,
-  ErrorApi,
-} from "@/interfaces"
+import { Book, FormBookInputFields, StudentBookByBook, ErrorApi } from "@/interfaces"
 import { endpoints } from "./apiEndpoints"
 
-export async function registerNewBook(formBookInputFields: FormRegisterBookInputFields) {
+export async function registerNewBook(formBookInputFields: FormBookInputFields) {
   const { coverList } = formBookInputFields
 
   try {
@@ -46,7 +39,7 @@ export async function registerNewBook(formBookInputFields: FormRegisterBookInput
   }
 }
 
-export async function editBook(formBookInputFields: FormEditBookInputFields, id: string) {
+export async function editBook(formBookInputFields: FormBookInputFields, id: string) {
   const { coverList, ...restFields } = formBookInputFields
 
   try {
@@ -115,6 +108,22 @@ export async function getStudentBookByBook(bookId: string) {
     return {
       ok: true,
       studentsOnBook,
+    }
+  } catch (error) {
+    return {
+      ok: false,
+    }
+  }
+}
+export async function getBooks(pageHandler: number) {
+  try {
+    const { data } = await axios.get<{ bookList: Book[] }>(
+      `/api/book/pagination/${pageHandler}`
+    )
+
+    return {
+      ok: true,
+      bookList: data.bookList,
     }
   } catch (error) {
     return {

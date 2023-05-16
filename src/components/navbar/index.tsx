@@ -38,7 +38,7 @@ const Navbar = ({ openNavbarMobile }: { openNavbarMobile?: boolean }) => {
 
   return (
     <section
-      className={`bg-white fixed min-h-screen ${
+      className={`bg-white fixed min-h-screen  ${
         openNavbarMobile ? "translate-x-0" : "-translate-x-10"
       }  md:relative md:translate-x-0 opacity-100 md:opacity-100 transition-all flex items-center md:px-2 lg:px-6 flex-col gap-5 pt-10`}
     >

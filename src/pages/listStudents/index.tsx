@@ -14,6 +14,7 @@ export const getStaticProps: GetStaticProps = async () => {
       orderBy: {
         created_at: "desc",
       },
+      take: 10,
       include: {
         studentProgress: {
           select: {
@@ -51,7 +52,7 @@ interface Props {
 const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [studentList, setStudentList] = useState(initialStudentList)
   return (
-    <section className="p-8 flex-1 ">
+    <section className="p-8 flex-1">
       <div className="bg-white p-4 rounded-xl">
         <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
@@ -61,7 +62,7 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
           <ErrorMessage message="Erro ao listar estudantes" />
         ) : (
           <TableStudents
-            sourceData={studentList}
+            studentList={studentList}
             setStudentList={setStudentList}
           />
         )}

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { MdModeEditOutline } from "react-icons/md"
-import { Book, FormEditBookInputFields } from "@/interfaces"
+import { Book, FormBookInputFields } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
@@ -26,7 +26,7 @@ const EditBookWrapper = ({ book, setBookList }: Props) => {
     }
   }, [])
 
-  async function handleSubmitFormEditBook(formInputFields: FormEditBookInputFields) {
+  async function handleSubmitFormEditBook(formInputFields: FormBookInputFields) {
     toast.open({
       content: "Atualizando livro, aguarde...",
       type: "loading",
