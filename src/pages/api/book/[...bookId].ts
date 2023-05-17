@@ -35,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       orderBy: {
         created_at: "desc",
       },
+      take: 10,
     })
 
     const [_, bookListUpdated] = await prisma.$transaction([

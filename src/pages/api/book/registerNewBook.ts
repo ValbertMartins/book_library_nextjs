@@ -33,8 +33,6 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
           crop: "fill",
         },
       })
-
-      console.log(bookCoverCloudinaryData)
     }
 
     const registerBookQuery = prisma.book.create({
@@ -50,6 +48,7 @@ export default async function registerNewBook(req: NextApiRequest, res: NextApiR
       orderBy: {
         created_at: "desc",
       },
+      take: 10,
     })
 
     const [registeredBook, bookListUpdated] = await prisma.$transaction([

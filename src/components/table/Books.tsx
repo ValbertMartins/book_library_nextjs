@@ -19,17 +19,27 @@ const Skeleton = () => {
 interface Props {
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
+  page: number
+  setPage: Dispatch<SetStateAction<number>>
+  inputBook: string
+  setLoading: Dispatch<SetStateAction<boolean>>
+  loading: boolean
 }
 
-const BooksTable = ({ bookList, setBookList }: Props) => {
-  const [page, setPage] = useState(0)
-  const [loading, setLoading] = useState(false)
-
-  async function handlerChangePagination(pageHandler: number) {
-    setPage(pageHandler)
+const BooksTable = ({
+  bookList,
+  setBookList,
+  setPage,
+  page,
+  inputBook,
+  loading,
+  setLoading,
+}: Props) => {
+  async function handlerChangePagination(pageNumber: number) {
+    setPage(pageNumber)
     setLoading(true)
 
-    const { ok, bookList } = await getBooks(pageHandler)
+    const { ok, bookList } = await getBooks(pageNumber, inputBook)
 
     if (ok && bookList) {
       setBookList(bookList)

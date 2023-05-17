@@ -10,9 +10,11 @@ import message from "antd/lib/message"
 interface Props {
   student: Student
   setStudentList: Dispatch<SetStateAction<Student[]>>
+  page: number
+  studentNameFilter: string
 }
 
-const EditStudentWrapper = ({ student, setStudentList }: Props) => {
+const EditStudentWrapper = ({ student, setStudentList, page, studentNameFilter }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
@@ -25,7 +27,12 @@ const EditStudentWrapper = ({ student, setStudentList }: Props) => {
       duration: 0,
     })
     setLoading(true)
-    const { ok, studentListUpdated } = await updateStudent(student.id, studentInputFields)
+    const { ok, studentListUpdated } = await updateStudent(
+      student.id,
+      studentInputFields,
+      page,
+      studentNameFilter
+    )
 
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)

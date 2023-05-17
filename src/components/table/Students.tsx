@@ -2,7 +2,6 @@ import { Student } from "@/interfaces"
 import EditStudentWrapper from "../editStudentWrapper"
 import { Dispatch, SetStateAction, useState } from "react"
 import DeleteStudentWrapper from "../deleteStudentWrapper"
-import axios from "axios"
 import { getStudents } from "@/utils/handlerStudent"
 import SkeletonAntd from "antd/lib/skeleton"
 
@@ -20,20 +19,28 @@ const Skeleton = () => {
 interface Props {
   studentList: Student[]
   setStudentList: Dispatch<SetStateAction<Student[]>>
+  page: number
+  setPage: Dispatch<SetStateAction<number>>
+  studentNameFilter: string
+  loading: boolean
+  setLoading: Dispatch<SetStateAction<boolean>>
 }
 
-const StudentsTable = ({ studentList, setStudentList }: Props) => {
-  const [page, setPage] = useState(0)
-
-  const [loading, setLoading] = useState(false)
-
-  async function handlerChangePagination(pageHandler: number) {
-    setPage(pageHandler)
+const StudentsTable = ({
+  studentList,
+  setStudentList,
+  setPage,
+  page,
+  studentNameFilter,
+  loading,
+  setLoading,
+}: Props) => {
+  async function handlerChangePagination(pageNumber: number) {
+    setPage(pageNumber)
     setLoading(true)
 
-    const { ok, studentList } = await getStudents(pageHandler)
+    const { ok, studentList } = await getStudents(pageNumber, studentNameFilter)
 
-    console.log(studentList)
     if (ok && studentList) {
       setStudentList(studentList)
     }
@@ -72,8 +79,10 @@ const StudentsTable = ({ studentList, setStudentList }: Props) => {
               </td>
               <td className="p-4">
                 <EditStudentWrapper
+                  page={page}
                   student={student}
                   setStudentList={setStudentList}
+                  studentNameFilter={studentNameFilter}
                 />
 
                 <DeleteStudentWrapper

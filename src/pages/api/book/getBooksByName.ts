@@ -17,6 +17,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           contains: bookName,
         },
       },
+      take: 10,
+      orderBy: {
+        created_at: "desc",
+      },
     })
     res.status(200).json({
       books,

@@ -12,7 +12,7 @@ export async function registerNewStudent(studentData: Omit<Student, "id">, state
 
   try {
     const { data } = await axios.post<{ studentListUpdated: Student[] }>(
-      endpoints.registerNewStudent.url,
+      "api/student",
       studentData
     )
     return {
@@ -31,16 +31,17 @@ export async function registerNewStudent(studentData: Omit<Student, "id">, state
 
 export async function updateStudent(
   studentId: string,
-  studentInputFields: Omit<Student, "id">
+  studentInputFields: Omit<Student, "id">,
+  page: number,
+  studentNameFilter?: string
 ) {
   try {
-    const { data } = await axios.patch<{ studentListUpdated: Student[] }>(
-      endpoints.editStudent.url,
-      {
-        id: studentId,
-        ...studentInputFields,
-      }
-    )
+    const { data } = await axios.patch<{ studentListUpdated: Student[] }>("api/student", {
+      id: studentId,
+      ...studentInputFields,
+      page,
+      studentNameFilter,
+    })
     return {
       ok: true,
       studentListUpdated: data.studentListUpdated,
@@ -55,11 +56,8 @@ export async function updateStudent(
 
 export async function deleteStudent(studentId: string) {
   try {
-    const { data } = await axios.post<{ studentListUpdated: Student[] }>(
-      endpoints.deleteStudent.url,
-      {
-        id: studentId,
-      }
+    const { data } = await axios.delete<{ studentListUpdated: Student[] }>(
+      `api/student/${studentId}`
     )
     return {
       ok: true,
@@ -90,10 +88,10 @@ export async function getStudentRankingList() {
   }
 }
 
-export async function getStudents(pageHandler: number) {
+export async function getStudents(pageNumber: number, studentNameFilter: string) {
   try {
     const { data } = await axios.get<{ studentList: Student[] }>(
-      `/api/student/pagination/${pageHandler}`
+      `/api/student/pagination/${pageNumber}/${studentNameFilter.trim()}`
     )
 
     return {

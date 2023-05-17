@@ -19,8 +19,6 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
     id: z.string(),
   })
 
-  console.log(req.body)
-
   try {
     const { cover, id, name, quantity } = editBookSchema.parse(req.body)
 
@@ -82,6 +80,7 @@ export default async function editBook(req: NextApiRequest, res: NextApiResponse
       orderBy: {
         created_at: "desc",
       },
+      take: 10,
     })
 
     const [_, bookListUpdated] = await prisma.$transaction([

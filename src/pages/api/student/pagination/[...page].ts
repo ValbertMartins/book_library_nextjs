@@ -8,27 +8,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const pageSchema = z.object({
     page: z.array(z.string()),
+    studentNameFilter: z.string().optional(),
   })
 
   try {
     const {
-      page: [pageIndex],
+      page: [pageIndex, studentNameFilter],
     } = pageSchema.parse(req.query)
 
     if (Number(pageIndex) < 0) {
       throw new Error("Bad request")
     }
 
-    // const studentList = await prisma.$queryRaw`
-    //   SELECT * FROM students
-    //   INNER JOIN studentProgress
-    //   ON students.id = studentProgress.studentId
-    //   ORDER BY created_at
-    //   DESC
-    //   LIMIT 20
-    //   OFFSET ${Number(pageIndex) * 5} `
-
     const studentList = await prisma.student.findMany({
+      where: {
+        name: {
+          contains: studentNameFilter,
+        },
+      },
       include: {
         studentProgress: {
           select: {
@@ -44,8 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       skip: Number(pageIndex) * 10,
     })
-
-    console.log(studentList.length)
 
     res.status(200).json({
       studentList,

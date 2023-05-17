@@ -115,10 +115,10 @@ export async function getStudentBookByBook(bookId: string) {
     }
   }
 }
-export async function getBooks(pageHandler: number) {
+export async function getBooks(pageNumber: number, inputBook: string) {
   try {
     const { data } = await axios.get<{ bookList: Book[] }>(
-      `/api/book/pagination/${pageHandler}`
+      `/api/book/pagination/${pageNumber}/${inputBook.trim()}`
     )
 
     return {
