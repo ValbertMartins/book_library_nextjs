@@ -1,4 +1,4 @@
-import BooksWrapper from "@/components/booksWrapper"
+import BooksWrapper from "@/components/bookShelfWrapper"
 import ErrorMessage from "@/components/errorMessage"
 import RankingWrapper from "@/components/rankingWrapper"
 import SearchBook from "@/components/searchBook"
@@ -26,6 +26,7 @@ export const getStaticProps: GetStaticProps = async () => {
       orderBy: {
         created_at: "desc",
       },
+      take: 10,
     })
     initialBookList = JSON.parse(JSON.stringify(initialBookList))
 
@@ -50,6 +51,8 @@ export default function Home({ initialBookList, apiError }: Props) {
   const [bookList, setBookList] = useState(initialBookList)
   const [loadingBooks, setLoadingBooks] = useState(false)
   const [openDrawerRanking, setOpenDrawerRanking] = useState(false)
+  const [page, setPage] = useState(0)
+  const [bookNameFilter, setBookNameFilter] = useState("")
 
   return (
     <StatisticsProvider>
@@ -66,8 +69,11 @@ export default function Home({ initialBookList, apiError }: Props) {
                 <AiOutlineTrophy size={20} />
               </button>
               <SearchBook
+                bookNameFilter={bookNameFilter}
+                setBookNameFilter={setBookNameFilter}
                 setBookList={setBookList}
                 setLoading={setLoadingBooks}
+                setPage={setPage}
               />
             </div>
           </header>
@@ -81,6 +87,10 @@ export default function Home({ initialBookList, apiError }: Props) {
               bookList={bookList}
               setBookList={setBookList}
               loadingBooks={loadingBooks}
+              setPage={setPage}
+              page={page}
+              bookNameFilter={bookNameFilter}
+              setLoading={setLoadingBooks}
             />
           )}
         </section>

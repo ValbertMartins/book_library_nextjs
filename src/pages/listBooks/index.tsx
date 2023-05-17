@@ -2,7 +2,7 @@ import RegisterBookWrapper from "@/components/registerBookWrapper"
 import SearchBook from "@/components/searchBook"
 import BooksTable from "@/components/table/Books"
 import { Book } from "@/interfaces"
-import { getBooks, getBooksByName } from "@/utils/handlerBook"
+import { getBooks } from "@/utils/handlerBook"
 import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
 import { FormEvent, useState } from "react"
@@ -39,7 +39,7 @@ interface Props {
 const ListBooks = ({ initialBookList }: Props) => {
   const [bookList, setBookList] = useState(initialBookList)
   const [loading, setLoading] = useState(false)
-  const [inputBook, setInputBook] = useState("")
+  const [bookNameFilter, setBookNameFilter] = useState("")
   const [page, setPage] = useState(0)
 
   async function handlerSearchBook(event: FormEvent) {
@@ -47,7 +47,7 @@ const ListBooks = ({ initialBookList }: Props) => {
     setLoading(true)
     setPage(0)
 
-    const { ok, bookList } = await getBooks(0, inputBook)
+    const { ok, bookList } = await getBooks(0, bookNameFilter)
     if (ok && bookList) {
       setBookList(bookList)
     }
@@ -73,7 +73,7 @@ const ListBooks = ({ initialBookList }: Props) => {
                 type="text"
                 placeholder="Procurar livro"
                 className=" py-1 px-3 outline-none border-none bg-primary-color placeholder:text-sm"
-                onChange={({ target }) => setInputBook(target.value)}
+                onChange={({ target }) => setBookNameFilter(target.value)}
               />
             </form>
           </div>
@@ -84,7 +84,7 @@ const ListBooks = ({ initialBookList }: Props) => {
           setBookList={setBookList}
           setPage={setPage}
           page={page}
-          inputBook={inputBook}
+          bookNameFilter={bookNameFilter}
           loading={loading}
           setLoading={setLoading}
         />

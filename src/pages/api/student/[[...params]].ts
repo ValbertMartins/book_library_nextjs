@@ -127,10 +127,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   } else if (req.method == "PATCH") {
     const studentDataSchema = z.object({
-      name: z.string().optional(),
-      gender: z.string().length(1).toUpperCase().optional(),
-      grade: z.number().optional(),
-      class: z.string().toUpperCase().optional(),
+      name: z.string(),
+      gender: z.string().length(1).toUpperCase(),
+      grade: z.number(),
+      class: z.string().toUpperCase(),
       id: z.string().nonempty(),
       page: z.number(),
       studentNameFilter: z.string(),

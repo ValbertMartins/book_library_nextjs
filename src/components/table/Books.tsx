@@ -21,7 +21,7 @@ interface Props {
   setBookList: Dispatch<SetStateAction<Book[]>>
   page: number
   setPage: Dispatch<SetStateAction<number>>
-  inputBook: string
+  bookNameFilter: string
   setLoading: Dispatch<SetStateAction<boolean>>
   loading: boolean
 }
@@ -31,7 +31,7 @@ const BooksTable = ({
   setBookList,
   setPage,
   page,
-  inputBook,
+  bookNameFilter,
   loading,
   setLoading,
 }: Props) => {
@@ -39,7 +39,7 @@ const BooksTable = ({
     setPage(pageNumber)
     setLoading(true)
 
-    const { ok, bookList } = await getBooks(pageNumber, inputBook)
+    const { ok, bookList } = await getBooks(pageNumber, bookNameFilter)
 
     if (ok && bookList) {
       setBookList(bookList)
@@ -73,6 +73,8 @@ const BooksTable = ({
                 <EditBookWrapper
                   book={book}
                   setBookList={setBookList}
+                  page={page}
+                  bookNameFilter={bookNameFilter}
                 />
 
                 <DeleteBookWrapper

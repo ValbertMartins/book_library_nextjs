@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { convertImageToBase64 } from "./convertImageToBase64"
-import { Book, FormBookInputFields, StudentBookByBook, ErrorApi } from "@/interfaces"
+import { Book, FormBookInputFields, StudentBookByBook } from "@/interfaces"
 import { endpoints } from "./apiEndpoints"
 
 export async function registerNewBook(formBookInputFields: FormBookInputFields) {
@@ -10,13 +10,10 @@ export async function registerNewBook(formBookInputFields: FormBookInputFields) 
     if (coverList && coverList[0]) {
       const cover = coverList[0].originFileObj
       const coverBase64 = await convertImageToBase64(cover as File)
-      const { data } = await axios.post<{ bookListUpdated: Book[] }>(
-        endpoints.registerNewBook.url,
-        {
-          ...formBookInputFields,
-          cover: coverBase64,
-        }
-      )
+      const { data } = await axios.post<{ bookListUpdated: Book[] }>("api/book", {
+        ...formBookInputFields,
+        cover: coverBase64,
+      })
 
       return {
         ok: true,
@@ -24,7 +21,7 @@ export async function registerNewBook(formBookInputFields: FormBookInputFields) 
       }
     }
     const { data } = await axios.post<{ bookListUpdated: Book[] }>(
-      endpoints.registerNewBook.url,
+      "api/book",
       formBookInputFields
     )
 
@@ -39,17 +36,24 @@ export async function registerNewBook(formBookInputFields: FormBookInputFields) 
   }
 }
 
-export async function editBook(formBookInputFields: FormBookInputFields, id: string) {
+export async function editBook(
+  formBookInputFields: FormBookInputFields,
+  id: string,
+  page: number,
+  bookNameFilter: string
+) {
   const { coverList, ...restFields } = formBookInputFields
 
   try {
     if (coverList && coverList[0]) {
       const cover = coverList[0].originFileObj
       const coverBase64 = await convertImageToBase64(cover as File)
-      const { data } = await axios.post<{ bookListUpdated: Book[] }>(endpoints.editBook.url, {
+      const { data } = await axios.patch<{ bookListUpdated: Book[] }>("/api/book", {
         ...restFields,
         id,
         cover: coverBase64,
+        page,
+        bookNameFilter,
       })
 
       return {
@@ -58,9 +62,11 @@ export async function editBook(formBookInputFields: FormBookInputFields, id: str
       }
     }
 
-    const { data } = await axios.post<{ bookListUpdated: Book[] }>(endpoints.editBook.url, {
+    const { data } = await axios.patch<{ bookListUpdated: Book[] }>("/api/book", {
       ...restFields,
       id,
+      page,
+      bookNameFilter,
     })
 
     return {
@@ -69,12 +75,14 @@ export async function editBook(formBookInputFields: FormBookInputFields, id: str
     }
   } catch (error) {
     let message
+
     if (error instanceof AxiosError) {
-      const { error: ErrorApi } = error.response?.data as { error: ErrorApi }
-
-      message = ErrorApi.message
+      if (error.response?.status === 413) {
+        message = "o limite máximo da imagem é 4MB"
+      } else if (error.response?.status == 500) {
+        message = error.response.data
+      }
     }
-
     return {
       ok: false,
       errorMessage: message ? message : "Não foi possível editar o livro",
@@ -124,23 +132,6 @@ export async function getBooks(pageNumber: number, inputBook: string) {
     return {
       ok: true,
       bookList: data.bookList,
-    }
-  } catch (error) {
-    return {
-      ok: false,
-    }
-  }
-}
-
-export async function getBooksByName(inputBookName: string) {
-  try {
-    const { data } = await axios.post<{ books: Book[] }>(endpoints.getBooksByName.url, {
-      bookName: inputBookName.trim(),
-    })
-
-    return {
-      ok: true,
-      bookList: data.books,
     }
   } catch (error) {
     return {

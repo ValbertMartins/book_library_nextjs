@@ -12,9 +12,11 @@ const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 interface Props {
   book: Book
   setBookList: Dispatch<SetStateAction<Book[]>>
+  page: number
+  bookNameFilter: string
 }
 
-const EditBookWrapper = ({ book, setBookList }: Props) => {
+const EditBookWrapper = ({ book, setBookList, page, bookNameFilter }: Props) => {
   const [loadingCover, setLoadingCover] = useState(true)
   const [openModal, setOpenModal] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
@@ -35,7 +37,9 @@ const EditBookWrapper = ({ book, setBookList }: Props) => {
 
     const { ok, bookListUpdated, errorMessage } = await editBook(
       { ...formInputFields },
-      book.id
+      book.id,
+      page,
+      bookNameFilter
     )
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)

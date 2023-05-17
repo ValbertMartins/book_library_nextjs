@@ -1,21 +1,29 @@
 import { Book } from "@/interfaces"
-import { getBooksByName } from "@/utils/handlerBook"
+import { getBooks } from "@/utils/handlerBook"
 import { Dispatch, FormEvent, SetStateAction, useState } from "react"
 import { MdSearch } from "react-icons/md"
 
 interface Props {
   setBookList: Dispatch<SetStateAction<Book[]>>
   setLoading: Dispatch<SetStateAction<boolean>>
+  setBookNameFilter: Dispatch<SetStateAction<string>>
+  bookNameFilter: string
+  setPage: Dispatch<SetStateAction<number>>
 }
 
-const SearchBook = ({ setBookList, setLoading }: Props) => {
-  const [inputBook, setInputBook] = useState("")
-
+const SearchBook = ({
+  setBookList,
+  setLoading,
+  setBookNameFilter,
+  bookNameFilter,
+  setPage,
+}: Props) => {
   async function handlerSearchBook(event: FormEvent) {
     event.preventDefault()
     setLoading(true)
+    setPage(0)
 
-    const { ok, bookList } = await getBooksByName(inputBook)
+    const { ok, bookList } = await getBooks(0, bookNameFilter)
     if (ok && bookList) {
       setBookList(bookList)
     }
@@ -34,7 +42,7 @@ const SearchBook = ({ setBookList, setLoading }: Props) => {
           type="text"
           placeholder="Procurar livro"
           className=" py-1 px-3 outline-none border-none placeholder:text-sm"
-          onChange={({ target }) => setInputBook(target.value)}
+          onChange={({ target }) => setBookNameFilter(target.value)}
         />
       </form>
     </div>
