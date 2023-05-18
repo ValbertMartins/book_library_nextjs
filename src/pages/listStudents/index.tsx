@@ -7,6 +7,7 @@ import ErrorMessage from "@/components/errorMessage"
 import RegisterStudentWrapper from "@/components/registerStudentWrapper"
 import { MdSearch } from "react-icons/md"
 import { getStudents } from "@/utils/handlerStudent"
+import SearchStudent from "@/components/searchStudent"
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
@@ -75,21 +76,14 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
 
         <div className="flex justify-between items-center">
           <RegisterStudentWrapper setStudentList={setStudentList} />
-          <div className="flex items-center bg-primary-color pl-3 rounded-lg py-1">
-            <MdSearch
-              size={22}
-              color="#a1a1aa"
-            />
 
-            <form onSubmit={handlerSearchStudent}>
-              <input
-                type="text"
-                placeholder="Procurar livro"
-                className=" py-1 px-3 outline-none border-none bg-primary-color placeholder:text-sm"
-                onChange={({ target }) => setStudentNameFilter(target.value)}
-              />
-            </form>
-          </div>
+          <SearchStudent
+            setLoading={setLoading}
+            setPage={setPage}
+            setStudentList={setStudentList}
+            setStudentNameFilter={setStudentNameFilter}
+            studentNameFilter={studentNameFilter}
+          />
         </div>
 
         {apiError ? (

@@ -3,6 +3,7 @@ import Popconfirm from "antd/lib/popconfirm"
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { MdDelete } from "react-icons/md"
 import { deleteBook } from "@/utils/handlerBook"
+import message from "antd/lib/message"
 
 interface Props {
   book: Book
@@ -22,6 +23,7 @@ const DeleteBookWrapper = ({ setBookList, book }: Props) => {
     const { ok, bookListUpdated } = await deleteBook(book.id)
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)
+      message.success("Livro deletado com sucesso")
     }
   }
   return (

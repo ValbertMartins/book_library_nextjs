@@ -31,7 +31,7 @@ const SearchBook = ({
   }
 
   return (
-    <div className="flex items-center bg-white pl-3 rounded-lg py-1">
+    <div className="flex items-center bg-white pl-3 rounded-lg py-1 border-[1px] border-blue-500 ">
       <MdSearch
         size={22}
         color="#a1a1aa"

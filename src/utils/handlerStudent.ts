@@ -7,9 +7,7 @@ interface State {
   setLoading: Dispatch<SetStateAction<boolean>>
 }
 
-export async function registerNewStudent(studentData: Omit<Student, "id">, state: State) {
-  state.setLoading(true)
-
+export async function registerNewStudent(studentData: Omit<Student, "id">) {
   try {
     const { data } = await axios.post<{ studentListUpdated: Student[] }>(
       "api/student",
@@ -24,8 +22,6 @@ export async function registerNewStudent(studentData: Omit<Student, "id">, state
       ok: false,
       studentListUpdated: null,
     }
-  } finally {
-    state.setLoading(false)
   }
 }
 

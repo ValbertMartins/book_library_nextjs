@@ -1,4 +1,4 @@
-import BooksWrapper from "@/components/bookShelfWrapper"
+import BookShelfWrapper from "@/components/bookShelfWrapper"
 import ErrorMessage from "@/components/errorMessage"
 import RankingWrapper from "@/components/rankingWrapper"
 import SearchBook from "@/components/searchBook"
@@ -83,7 +83,7 @@ export default function Home({ initialBookList, apiError }: Props) {
           {apiError ? (
             <ErrorMessage message="Falha ao carregar a lista de Livros" />
           ) : (
-            <BooksWrapper
+            <BookShelfWrapper
               bookList={bookList}
               setBookList={setBookList}
               loadingBooks={loadingBooks}

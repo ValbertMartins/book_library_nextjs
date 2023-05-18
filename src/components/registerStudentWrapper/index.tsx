@@ -14,15 +14,14 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
   const [toast, toastContextHolder] = message.useMessage()
 
   async function handleSubmitForm(studentData: Omit<Student, "id">) {
+    setLoading(true)
     toast.open({
       key: "toastRegisterModal",
       type: "loading",
       content: "Cadastrando estudante...",
       duration: 0,
     })
-    const { ok, studentListUpdated } = await registerNewStudent(studentData, {
-      setLoading,
-    })
+    const { ok, studentListUpdated } = await registerNewStudent(studentData)
 
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
@@ -33,6 +32,8 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
       toast.destroy()
       message.error("Falha ao cadastrar estudante, tente novamente")
     }
+
+    setLoading(false)
   }
 
   return (

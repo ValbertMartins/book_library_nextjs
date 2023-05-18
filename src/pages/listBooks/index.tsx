@@ -62,21 +62,13 @@ const ListBooks = ({ initialBookList }: Props) => {
         <div className="flex items-center justify-between mt-8">
           <RegisterBookWrapper setBookList={setBookList} />
 
-          <div className="flex items-center bg-primary-color pl-3 rounded-lg py-1">
-            <MdSearch
-              size={22}
-              color="#a1a1aa"
-            />
-
-            <form onSubmit={handlerSearchBook}>
-              <input
-                type="text"
-                placeholder="Procurar livro"
-                className=" py-1 px-3 outline-none border-none bg-primary-color placeholder:text-sm"
-                onChange={({ target }) => setBookNameFilter(target.value)}
-              />
-            </form>
-          </div>
+          <SearchBook
+            setBookNameFilter={setBookNameFilter}
+            bookNameFilter={bookNameFilter}
+            setPage={setPage}
+            setLoading={setLoading}
+            setBookList={setBookList}
+          />
         </div>
 
         <BooksTable

@@ -3,6 +3,7 @@ import { Student } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { MdDelete } from "react-icons/md"
+import message from "antd/lib/message"
 
 interface Props {
   student: Student
@@ -23,6 +24,7 @@ const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
     const { ok, studentListUpdated } = await deleteStudent(student.id)
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
+      message.success("Estudante deletado com sucesso")
     }
   }
 

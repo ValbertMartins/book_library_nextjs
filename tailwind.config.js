@@ -19,6 +19,9 @@ module.exports = {
       backgroundColor: {
         "primary-color": "rgba(250,250,250,255)",
       },
+      borderColor: {
+        "primary-color": "rgba(250,250,250,255)",
+      },
 
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],

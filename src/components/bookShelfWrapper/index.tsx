@@ -1,7 +1,7 @@
 import { Book } from "@/interfaces"
 import { Dispatch, SetStateAction, useState } from "react"
 import ModalAntd from "antd/lib/modal"
-import BookList from "../bookList"
+import BookShelfList from "../bookShelfList"
 import message from "antd/lib/message"
 
 import BorrowBookForm from "../forms/BorrowBook"
@@ -80,7 +80,7 @@ const BooksWrapper = ({
           <Loading>Carregando livros</Loading>
         </div>
       ) : (
-        <BookList
+        <BookShelfList
           bookList={bookList}
           setBookList={setBookList}
         />
