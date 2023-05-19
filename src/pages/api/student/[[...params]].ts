@@ -170,6 +170,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
 
       await res.revalidate("/listStudents")
+
       return res.status(200).json({ studentListUpdated })
     } catch (error) {
       return res.status(500).json({

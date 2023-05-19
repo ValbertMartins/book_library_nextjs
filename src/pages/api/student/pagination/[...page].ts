@@ -42,8 +42,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       skip: Number(pageIndex) * 10,
     })
 
-    await res.revalidate("/listStudents")
-
     res.status(200).json({
       studentList,
     })
