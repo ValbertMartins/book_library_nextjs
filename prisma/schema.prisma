@@ -45,6 +45,8 @@ model StudentBook {
   studentId  String
   created_at DateTime @default(now())
 
+  // @@index([studentId])
+  // @@index([bookId])
   @@map("studentsBooks")
 }
 

@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  database:
+    image: mysql
+    ports: 
+      - 3306:3306
+    container_name: local_db_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./db/development_backup_volume:/var/lib/mysql
