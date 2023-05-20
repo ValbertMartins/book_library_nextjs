@@ -14,7 +14,7 @@ const menuItens = [
   },
 
   {
-    path: "/listBooks",
+    path: "/books",
     icon: (color: string) => (
       <MdMenuBook
         className={`${color} hover:text-cyan-500 transition-colors`}
@@ -23,7 +23,7 @@ const menuItens = [
     ),
   },
   {
-    path: "/listStudents",
+    path: "/students",
     icon: (color: string) => (
       <MdPersonSearch
         className={`${color} hover:text-cyan-500 transition-colors ml-1`}
