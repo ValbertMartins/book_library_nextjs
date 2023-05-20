@@ -27,8 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (cover) {
         bookCoverCloudinaryData = await cloudinary.uploader.upload(cover, {
           transformation: {
-            width: 400,
-            height: 550,
+            width: 350,
+            height: 450,
             crop: "fill",
           },
         })
@@ -109,8 +109,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (cover) {
         newBookCoverCloudinaryData = await cloudinary.uploader.upload(cover, {
           transformation: {
-            width: 400,
-            height: 550,
+            width: 350,
+            height: 450,
             crop: "fill",
           },
         })
