@@ -42,24 +42,12 @@ const ListBooks = ({ initialBookList }: Props) => {
   const [bookNameFilter, setBookNameFilter] = useState("")
   const [page, setPage] = useState(0)
 
-  async function handlerSearchBook(event: FormEvent) {
-    event.preventDefault()
-    setLoading(true)
-    setPage(0)
-
-    const { ok, bookList } = await getBooks(0, bookNameFilter)
-    if (ok && bookList) {
-      setBookList(bookList)
-    }
-    setLoading(false)
-  }
-
   return (
-    <section className="p-8 flex-1 h-screen overflow-scroll">
+    <section className="px-4 pt-8 flex-1 h-screen overflow-scroll">
       <div className="bg-white p-4 rounded-xl">
         <p className="text-2xl font-bold pb-5">Livros</p>
 
-        <div className="flex items-center justify-between mt-8">
+        <div className="flex items-center justify-between mt-4">
           <RegisterBookWrapper setBookList={setBookList} />
 
           <SearchBook

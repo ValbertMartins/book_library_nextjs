@@ -59,11 +59,11 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [page, setPage] = useState(0)
 
   return (
-    <section className="p-8 flex-1">
+    <section className="pt-8 px-4 flex-1">
       <div className="bg-white p-4 rounded-xl">
         <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
-        <div className="flex justify-between items-center mt-8">
+        <div className="flex justify-between items-center mt-4">
           <RegisterStudentWrapper setStudentList={setStudentList} />
 
           <SearchStudent
