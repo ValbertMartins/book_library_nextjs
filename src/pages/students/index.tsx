@@ -58,23 +58,12 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
 
-  async function handlerSearchStudent(event: FormEvent) {
-    event.preventDefault()
-    setLoading(true)
-    setPage(0)
-    const { ok, studentList } = await getStudents(0, studentNameFilter)
-    if (ok && studentList) {
-      setStudentList(studentList)
-    }
-    setLoading(false)
-  }
-
   return (
     <section className="p-8 flex-1">
       <div className="bg-white p-4 rounded-xl">
         <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mt-8">
           <RegisterStudentWrapper setStudentList={setStudentList} />
 
           <SearchStudent

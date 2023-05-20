@@ -32,17 +32,17 @@ const SearchStudent = ({
   }
 
   return (
-    <div className="flex items-center bg-white pl-3 rounded-lg py-1 border-[1px] border-blue-500 ">
+    <div className="flex items-center bg-white pl-2 overflow-hidden rounded-lg border-2 border-black/5 hover:border-blue-400 transition-all duration-300 group">
       <MdSearch
         size={22}
-        color="#a1a1aa"
+        className="text-black/20 group-hover:text-blue-400 transition-all duration-300"
       />
 
       <form onSubmit={handlerSearchStudent}>
         <input
           type="text"
           placeholder="Procurar Estudante"
-          className=" py-1 px-3 outline-none border-none placeholder:text-sm"
+          className="py-1 px-3 outline-none border-none placeholder:text-sm group-hover:placeholder:text-blue-400 "
           onChange={({ target }) => setStudentNameFilter(target.value)}
         />
       </form>

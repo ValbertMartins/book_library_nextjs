@@ -64,7 +64,7 @@ export default function Home({ initialBookList, apiError }: Props) {
             <div className="flex items-center gap-x-4">
               <button
                 onClick={() => setOpenDrawerRanking(true)}
-                className=" flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.60rem]  hover:bg-blue-400 transition-all"
+                className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.40rem]  hover:bg-blue-400 transition-all"
               >
                 <AiOutlineTrophy size={20} />
               </button>
