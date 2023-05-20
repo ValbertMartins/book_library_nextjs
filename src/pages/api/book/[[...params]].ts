@@ -56,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
 
       await res.revalidate("/")
-      await res.revalidate("/listBooks")
+      await res.revalidate("/books")
 
       res.status(200).json({
         registeredBook,
@@ -159,7 +159,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
 
       await res.revalidate("/")
-      await res.revalidate("/listBooks")
+      await res.revalidate("/books")
 
       return res.status(200).json({
         bookListUpdated,
@@ -215,7 +215,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
 
       await res.revalidate("/")
-      await res.revalidate("/listBooks")
+      await res.revalidate("/books")
 
       res.status(200).json({
         bookListUpdated,

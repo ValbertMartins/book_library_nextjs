@@ -45,7 +45,7 @@ const BooksWrapper = ({
   return (
     <section className="bg-white rounded-xl px-4 ">
       <div className="flex items-center justify-between pt-8">
-        <p className="font-bold mx-4 text-xl ">Todos os livros</p>
+        <p className="font-bold mx-4 text-xl ">Livros</p>
 
         <button
           className="mb-4 flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-4 py-2 mr-4 hover:bg-blue-400 transition-all"
@@ -86,7 +86,7 @@ const BooksWrapper = ({
         />
       )}
 
-      <div className="flex items-center mt-4 mx-4">
+      <div className="flex items-center mx-4 py-4">
         <button
           onClick={() => handlerChangePagination(page - 1)}
           disabled={page === 0}

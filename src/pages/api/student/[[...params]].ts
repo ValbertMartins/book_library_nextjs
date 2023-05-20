@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         updateStudentListQuery,
       ])
 
-      await res.revalidate("/listStudents")
+      await res.revalidate("/students")
 
       return res.status(200).json({ studentListUpdated })
     } catch (error) {
@@ -114,7 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         studentListQuery,
       ])
 
-      await res.revalidate("/listStudents")
+      await res.revalidate("/students")
 
       return res.status(200).json({ studentListUpdated })
     } catch (error) {
@@ -169,7 +169,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         studentListUpdatedQuery,
       ])
 
-      await res.revalidate("/listStudents")
+      await res.revalidate("/students")
 
       return res.status(200).json({ studentListUpdated })
     } catch (error) {

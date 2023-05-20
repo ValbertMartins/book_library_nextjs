@@ -56,10 +56,10 @@ export default function Home({ initialBookList, apiError }: Props) {
 
   return (
     <StatisticsProvider>
-      <section className="bg-primary-color px-8 pt-6 flex-1 flex">
+      <section className="bg-primary-color mx-4 pt-6 flex-1 flex">
         <section className="flex-1">
           <header className="flex items-center justify-between">
-            <div className="text-2xl font-bold">Biblioteca</div>
+            <div className="text-2xl font-bold">Libook</div>
 
             <div className="flex items-center gap-x-4">
               <button
