@@ -25,7 +25,7 @@ const BookList = ({ bookList, setBookList }: Props) => {
           key={book.id}
           className="flex flex-col cursor-pointer"
         >
-          <div className="h-[260px] sm:h-[250px] lg:h-[300px] xl:h-[320px] 2xl:h-[450px] rounded-xl overflow-hidden ">
+          <div className=" rounded-xl overflow-hidden ">
             <Image
               className={`object-cover h-full w-full ${
                 imagesLoading ? "blur-md scale-100" : "grayscale-0 blur-0 scale-100"

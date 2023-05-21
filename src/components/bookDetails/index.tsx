@@ -1,11 +1,13 @@
 import ModalAntd from "antd/lib/modal"
-import { Dispatch, Fragment, SetStateAction, useContext, useEffect, useState } from "react"
-import { Book, Student, StudentBook, StudentBookByBook } from "@/interfaces"
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
+import { Book, StudentBookByBook } from "@/interfaces"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import { getStudentBookByBook } from "@/utils/handlerBook"
 import { finishBorrowBook } from "@/utils/handlerBorrowBook"
 import Button from "antd/lib/button"
 import { formatDate } from "@/utils/formatDate"
+import Loading from "../loading"
+import message from "antd/lib/message"
 
 interface Props {
   setOpenModalBookDetails: Dispatch<SetStateAction<boolean>>
@@ -24,28 +26,47 @@ export const BookDetails = ({
 }: Props) => {
   const { updateStatistics } = useContext(StatisticsContext)
   const [studentsOnBook, setStudentsOnBook] = useState<StudentBookByBook[] | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [toast, toastContexthold] = message.useMessage()
 
   useEffect(() => {
     async function handlerGetStudentsOnBook() {
+      setLoading(true)
+
       const { ok, studentsOnBook } = await getStudentBookByBook(book.id)
       if (ok && studentsOnBook) {
-        return setStudentsOnBook(studentsOnBook)
+        setStudentsOnBook(studentsOnBook)
       }
+      setLoading(false)
     }
-
     handlerGetStudentsOnBook()
   }, [])
 
   async function handlerFinishBorrowBook(studentId: string, bookId: string) {
+    setLoading(true)
+    toast.open({
+      type: "loading",
+      content: "Devolvendo livro...",
+      duration: 0,
+    })
+
     const { ok, updatedStudentsOnBook, bookListUpdated } = await finishBorrowBook(
       studentId,
       bookId
     )
+
     if (ok && updatedStudentsOnBook && bookListUpdated) {
+      toast.destroy()
+      toast.success("Livro devolvido com sucesso")
       setStudentsOnBook(updatedStudentsOnBook)
       setBookList(bookListUpdated)
       updateStatistics()
+    } else {
+      toast.destroy()
+      toast.error("Não foi possível devolver o livro, tente novamente")
     }
+
+    setLoading(false)
   }
   return (
     <ModalAntd
@@ -59,7 +80,7 @@ export const BookDetails = ({
       footer={null}
     >
       <div>
-        <h1 className="font-bold text-xl my-6">Alunos com o livro {book.name}</h1>
+        <h1 className="font-bold text-xl my-6 ">{book.name}</h1>
 
         <table className="w-full mt-2">
           <thead>
@@ -67,7 +88,7 @@ export const BookDetails = ({
               <th className="rounded-lg p-4">Nome</th>
               <th className="rounded-lg p-4">Série</th>
               <th className="rounded-lg p-4">Turma</th>
-              <th className="rounded-lg p-4">Criado em</th>
+              <th className="rounded-lg p-4">Emprestado em</th>
               <th className="rounded-lg p-4">Ações</th>
             </tr>
           </thead>
@@ -88,15 +109,30 @@ export const BookDetails = ({
                     }}
                     type="primary"
                     size="small"
+                    disabled={loading}
                   >
-                    Entregar
+                    Devolver livro
                   </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {loading && !studentsOnBook && (
+          <div className="mt-8">
+            <Loading>Carregando estudantes</Loading>
+          </div>
+        )}
+
+        {studentsOnBook?.length === 0 && (
+          <p className="text-center font-semibold text-blue-500 mt-6 text-lg">
+            Nenhum estudante com o livro no momento
+          </p>
+        )}
       </div>
+
+      {toastContexthold}
     </ModalAntd>
   )
 }
