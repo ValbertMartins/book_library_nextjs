@@ -1,8 +1,20 @@
-import { FormEvent } from "react"
+import { useForm, SubmitHandler } from "react-hook-form"
+
+interface IFormInputs {
+  fullname: string
+  email: string
+  password: string
+}
 
 const RegisterAdmin = () => {
-  async function handleRegisterAdmin(event: FormEvent) {
-    event.preventDefault()
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInputs>()
+
+  async function registerAdmin(data: IFormInputs) {
+    console.log(data)
   }
 
   return (
@@ -15,13 +27,14 @@ const RegisterAdmin = () => {
           </p>
 
           <form
-            onSubmit={handleRegisterAdmin}
+            onSubmit={handleSubmit(data => registerAdmin(data))}
             className="flex flex-col gap-4"
           >
             <label className="font-semibold">
               Nome completo
               <input
                 type="text"
+                {...register("fullname", { required: true })}
                 className="block w-full outline-none border-black/10 border-[1px] rounded-lg px-4 py-2 placeholder:font-normal"
                 placeholder="Insira seu nome"
               />
@@ -33,6 +46,7 @@ const RegisterAdmin = () => {
                 type="text"
                 className="block w-full outline-none border-black/10 border-[1px] rounded-lg px-4 py-2 placeholder:font-normal"
                 placeholder="Insira seu e-mail"
+                {...register("email", { required: true })}
               />
             </label>
 
@@ -40,9 +54,13 @@ const RegisterAdmin = () => {
               Senha
               <input
                 type="text"
-                className="block w-full outline-none border-black/10 border-[1px] rounded-lg px-4 py-2 placeholder:font-normal"
+                className={`block w-full outline-none ${
+                  errors.password ? "border-red-500" : "border-black/10"
+                } border-[1px] rounded-lg px-4 py-2 placeholder:font-normal`}
                 placeholder="Insira sua senha"
+                {...register("password", { required: true, minLength: 5 })}
               />
+              {errors.password && <p className="text-red-400">a senha é obrigatória</p>}
             </label>
 
             <button
