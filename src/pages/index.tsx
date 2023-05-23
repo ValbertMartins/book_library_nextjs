@@ -1,107 +1,24 @@
-import BookShelfWrapper from "@/components/bookShelfWrapper"
-import ErrorMessage from "@/components/errorMessage"
-import RankingWrapper from "@/components/rankingWrapper"
-import SearchBook from "@/components/searchBook"
-import StatisticsWrapper from "@/components/statisticsWrapper"
-import { StatisticsProvider } from "@/contexts/StatisticsProvider"
-import { Book, ErrorApi } from "@/interfaces"
+import { GetServerSideProps } from "next"
 import { PrismaClient } from "@prisma/client"
-import { GetStaticProps } from "next"
-import { useState } from "react"
-import { AiOutlineTrophy } from "react-icons/ai"
 
-interface Props {
-  initialBookList: Book[]
-  apiError?: ErrorApi
-  registeredStudentsCounter: number
-  registeredBooksCounter: number
-  booksBorrowedCounter: number
-}
-
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const prisma = new PrismaClient()
 
-  try {
-    let initialBookList = await prisma.book.findMany({
-      orderBy: {
-        created_at: "desc",
-      },
-      take: 10,
-    })
-    initialBookList = JSON.parse(JSON.stringify(initialBookList))
+  const hasAdmin = await prisma.admin.count()
 
-    return {
-      props: {
-        initialBookList,
-      },
-    }
-  } catch (error) {
-    return {
-      props: {
-        apiError: {
-          message: "Falha ao listar estudantes",
-          status: 500,
+  return {
+    redirect: hasAdmin
+      ? {
+          destination: "/auth/login",
+          permanent: false,
+        }
+      : {
+          destination: "/auth/register-admin",
+          permanent: false,
         },
-      },
-    }
   }
 }
 
-export default function Home({ initialBookList, apiError }: Props) {
-  const [bookList, setBookList] = useState(initialBookList)
-  const [loadingBooks, setLoadingBooks] = useState(false)
-  const [openDrawerRanking, setOpenDrawerRanking] = useState(false)
-  const [page, setPage] = useState(0)
-  const [bookNameFilter, setBookNameFilter] = useState("")
-
-  return (
-    <StatisticsProvider>
-      <section className="bg-primary-color mx-4 pt-6 flex-1 flex">
-        <section className="flex-1">
-          <header className="flex items-center justify-between">
-            <div className="text-2xl font-bold">Libook</div>
-
-            <div className="flex items-center gap-x-4">
-              <button
-                onClick={() => setOpenDrawerRanking(true)}
-                className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.40rem]  hover:bg-blue-400 transition-all"
-              >
-                <AiOutlineTrophy size={20} />
-              </button>
-              <SearchBook
-                bookNameFilter={bookNameFilter}
-                setBookNameFilter={setBookNameFilter}
-                setBookList={setBookList}
-                setLoading={setLoadingBooks}
-                setPage={setPage}
-              />
-            </div>
-          </header>
-
-          <StatisticsWrapper />
-
-          {apiError ? (
-            <ErrorMessage message="Falha ao carregar a lista de Livros" />
-          ) : (
-            <BookShelfWrapper
-              bookList={bookList}
-              setBookList={setBookList}
-              loadingBooks={loadingBooks}
-              setPage={setPage}
-              page={page}
-              bookNameFilter={bookNameFilter}
-              setLoading={setLoadingBooks}
-            />
-          )}
-        </section>
-
-        {openDrawerRanking && (
-          <RankingWrapper
-            setOpenDrawerRanking={setOpenDrawerRanking}
-            openDrawerRanking={openDrawerRanking}
-          />
-        )}
-      </section>
-    </StatisticsProvider>
-  )
+export default function Home() {
+  return <></>
 }

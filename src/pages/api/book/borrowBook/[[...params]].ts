@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
 
       await Promise.all([
-        res.revalidate("/"),
+        res.revalidate("/dashboard"),
         res.revalidate("/students"),
         res.revalidate("/books"),
       ])
@@ -157,7 +157,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
 
       await Promise.all([
-        res.revalidate("/"),
+        res.revalidate("/dashboard"),
         res.revalidate("/students"),
         res.revalidate("/books"),
       ])

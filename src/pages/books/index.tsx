@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar"
 import RegisterBookWrapper from "@/components/registerBookWrapper"
 import SearchBook from "@/components/searchBook"
 import BooksTable from "@/components/table/Books"
@@ -43,32 +44,36 @@ const ListBooks = ({ initialBookList }: Props) => {
   const [page, setPage] = useState(0)
 
   return (
-    <section className="px-4 pt-8 flex-1 h-screen overflow-scroll">
-      <div className="bg-white p-4 rounded-xl">
-        <p className="text-2xl font-bold pb-5">Livros</p>
+    <section className="flex">
+      <Navbar />
 
-        <div className="flex items-center justify-between mt-4">
-          <RegisterBookWrapper setBookList={setBookList} />
+      <section className="px-4 pt-8 flex-1 h-screen overflow-scroll">
+        <div className="bg-white p-4 rounded-xl">
+          <p className="text-2xl font-bold pb-5">Livros</p>
 
-          <SearchBook
-            setBookNameFilter={setBookNameFilter}
-            bookNameFilter={bookNameFilter}
-            setPage={setPage}
-            setLoading={setLoading}
+          <div className="flex items-center justify-between mt-4">
+            <RegisterBookWrapper setBookList={setBookList} />
+
+            <SearchBook
+              setBookNameFilter={setBookNameFilter}
+              bookNameFilter={bookNameFilter}
+              setPage={setPage}
+              setLoading={setLoading}
+              setBookList={setBookList}
+            />
+          </div>
+
+          <BooksTable
+            bookList={bookList}
             setBookList={setBookList}
+            setPage={setPage}
+            page={page}
+            bookNameFilter={bookNameFilter}
+            loading={loading}
+            setLoading={setLoading}
           />
         </div>
-
-        <BooksTable
-          bookList={bookList}
-          setBookList={setBookList}
-          setPage={setPage}
-          page={page}
-          bookNameFilter={bookNameFilter}
-          loading={loading}
-          setLoading={setLoading}
-        />
-      </div>
+      </section>
     </section>
   )
 }

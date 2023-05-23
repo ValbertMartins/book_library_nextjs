@@ -8,6 +8,7 @@ import RegisterStudentWrapper from "@/components/registerStudentWrapper"
 import { MdSearch } from "react-icons/md"
 import { getStudents } from "@/utils/handlerStudent"
 import SearchStudent from "@/components/searchStudent"
+import Navbar from "@/components/navbar"
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
@@ -59,36 +60,40 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [page, setPage] = useState(0)
 
   return (
-    <section className="pt-8 px-4 flex-1">
-      <div className="bg-white p-4 rounded-xl">
-        <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
+    <section className="flex">
+      <Navbar />
 
-        <div className="flex justify-between items-center mt-4">
-          <RegisterStudentWrapper setStudentList={setStudentList} />
+      <section className="pt-8 px-4 flex-1 overflow-scroll h-screen">
+        <div className="bg-white p-4 rounded-xl">
+          <h1 className="text-2xl font-bold pb-5">Estudantes</h1>
 
-          <SearchStudent
-            setLoading={setLoading}
-            setPage={setPage}
-            setStudentList={setStudentList}
-            setStudentNameFilter={setStudentNameFilter}
-            studentNameFilter={studentNameFilter}
-          />
+          <div className="flex justify-between items-center mt-4">
+            <RegisterStudentWrapper setStudentList={setStudentList} />
+
+            <SearchStudent
+              setLoading={setLoading}
+              setPage={setPage}
+              setStudentList={setStudentList}
+              setStudentNameFilter={setStudentNameFilter}
+              studentNameFilter={studentNameFilter}
+            />
+          </div>
+
+          {apiError ? (
+            <ErrorMessage message="Erro ao listar estudantes" />
+          ) : (
+            <TableStudents
+              studentList={studentList}
+              setStudentList={setStudentList}
+              page={page}
+              setPage={setPage}
+              studentNameFilter={studentNameFilter}
+              loading={loading}
+              setLoading={setLoading}
+            />
+          )}
         </div>
-
-        {apiError ? (
-          <ErrorMessage message="Erro ao listar estudantes" />
-        ) : (
-          <TableStudents
-            studentList={studentList}
-            setStudentList={setStudentList}
-            page={page}
-            setPage={setPage}
-            studentNameFilter={studentNameFilter}
-            loading={loading}
-            setLoading={setLoading}
-          />
-        )}
-      </div>
+      </section>
     </section>
   )
 }
