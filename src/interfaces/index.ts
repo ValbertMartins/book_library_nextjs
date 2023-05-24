@@ -56,3 +56,9 @@ export interface FormBookInputFields {
   quantity: number
   coverList?: UploadFile[]
 }
+
+export interface RegisterAdminInputs {
+  name: string
+  email: string
+  password: string
+}

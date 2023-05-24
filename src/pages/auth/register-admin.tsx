@@ -1,27 +1,21 @@
-import axios from "axios"
-import { useForm, SubmitHandler } from "react-hook-form"
-
-interface IFormInputs {
-  name: string
-  email: string
-  password: string
-}
+import AdminAuthProvider, { adminAuthContext } from "@/contexts/AdminAuthProvider"
+import { RegisterAdminInputs } from "@/interfaces"
+import { useContext } from "react"
+import { useForm } from "react-hook-form"
 
 const RegisterAdmin = () => {
+  const { registerAdmin } = useContext(adminAuthContext)
+
+  console.log(registerAdmin)
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<IFormInputs>()
-
-  async function registerAdmin(data: IFormInputs) {
-    const response = await axios.post("/api/auth/register", data)
-
-    console.log(response.data)
-  }
+  } = useForm<RegisterAdminInputs>()
 
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-hidden bg-white">
+    <section className="grid grid-cols-1 lg:grid-cols-2  h-screen overflow-hidden bg-white">
       <div className="flex items-center justify-center">
         <div className="flex-1 max-w-lg p-4">
           <h1 className="font-bold text-3xl">Crie sua conta</h1>
@@ -80,7 +74,7 @@ const RegisterAdmin = () => {
           </form>
         </div>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden lg:block h-screen">
         <img
           className="w-full h-full object-cover"
           src="/auth-illustration.svg"
