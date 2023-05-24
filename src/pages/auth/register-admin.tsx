@@ -1,7 +1,8 @@
+import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 interface IFormInputs {
-  fullname: string
+  name: string
   email: string
   password: string
 }
@@ -14,7 +15,9 @@ const RegisterAdmin = () => {
   } = useForm<IFormInputs>()
 
   async function registerAdmin(data: IFormInputs) {
-    console.log(data)
+    const response = await axios.post("/api/auth/register", data)
+
+    console.log(response.data)
   }
 
   return (
@@ -34,7 +37,7 @@ const RegisterAdmin = () => {
               Nome completo
               <input
                 type="text"
-                {...register("fullname", { required: true })}
+                {...register("name", { required: true })}
                 className="block w-full outline-none border-black/10 border-[1px] rounded-lg px-4 py-2 placeholder:font-normal"
                 placeholder="Insira seu nome"
               />
@@ -60,7 +63,12 @@ const RegisterAdmin = () => {
                 placeholder="Insira sua senha"
                 {...register("password", { required: true, minLength: 5 })}
               />
-              {errors.password && <p className="text-red-400">a senha é obrigatória</p>}
+              {errors.password?.type === "required" && (
+                <p className="text-red-400">a senha é obrigatória</p>
+              )}
+              {errors.password?.type === "minLength" && (
+                <p className="text-red-400">a senha deve ter pelo menos 5 dígitos</p>
+              )}
             </label>
 
             <button
