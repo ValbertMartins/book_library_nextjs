@@ -1,12 +1,15 @@
-import { useRouter } from "next/router"
-import { FormEvent } from "react"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
+import { formAuthFields } from "@/interfaces"
+import { useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
 
 const Login = () => {
-  const router = useRouter()
-  async function handleLogin(event: FormEvent) {
-    event.preventDefault()
-    router.push("/dashboard")
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Pick<formAuthFields, "email" | "password">>()
+  const { signIn, loading } = useContext(adminAuthContext)
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-hidden bg-white">
@@ -18,7 +21,7 @@ const Login = () => {
           </p>
 
           <form
-            onSubmit={handleLogin}
+            onSubmit={handleSubmit(inputFields => signIn(inputFields))}
             className="flex flex-col gap-4"
           >
             <label className="font-semibold">
@@ -27,28 +30,39 @@ const Login = () => {
                 type="text"
                 className="block w-full outline-none border-black/10 border-[1px] rounded-lg px-4 py-2 placeholder:font-normal"
                 placeholder="Insira seu e-mail"
+                {...register("email", { required: true })}
               />
             </label>
 
             <label className="font-semibold">
               Senha
               <input
-                type="text"
-                className="block w-full outline-none border-black/10 border-[1px] rounded-lg px-4 py-2 placeholder:font-normal"
+                type="password"
+                className={`block w-full outline-none ${
+                  errors.password ? "border-red-500" : "border-black/10"
+                } border-[1px] rounded-lg px-4 py-2 placeholder:font-normal`}
                 placeholder="Insira sua senha"
+                {...register("password", { required: true, minLength: 5 })}
               />
+              {errors.password?.type === "required" && (
+                <p className="text-red-400">a senha é obrigatória</p>
+              )}
+              {errors.password?.type === "minLength" && (
+                <p className="text-red-400">a senha deve ter pelo menos 5 dígitos</p>
+              )}
             </label>
 
             <button
               type="submit"
-              className="rounded-lg px-4 py-2 bg-blue-500 font-bold text-white hover:outline hover:outline-blue-300 hover:outline-2 transition-all mt-2"
+              className="rounded-lg px-4 py-2 bg-blue-500 font-bold text-white hover:outline hover:outline-blue-300 hover:outline-2 transition-all mt-2 disabled:bg-primary-color disabled:border-2 disabled:border-zinc-300 disabled:text-zinc-300 disabled:outline-none"
+              disabled={loading}
             >
               Entrar
             </button>
           </form>
         </div>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden lg:block h-screen">
         <img
           className="w-full h-full object-cover"
           src="/auth-illustration.svg"

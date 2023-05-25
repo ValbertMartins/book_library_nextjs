@@ -1,18 +1,16 @@
-import AdminAuthProvider, { adminAuthContext } from "@/contexts/AdminAuthProvider"
-import { RegisterAdminInputs } from "@/interfaces"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
+import { formAuthFields } from "@/interfaces"
 import { useContext } from "react"
 import { useForm } from "react-hook-form"
 
-const RegisterAdmin = () => {
-  const { registerAdmin } = useContext(adminAuthContext)
-
-  console.log(registerAdmin)
+const Register = () => {
+  const { signUp } = useContext(adminAuthContext)
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<RegisterAdminInputs>()
+  } = useForm<formAuthFields>()
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2  h-screen overflow-hidden bg-white">
@@ -24,7 +22,7 @@ const RegisterAdmin = () => {
           </p>
 
           <form
-            onSubmit={handleSubmit(data => registerAdmin(data))}
+            onSubmit={handleSubmit(inputFields => signUp(inputFields))}
             className="flex flex-col gap-4"
           >
             <label className="font-semibold">
@@ -50,7 +48,7 @@ const RegisterAdmin = () => {
             <label className="font-semibold">
               Senha
               <input
-                type="text"
+                type="password"
                 className={`block w-full outline-none ${
                   errors.password ? "border-red-500" : "border-black/10"
                 } border-[1px] rounded-lg px-4 py-2 placeholder:font-normal`}
@@ -85,4 +83,4 @@ const RegisterAdmin = () => {
   )
 }
 
-export default RegisterAdmin
+export default Register

@@ -4,11 +4,12 @@ import Navbar from "@/components/navbar"
 import RankingWrapper from "@/components/rankingWrapper"
 import SearchBook from "@/components/searchBook"
 import StatisticsWrapper from "@/components/statisticsWrapper"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { StatisticsProvider } from "@/contexts/StatisticsProvider"
 import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { AiOutlineTrophy } from "react-icons/ai"
 
 interface Props {
@@ -54,6 +55,7 @@ export default function Home({ initialBookList, apiError }: Props) {
   const [openDrawerRanking, setOpenDrawerRanking] = useState(false)
   const [page, setPage] = useState(0)
   const [bookNameFilter, setBookNameFilter] = useState("")
+  const { admin } = useContext(adminAuthContext)
 
   return (
     <StatisticsProvider>
@@ -66,12 +68,6 @@ export default function Home({ initialBookList, apiError }: Props) {
               <div className="text-2xl font-bold">Libook</div>
 
               <div className="flex items-center gap-x-4">
-                <button
-                  onClick={() => setOpenDrawerRanking(true)}
-                  className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.40rem]  hover:bg-blue-400 transition-all"
-                >
-                  <AiOutlineTrophy size={20} />
-                </button>
                 <SearchBook
                   bookNameFilter={bookNameFilter}
                   setBookNameFilter={setBookNameFilter}
@@ -79,6 +75,15 @@ export default function Home({ initialBookList, apiError }: Props) {
                   setLoading={setLoadingBooks}
                   setPage={setPage}
                 />
+
+                <button
+                  onClick={() => setOpenDrawerRanking(true)}
+                  className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.40rem]  hover:bg-blue-400 transition-all"
+                >
+                  <AiOutlineTrophy size={20} />
+                </button>
+
+                <p>{admin ? admin.name : "Entrar"}</p>
               </div>
             </header>
 

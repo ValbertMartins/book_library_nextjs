@@ -57,7 +57,7 @@ export interface FormBookInputFields {
   coverList?: UploadFile[]
 }
 
-export interface RegisterAdminInputs {
+export interface formAuthFields {
   name: string
   email: string
   password: string
