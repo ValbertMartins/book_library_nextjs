@@ -3,6 +3,7 @@ import { z } from "zod"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcrypt"
 const prisma = new PrismaClient()
+import jwt from "jsonwebtoken"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).json({ message: "bad request" })
@@ -26,9 +27,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!passwordIsCorrect) return res.status(400).json("email or password invalid")
 
+    const jwt_token = jwt.sign({ name: admin.name, id: admin.id }, `${process.env.JWT_SECRET}`)
+
+    res.setHeader("Set-cookie", `jwt=${jwt_token}; sameSite=none; Secure; Path=/; HttpOnly`)
+
     res.status(200).json({
       isLogged: true,
       admin: { name: admin.name },
+      jwt_token,
     })
   } catch (error) {
     console.log(error)

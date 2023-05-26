@@ -24,7 +24,6 @@ interface Props {
 export const AdminAuthProvider = ({ children }: Props) => {
   const [admin, setAdmin] = useState<Admin | null>(null)
   const [loading, setLoading] = useState(false)
-  const [authError, setAuthError] = useState(null)
   const [toast, toastContextHolder] = message.useMessage()
   const { push } = useRouter()
 
@@ -44,7 +43,7 @@ export const AdminAuthProvider = ({ children }: Props) => {
 
   async function signIn(dataFields: Pick<formAuthFields, "email" | "password">) {
     setLoading(true)
-    setAuthError(null)
+
     toast.open({ content: "Aguarde...", type: "loading", duration: 0 })
     try {
       const {
@@ -58,7 +57,7 @@ export const AdminAuthProvider = ({ children }: Props) => {
       if (error instanceof AxiosError) {
         toast.error(
           error.response?.status === 400
-            ? "Email ou senha inválidos, tente novamente..."
+            ? "Email ou senha inválidos, tente novamente"
             : "Falha ao entrar, tente novamente"
         )
       } else {
