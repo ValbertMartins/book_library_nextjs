@@ -27,9 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!passwordIsCorrect) return res.status(400).json("email or password invalid")
 
-    const jwt_token = jwt.sign({ name: admin.name, id: admin.id }, `${process.env.JWT_SECRET}`)
+    const jwt_token = jwt.sign({ id: admin.id }, `${process.env.JWT_SECRET}`)
 
-    res.setHeader("Set-cookie", `jwt=${jwt_token}; sameSite=none; Secure; Path=/; HttpOnly`)
+    res.setHeader(
+      "Set-cookie",
+      `jwt_token=${jwt_token}; sameSite=none; Secure; Path=/; HttpOnly`
+    )
 
     res.status(200).json({
       isLogged: true,
@@ -37,7 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       jwt_token,
     })
   } catch (error) {
-    console.log(error)
     res.status(500).json({ message: "internal server error" })
   }
 }

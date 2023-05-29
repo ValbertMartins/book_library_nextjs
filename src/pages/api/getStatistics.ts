@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 
 export default async function getStatistics(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") return res.status(400).json({ message: "invalid request" })
+
   try {
     const [registeredBooksCounter, registeredStudentsCounter, booksBorrowedCounter] =
       await Promise.all([

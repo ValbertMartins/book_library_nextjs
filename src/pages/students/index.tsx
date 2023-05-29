@@ -2,13 +2,14 @@ import { GetStaticProps } from "next"
 import { PrismaClient } from "@prisma/client"
 import { ErrorApi, Student } from "@/interfaces"
 import TableStudents from "@/components/table/Students"
-import { FormEvent, useState } from "react"
+import { FormEvent, useContext, useState } from "react"
 import ErrorMessage from "@/components/errorMessage"
 import RegisterStudentWrapper from "@/components/registerStudentWrapper"
 import { MdSearch } from "react-icons/md"
 import { getStudents } from "@/utils/handlerStudent"
 import SearchStudent from "@/components/searchStudent"
 import Navbar from "@/components/navbar"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient()
@@ -58,6 +59,9 @@ const ListStudents = ({ initialStudentList, apiError }: Props) => {
   const [studentNameFilter, setStudentNameFilter] = useState("")
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
+  const { admin } = useContext(adminAuthContext)
+
+  if (!admin) return null
 
   return (
     <section className="flex">

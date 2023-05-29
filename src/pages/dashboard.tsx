@@ -57,6 +57,8 @@ export default function Home({ initialBookList, apiError }: Props) {
   const [bookNameFilter, setBookNameFilter] = useState("")
   const { admin } = useContext(adminAuthContext)
 
+  if (!admin) return null
+
   return (
     <StatisticsProvider>
       <section className="flex">

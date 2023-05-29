@@ -2,11 +2,12 @@ import Navbar from "@/components/navbar"
 import RegisterBookWrapper from "@/components/registerBookWrapper"
 import SearchBook from "@/components/searchBook"
 import BooksTable from "@/components/table/Books"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { Book } from "@/interfaces"
 import { getBooks } from "@/utils/handlerBook"
 import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
-import { FormEvent, useState } from "react"
+import { FormEvent, useContext, useState } from "react"
 import { MdSearch } from "react-icons/md"
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -42,6 +43,9 @@ const ListBooks = ({ initialBookList }: Props) => {
   const [loading, setLoading] = useState(false)
   const [bookNameFilter, setBookNameFilter] = useState("")
   const [page, setPage] = useState(0)
+  const { admin } = useContext(adminAuthContext)
+
+  if (!admin) return null
 
   return (
     <section className="flex">

@@ -1,5 +1,6 @@
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { formAuthFields } from "@/interfaces"
+import Image from "next/image"
 import { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 
@@ -66,7 +67,7 @@ const Login = () => {
         <img
           className="w-full h-full object-cover"
           src="/auth-illustration.svg"
-          alt=""
+          alt="Mulher segurando celular enquanto caminha"
         />
       </div>
     </section>
