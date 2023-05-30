@@ -1,16 +1,22 @@
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { formAuthFields } from "@/interfaces"
-import Image from "next/image"
 import { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-
+import { useRouter } from "next/router"
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Pick<formAuthFields, "email" | "password">>()
-  const { signIn, loading } = useContext(adminAuthContext)
+  const { signIn, loading, admin } = useContext(adminAuthContext)
+  const { push } = useRouter()
+
+  useEffect(() => {
+    if (admin) {
+      push("/dashboard")
+    }
+  }, [admin])
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-hidden bg-white">

@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     res.status(200).json({
-      admin: { name: admin.name },
+      admin: { name: admin.name, email: admin.email, id: admin.id },
     })
   } catch (error) {
     res.status(500).json({

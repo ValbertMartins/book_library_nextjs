@@ -35,8 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     )
 
     res.status(200).json({
-      isLogged: true,
-      admin: { name: admin.name },
+      admin: { name: admin.name, email: admin.email, id: admin.id },
       jwt_token,
     })
   } catch (error) {
