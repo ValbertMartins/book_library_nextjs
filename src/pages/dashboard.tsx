@@ -11,6 +11,7 @@ import { PrismaClient } from "@prisma/client"
 import { GetStaticProps } from "next"
 import { useContext, useState } from "react"
 import { AiOutlineTrophy } from "react-icons/ai"
+import { IoMdPerson } from "react-icons/io"
 
 interface Props {
   initialBookList: Book[]
@@ -70,6 +71,12 @@ export default function Home({ initialBookList, apiError }: Props) {
               <div className="text-2xl font-bold">Libook</div>
 
               <div className="flex items-center gap-x-4">
+                <button
+                  onClick={() => setOpenDrawerRanking(true)}
+                  className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.40rem]  hover:bg-blue-400 transition-all"
+                >
+                  <AiOutlineTrophy size={20} />
+                </button>
                 <SearchBook
                   bookNameFilter={bookNameFilter}
                   setBookNameFilter={setBookNameFilter}
@@ -78,14 +85,13 @@ export default function Home({ initialBookList, apiError }: Props) {
                   setPage={setPage}
                 />
 
-                <button
-                  onClick={() => setOpenDrawerRanking(true)}
-                  className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md p-[0.40rem]  hover:bg-blue-400 transition-all"
-                >
-                  <AiOutlineTrophy size={20} />
-                </button>
-
-                <p>{admin ? admin.name : "Entrar"}</p>
+                <div className="bg-white px-4 py-2 rounded-md flex items-center gap-x-2 cursor-pointer">
+                  <p className="text-black/40 font-semibold">{admin && admin.name}</p>
+                  <IoMdPerson
+                    size={25}
+                    className="text-black/20 hover:text-blue-400 transition-all duration-300"
+                  />
+                </div>
               </div>
             </header>
 
