@@ -54,10 +54,7 @@ export const AdminAuthProvider = ({ children }: Props) => {
   async function signUp(dataFields: formAuthFields) {
     setLoading(true)
     try {
-      const {
-        data: { admin },
-      } = await axios.post<{ admin: Admin }>("/api/auth/register", dataFields)
-      setAdmin(admin)
+      await axios.post<{ admin: Admin }>("/api/auth/register", dataFields)
       push("/auth/login")
     } catch (error) {
       console.error(error)
@@ -101,11 +98,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
       setAdmin(null)
       push("/")
     }
-  }
-
-  async function checkIfExistsAdminRegisteredInDb() {
-    try {
-    } catch (error) {}
   }
 
   return (
