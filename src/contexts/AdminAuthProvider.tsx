@@ -12,9 +12,10 @@ interface Admin {
 
 interface ProviderValues {
   admin: Admin | null
+  loading: boolean
   signUp: (dataFields: formAuthFields) => Promise<void>
   signIn: (dataFields: Pick<formAuthFields, "email" | "password">) => Promise<void>
-  loading: boolean
+  signOut: () => Promise<void>
 }
 
 export const adminAuthContext = createContext({} as ProviderValues)
@@ -31,7 +32,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const adminPersistentData = localStorage.getItem("admin")
-
     async function handlerPersistentAdminData() {
       if (adminPersistentData) {
         const { id }: Admin = JSON.parse(adminPersistentData)
@@ -39,13 +39,12 @@ export const AdminAuthProvider = ({ children }: Props) => {
           const { data } = await axios.post<{ admin: Admin }>("/api/auth/verify-auth", {
             id,
           })
-
           setAdmin(data.admin)
         } catch (error) {
-          push("/")
+          await push("/")
         }
       } else {
-        push("/")
+        await push("/")
       }
     }
 
@@ -78,7 +77,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
       setAdmin(admin)
       localStorage.setItem("admin", JSON.stringify(admin))
       toast.destroy()
-      push("/dashboard")
     } catch (error) {
       toast.destroy()
       if (error instanceof AxiosError) {
@@ -94,12 +92,29 @@ export const AdminAuthProvider = ({ children }: Props) => {
     setLoading(false)
   }
 
+  async function signOut() {
+    const {
+      data: { isAuth, ok },
+    } = await axios.get<{ isAuth: boolean; ok: boolean }>("/api/auth/logout")
+    if (!isAuth && ok) {
+      localStorage.removeItem("admin")
+      setAdmin(null)
+      push("/")
+    }
+  }
+
+  async function checkIfExistsAdminRegisteredInDb() {
+    try {
+    } catch (error) {}
+  }
+
   return (
     <adminAuthContext.Provider
       value={{
         admin,
         signUp,
         signIn,
+        signOut,
         loading,
       }}
     >

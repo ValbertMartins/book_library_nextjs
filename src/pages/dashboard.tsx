@@ -86,10 +86,10 @@ export default function Home({ initialBookList, apiError }: Props) {
                 />
 
                 <div className="bg-white px-4 py-2 rounded-md flex items-center gap-x-2 cursor-pointer">
-                  <p className="text-black/40 font-semibold">{admin && admin.name}</p>
+                  <p className="text-blue-500 font-semibold">{admin && admin.name}</p>
                   <IoMdPerson
                     size={25}
-                    className="text-black/20 hover:text-blue-400 transition-all duration-300"
+                    className="text-blue-500 hover:text-blue-400 transition-all duration-300"
                   />
                 </div>
               </div>

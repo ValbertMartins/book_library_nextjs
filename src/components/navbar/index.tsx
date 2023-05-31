@@ -1,6 +1,8 @@
 import { MdSpaceDashboard, MdPersonSearch, MdMenuBook, MdExitToApp } from "react-icons/md"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useContext } from "react"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 const menuItens = [
   {
@@ -35,6 +37,7 @@ const menuItens = [
 
 const Navbar = ({ openNavbarMobile }: { openNavbarMobile?: boolean }) => {
   const { pathname } = useRouter()
+  const { signOut } = useContext(adminAuthContext)
 
   return (
     <section
@@ -55,9 +58,12 @@ const Navbar = ({ openNavbarMobile }: { openNavbarMobile?: boolean }) => {
         ))}
       </div>
 
-      <div>
+      <div
+        className="mb-5 "
+        onClick={signOut}
+      >
         <MdExitToApp
-          className={`text-slate-300 hover:text-cyan-500 transition-colors ml-1 pb-10 cursor-pointer`}
+          className={`text-slate-300 hover:text-cyan-500 transition-colors cursor-pointer`}
           size={30}
         />
       </div>
