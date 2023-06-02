@@ -3,7 +3,7 @@ import { MdModeEditOutline } from "react-icons/md"
 import StudentForm from "../forms/Student"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
-import { updateStudent } from "@/utils/handlerStudent"
+import { updateStudent } from "@/services/api/student"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
 

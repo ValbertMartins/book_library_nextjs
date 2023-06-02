@@ -2,7 +2,7 @@ import { Student } from "@/interfaces"
 import EditStudentWrapper from "../editStudentWrapper"
 import { Dispatch, SetStateAction, useState } from "react"
 import DeleteStudentWrapper from "../deleteStudentWrapper"
-import { getStudents } from "@/utils/handlerStudent"
+import { getStudents } from "@/services/api/student"
 import SkeletonAntd from "antd/lib/skeleton"
 
 const Skeleton = () => {

@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from "react"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import StudentForm from "../forms/Student"
-import { registerNewStudent } from "@/utils/handlerStudent"
+import { registerNewStudent } from "@/services/api/student"
 import message from "antd/lib/message"
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>

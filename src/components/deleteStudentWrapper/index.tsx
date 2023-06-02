@@ -1,4 +1,4 @@
-import { deleteStudent } from "@/utils/handlerStudent"
+import { deleteStudent } from "@/services/api/student"
 import { Student } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"

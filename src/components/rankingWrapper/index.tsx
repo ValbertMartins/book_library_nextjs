@@ -1,5 +1,5 @@
 import { Student } from "@/interfaces"
-import { getStudentRankingList } from "@/utils/handlerStudent"
+import { getStudentRankingList } from "@/services/api/student"
 import Drawer from "antd/lib/drawer"
 import axios from "axios"
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react"

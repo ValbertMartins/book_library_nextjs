@@ -3,7 +3,7 @@ import { Book, Student } from "@/interfaces"
 import { getBooks } from "@/services/api/book"
 import { Dispatch, FormEvent, SetStateAction } from "react"
 import { MdSearch } from "react-icons/md"
-import { getStudents } from "@/utils/handlerStudent"
+import { getStudents } from "@/services/api/student"
 
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>

@@ -1,6 +1,6 @@
 import { Student } from "@/interfaces"
 import axios from "axios"
-import { endpoints } from "./apiEndpoints"
+import { endpoints } from "@/utils/apiEndpoints"
 
 export async function registerNewStudent(studentData: Omit<Student, "id">) {
   try {
