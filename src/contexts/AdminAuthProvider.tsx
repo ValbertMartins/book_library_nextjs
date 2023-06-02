@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios"
 import React, { ReactNode, createContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import message from "antd/lib/message"
+import { url } from "inspector"
 
 interface Admin {
   name: string
@@ -31,24 +32,14 @@ export const AdminAuthProvider = ({ children }: Props) => {
   const { push } = useRouter()
 
   useEffect(() => {
-    const adminPersistentData = localStorage.getItem("admin")
-    async function handlerPersistentAdminData() {
-      if (adminPersistentData) {
-        const { id }: Admin = JSON.parse(adminPersistentData)
-        try {
-          const { data } = await axios.post<{ admin: Admin }>("/api/auth/verify-auth", {
-            id,
-          })
-          setAdmin(data.admin)
-        } catch (error) {
-          await push("/")
-        }
-      } else {
-        await push("/")
-      }
+    async function handlerPersistAuthState() {
+      try {
+        const { data } = await axios.get<{ admin: Admin }>("/api/auth/verify-auth")
+        setAdmin(data.admin)
+      } catch (error) {}
     }
 
-    handlerPersistentAdminData()
+    handlerPersistAuthState()
   }, [])
 
   async function signUp(dataFields: formAuthFields) {
@@ -72,7 +63,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
         data: { admin },
       } = await axios.post<{ admin: Admin }>("/api/auth/login", dataFields)
       setAdmin(admin)
-      localStorage.setItem("admin", JSON.stringify(admin))
       toast.destroy()
     } catch (error) {
       toast.destroy()
@@ -94,7 +84,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
       data: { isAuth, ok },
     } = await axios.get<{ isAuth: boolean; ok: boolean }>("/api/auth/logout")
     if (!isAuth && ok) {
-      localStorage.removeItem("admin")
       setAdmin(null)
       push("/")
     }

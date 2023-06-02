@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email,
       },
     })
-    if (!admin) return res.status(400).json({ message: "email or password invalid" })
+    if (!admin) return res.status(404).json({ message: "email or password invalid" })
 
     const passwordIsCorrect = await bcrypt.compare(password, admin.password)
 
-    if (!passwordIsCorrect) return res.status(400).json("email or password invalid")
+    if (!passwordIsCorrect) return res.status(404).json("email or password invalid")
 
     const jwt_token = jwt.sign({ id: admin.id }, `${process.env.JWT_SECRET}`)
 

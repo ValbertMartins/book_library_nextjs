@@ -3,6 +3,27 @@ import { formAuthFields } from "@/interfaces"
 import { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
+import { GetServerSideProps } from "next"
+import { PrismaClient } from "@prisma/client"
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const prisma = new PrismaClient()
+  const adminRegisteredCounter = await prisma.admin.count()
+
+  if (adminRegisteredCounter === 0) {
+    return {
+      redirect: {
+        destination: "/auth/register-admin",
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
+
 const Login = () => {
   const {
     register,
