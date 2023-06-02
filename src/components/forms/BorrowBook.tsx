@@ -24,13 +24,16 @@ interface Props {
 
 const BorrowBookForm = ({ setOpenModalBorrowBook, toast, bookList, setBookList }: Props) => {
   const [studentList, setStudentList] = useState([] as Pick<Student, "id" | "name">[])
+  const [allBooks, setAllBooks] = useState(
+    [] as Pick<Book, "id" | "name" | "quantity_available">[]
+  )
   const { updateStatistics } = useContext(StatisticsContext)
 
   useEffect(() => {
     async function getSelectValues() {
       const { data, ok } = await getStudentsAndBooksNames()
       if (ok && data) {
-        // setBookList(data.bookList)
+        setAllBooks(data.bookList)
         setStudentList(data.studentList)
       }
     }
@@ -72,7 +75,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, bookList, setBookList }
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
           placeholder="Livro"
-          options={bookList
+          options={allBooks
             .filter(book => book.quantity_available > 0)
             .map(book => ({ label: book.name, value: book.id }))}
         />

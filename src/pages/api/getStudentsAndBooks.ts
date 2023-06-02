@@ -18,6 +18,7 @@ export default async function getStudentsBookList(req: NextApiRequest, res: Next
         select: {
           name: true,
           id: true,
+          quantity_available: true,
         },
       }),
     ])

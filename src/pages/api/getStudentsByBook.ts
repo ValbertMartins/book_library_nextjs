@@ -10,7 +10,6 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
     })
     try {
       const { bookId } = bookIdSchema.parse(req.body)
-
       const studentsOnBook = await prisma.studentBook.findMany({
         where: {
           bookId,
@@ -24,12 +23,7 @@ export default async function getStudentsOnBook(req: NextApiRequest, res: NextAp
 
       res.status(200).json(studentsOnBook)
     } catch (error) {
-      res.status(500).json({
-        error: {
-          message: "Não foi possível carregar os estudantes.",
-          status: 500,
-        },
-      })
+      res.status(500).json("Não foi possível carregar os estudantes.")
     }
   }
 }

@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios"
 import { endpoints } from "@/services/api"
 
 interface Props {
-  bookList: Pick<Book, "id" | "name">[]
+  bookList: Pick<Book, "id" | "name" | "quantity_available">[]
   studentList: Pick<Student, "id" | "name">[]
 }
 

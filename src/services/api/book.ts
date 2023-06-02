@@ -131,6 +131,7 @@ export async function getStudentBookByBook(bookId: string) {
   } catch (error) {
     return {
       ok: false,
+      error: formatApiError(error),
     }
   }
 }
