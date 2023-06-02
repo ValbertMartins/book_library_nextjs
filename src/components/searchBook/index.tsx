@@ -1,5 +1,5 @@
 import { Book } from "@/interfaces"
-import { getBooks } from "@/utils/handlerBook"
+import { getBooks } from "@/services/api/book"
 import { Dispatch, FormEvent, SetStateAction, useState } from "react"
 import { MdSearch } from "react-icons/md"
 

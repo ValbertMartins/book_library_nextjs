@@ -1,11 +1,6 @@
 import { Student } from "@/interfaces"
 import axios from "axios"
-import { Dispatch, SetStateAction } from "react"
 import { endpoints } from "./apiEndpoints"
-
-interface State {
-  setLoading: Dispatch<SetStateAction<boolean>>
-}
 
 export async function registerNewStudent(studentData: Omit<Student, "id">) {
   try {

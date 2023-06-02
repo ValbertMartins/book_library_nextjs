@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios"
-import { convertImageToBase64 } from "./convertImageToBase64"
+import { convertImageToBase64 } from "@/utils/convertImageToBase64"
 import { Book, FormBookInputFields, StudentBookByBook } from "@/interfaces"
-import { endpoints } from "./apiEndpoints"
+import { endpoints } from "@/utils/apiEndpoints"
 
 export async function registerNewBook(formBookInputFields: FormBookInputFields) {
   const { coverList } = formBookInputFields

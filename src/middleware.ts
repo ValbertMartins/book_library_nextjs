@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { verifyAuth } from "./utils/auth"
+import { verifyAuth } from "./services/api/auth"
 
 export async function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.includes("/auth")) return NextResponse.next()

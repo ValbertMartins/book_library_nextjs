@@ -2,7 +2,7 @@ import { Book } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { MdDelete } from "react-icons/md"
-import { deleteBook } from "@/utils/handlerBook"
+import { deleteBook } from "@/services/api/book"
 import message from "antd/lib/message"
 
 interface Props {

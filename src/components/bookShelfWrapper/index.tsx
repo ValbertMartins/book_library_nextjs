@@ -6,7 +6,7 @@ import message from "antd/lib/message"
 
 import BorrowBookForm from "../forms/BorrowBook"
 import Loading from "../loading"
-import { getBooks } from "@/utils/handlerBook"
+import { getBooks } from "@/services/api/book"
 
 interface Props {
   bookList: Book[]

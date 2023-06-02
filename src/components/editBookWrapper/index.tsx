@@ -5,7 +5,7 @@ import ModalAntd from "antd/lib/modal"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
 import BookForm from "../forms/Book"
-import { editBook, getStudentBookByBook } from "@/utils/handlerBook"
+import { editBook, getStudentBookByBook } from "@/services/api/book"
 import Image from "next/image"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 

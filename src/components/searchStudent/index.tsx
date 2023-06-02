@@ -1,6 +1,6 @@
 import React from "react"
 import { Book, Student } from "@/interfaces"
-import { getBooks } from "@/utils/handlerBook"
+import { getBooks } from "@/services/api/book"
 import { Dispatch, FormEvent, SetStateAction } from "react"
 import { MdSearch } from "react-icons/md"
 import { getStudents } from "@/utils/handlerStudent"

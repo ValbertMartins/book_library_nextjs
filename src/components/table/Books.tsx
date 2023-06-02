@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useState } from "react"
 import EditBookWrapper from "../editBookWrapper"
 import DeleteBookWrapper from "../deleteBookWrapper"
 import SkeletonAntd from "antd/lib/skeleton"
-import { getBooks } from "@/utils/handlerBook"
+import { getBooks } from "@/services/api/book"
 
 const Skeleton = () => {
   return (

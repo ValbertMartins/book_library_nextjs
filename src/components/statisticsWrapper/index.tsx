@@ -2,13 +2,14 @@ import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import { getStatistics } from "@/utils/handlerStatistics"
 import React, { useContext, useEffect, useState } from "react"
 import { MdMenuBook, MdPerson, MdBook } from "react-icons/md"
-import { useRouter } from "next/router"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
+
 const StatisticsWrapper = () => {
   const [registeredStudentsCounter, setRegisteredStudentsCounter] = useState(0)
   const [registeredBooksCounter, setRegisteredBooksCounter] = useState(0)
   const [booksBorrowedCounter, setBooksBorrowedCounter] = useState(0)
   const { updatedStatistics } = useContext(StatisticsContext)
-  const { push } = useRouter()
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
 
   useEffect(() => {
     async function handlerStatistics() {
@@ -19,7 +20,7 @@ const StatisticsWrapper = () => {
         setRegisteredBooksCounter(data.registeredBooksCounter)
         setBooksBorrowedCounter(data.booksBorrowedCounter)
       } else {
-        push("/")
+        // handlerInauthorizedUserRequest()
       }
     }
 

@@ -1,7 +1,7 @@
 import { Book, FormBookInputFields } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import { Dispatch, SetStateAction, useState } from "react"
-import { registerNewBook } from "@/utils/handlerBook"
+import { registerNewBook } from "@/services/api/book"
 import Image from "next/image"
 import BookForm from "../forms/Book"
 import message from "antd/lib/message"

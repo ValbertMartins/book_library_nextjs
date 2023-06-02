@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.setHeader(
       "Set-cookie",
-      `jwt_token=${jwt_token}; sameSite=none; Secure; Path=/; HttpOnly`
+      `jwt_token=${jwt_token}; sameSite=none; Secure; Path=/; HttpOnly; `
     )
 
     res.status(200).json({

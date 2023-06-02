@@ -1,9 +1,15 @@
 import { formAuthFields } from "@/interfaces"
 import axios, { AxiosError } from "axios"
-import React, { ReactNode, createContext, useEffect, useState } from "react"
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from "react"
 import { useRouter } from "next/router"
 import message from "antd/lib/message"
-import { url } from "inspector"
 
 interface Admin {
   name: string
@@ -13,10 +19,12 @@ interface Admin {
 
 interface ProviderValues {
   admin: Admin | null
+  setAdmin: Dispatch<SetStateAction<Admin | null>>
   loading: boolean
   signUp: (dataFields: formAuthFields) => Promise<void>
   signIn: (dataFields: Pick<formAuthFields, "email" | "password">) => Promise<void>
   signOut: () => Promise<void>
+  handlerInauthorizedUserRequest: () => void
 }
 
 export const adminAuthContext = createContext({} as ProviderValues)
@@ -36,7 +44,9 @@ export const AdminAuthProvider = ({ children }: Props) => {
       try {
         const { data } = await axios.get<{ admin: Admin }>("/api/auth/verify-auth")
         setAdmin(data.admin)
-      } catch (error) {}
+      } catch (error) {
+        push("/")
+      }
     }
 
     handlerPersistAuthState()
@@ -89,14 +99,21 @@ export const AdminAuthProvider = ({ children }: Props) => {
     }
   }
 
+  function handlerInauthorizedUserRequest() {
+    setAdmin(null)
+    push("/auth/login")
+  }
+
   return (
     <adminAuthContext.Provider
       value={{
         admin,
+        setAdmin,
         signUp,
         signIn,
         signOut,
         loading,
+        handlerInauthorizedUserRequest,
       }}
     >
       {children}
