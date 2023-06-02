@@ -5,7 +5,7 @@ import ModalAntd from "antd/lib/modal"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
 import BookForm from "../forms/Book"
-import { editBook, getStudentBookByBook } from "@/services/api/book"
+import { editBook } from "@/services/api/book"
 import Image from "next/image"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
@@ -35,7 +35,7 @@ const EditBookWrapper = ({ book, setBookList, page, bookNameFilter }: Props) => 
       duration: 0,
     })
 
-    const { ok, bookListUpdated, errorMessage } = await editBook(
+    const { ok, bookListUpdated, error } = await editBook(
       { ...formInputFields },
       book.id,
       page,
@@ -48,7 +48,7 @@ const EditBookWrapper = ({ book, setBookList, page, bookNameFilter }: Props) => 
       setOpenModal(false)
     } else {
       toast.destroy()
-      message.error(errorMessage ? errorMessage : "Falha ao atualizar o livro")
+      message.error(error?.message ? error.message : "Falha ao atualizar o livro")
     }
   }
 

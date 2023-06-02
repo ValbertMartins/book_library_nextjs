@@ -1,9 +1,26 @@
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { convertImageToBase64 } from "@/utils/convertImageToBase64"
 import { Book, FormBookInputFields, StudentBookByBook } from "@/interfaces"
-import { endpoints } from "@/utils/apiEndpoints"
+import { formatApiError } from "./errors"
 
-export async function registerNewBook(formBookInputFields: FormBookInputFields) {
+export async function getBooks(pageNumber: number, inputBook: string) {
+  try {
+    const { data } = await axios.get<{ bookList: Book[] }>(
+      `/api/book/${pageNumber}/${inputBook.trim()}`
+    )
+
+    return {
+      ok: true,
+      bookList: data.bookList,
+    }
+  } catch (error) {
+    return {
+      ok: false,
+    }
+  }
+}
+
+export async function registerBook(formBookInputFields: FormBookInputFields) {
   const { coverList } = formBookInputFields
 
   try {
@@ -20,6 +37,7 @@ export async function registerNewBook(formBookInputFields: FormBookInputFields) 
         bookListUpdated: data.bookListUpdated,
       }
     }
+
     const { data } = await axios.post<{ bookListUpdated: Book[] }>(
       "api/book",
       formBookInputFields
@@ -32,6 +50,7 @@ export async function registerNewBook(formBookInputFields: FormBookInputFields) 
   } catch (error) {
     return {
       ok: false,
+      error: formatApiError(error),
     }
   }
 }
@@ -74,18 +93,9 @@ export async function editBook(
       bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
-    let message
-
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 413) {
-        message = "o limite máximo da imagem é 4MB"
-      } else if (error.response?.status == 500) {
-        message = error.response.data
-      }
-    }
     return {
       ok: false,
-      errorMessage: message ? message : "Não foi possível editar o livro",
+      error: formatApiError(error),
     }
   }
 }
@@ -101,6 +111,7 @@ export async function deleteBook(bookId: string) {
   } catch (error) {
     return {
       ok: false,
+      error: formatApiError(error),
     }
   }
 }
@@ -108,7 +119,7 @@ export async function deleteBook(bookId: string) {
 export async function getStudentBookByBook(bookId: string) {
   try {
     const { data: studentsOnBook } = await axios.post<StudentBookByBook[]>(
-      endpoints.getStudentsOnBook.url,
+      "/api/getStudentsByBook",
       {
         bookId,
       }
@@ -116,22 +127,6 @@ export async function getStudentBookByBook(bookId: string) {
     return {
       ok: true,
       studentsOnBook,
-    }
-  } catch (error) {
-    return {
-      ok: false,
-    }
-  }
-}
-export async function getBooks(pageNumber: number, inputBook: string) {
-  try {
-    const { data } = await axios.get<{ bookList: Book[] }>(
-      `/api/book/pagination/${pageNumber}/${inputBook.trim()}`
-    )
-
-    return {
-      ok: true,
-      bookList: data.bookList,
     }
   } catch (error) {
     return {

@@ -1,6 +1,6 @@
 import { Statistics } from "@/interfaces"
 import axios from "axios"
-import { endpoints } from "./apiEndpoints"
+import { endpoints } from "@/services/api"
 
 export async function getStatistics() {
   try {

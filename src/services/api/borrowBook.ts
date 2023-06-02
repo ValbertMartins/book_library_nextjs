@@ -1,6 +1,6 @@
 import { Book, ErrorApi, Student, StudentBookByBook } from "@/interfaces"
 import axios, { AxiosError } from "axios"
-import { endpoints } from "./apiEndpoints"
+import { endpoints } from "@/services/api"
 
 interface Props {
   bookList: Pick<Book, "id" | "name">[]

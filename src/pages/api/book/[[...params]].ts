@@ -12,7 +12,46 @@ cloudinary.config({
 })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method == "POST") {
+  if (req.method === "GET") {
+    const pageSchema = z.object({
+      params: z.array(z.string()),
+      inputBook: z.string().optional(),
+    })
+
+    try {
+      const {
+        params: [pageIndex, inputBook],
+      } = pageSchema.parse(req.query)
+
+      if (Number(pageIndex) < 0) {
+        throw new Error("Bad request")
+      }
+
+      const bookList = await prisma.book.findMany({
+        where: {
+          name: {
+            contains: inputBook,
+          },
+        },
+        take: 10,
+        orderBy: {
+          created_at: "desc",
+        },
+        skip: Number(pageIndex) * 10,
+      })
+
+      res.status(200).json({
+        bookList,
+      })
+    } catch (error) {
+      res.status(500).json({
+        error: {
+          status: 500,
+          message: "Erro ao listar os livros",
+        },
+      })
+    }
+  } else if (req.method == "POST") {
     const bookSchema = z.object({
       name: z.string(),
       quantity: z.number(),
@@ -63,12 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         bookListUpdated,
       })
     } catch (error) {
-      let message
-      if (error instanceof Error) {
-        message = error.message
-      }
-
-      res.status(500).json(message ? message : "Erro ao cadastar estudante")
+      res.status(500).json("Erro ao cadastar livro")
     }
   } else if (req.method == "PATCH") {
     const editBookSchema = z.object({
@@ -115,7 +149,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         })
 
-        if (book?.cover) {
+        if (book.cover) {
           const deleteOldBookCover = await cloudinary.uploader.destroy(
             getPublicIdFromUrl(book.cover)
           )
@@ -221,12 +255,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         bookListUpdated,
       })
     } catch (error) {
-      res.status(500).json({
-        error: {
-          status: 500,
-          message: "Erro ao excluir livro.",
-        },
-      })
+      let message
+      if (error instanceof Error) {
+        message = error.message
+      }
+
+      res.status(500).json(message ? message : "Erro ao excluir livro.")
     }
   }
 }

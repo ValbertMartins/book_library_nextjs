@@ -1,5 +1,5 @@
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
-import { getStatistics } from "@/utils/handlerStatistics"
+import { getStatistics } from "@/services/api/statistics"
 import React, { useContext, useEffect, useState } from "react"
 import { MdMenuBook, MdPerson, MdBook } from "react-icons/md"
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"

@@ -1,5 +1,5 @@
 import { Book, Student } from "@/interfaces"
-import { getStudentsAndBooksNames, registerNewBorrowBook } from "@/utils/handlerBorrowBook"
+import { getStudentsAndBooksNames, registerNewBorrowBook } from "@/services/api/borrowBook"
 import Button from "antd/lib/button"
 import Form from "antd/lib/form"
 import { MessageInstance } from "antd/lib/message/interface"

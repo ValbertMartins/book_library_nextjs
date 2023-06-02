@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react
 import { Book, StudentBookByBook } from "@/interfaces"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import { getStudentBookByBook } from "@/services/api/book"
-import { finishBorrowBook } from "@/utils/handlerBorrowBook"
+import { finishBorrowBook } from "@/services/api/borrowBook"
 import Button from "antd/lib/button"
 import { formatDate } from "@/utils/formatDate"
 import Loading from "../loading"

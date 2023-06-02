@@ -1,7 +1,7 @@
 import { Book, FormBookInputFields } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import { Dispatch, SetStateAction, useState } from "react"
-import { registerNewBook } from "@/services/api/book"
+import { registerBook } from "@/services/api/book"
 import Image from "next/image"
 import BookForm from "../forms/Book"
 import message from "antd/lib/message"
@@ -16,13 +16,13 @@ const RegisterBookWrapper = ({ setBookList }: Props) => {
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
 
-  async function handleSubmitFormRegisterNewBook(formBookInputFields: FormBookInputFields) {
+  async function handleSubmitFormregisterBook(formBookInputFields: FormBookInputFields) {
     toast.open({
       content: "Cadastrando livro",
       type: "loading",
       duration: 0,
     })
-    const { ok, bookListUpdated } = await registerNewBook(formBookInputFields)
+    const { ok, bookListUpdated } = await registerBook(formBookInputFields)
     if (ok && bookListUpdated) {
       toast.destroy()
       message.success("Livro cadastrado com sucesso.")
@@ -58,7 +58,7 @@ const RegisterBookWrapper = ({ setBookList }: Props) => {
         <div className="grid grid-cols-2 gap-x-10">
           <BookForm
             setCoverPreview={setCoverPreview}
-            handleSubmitForm={handleSubmitFormRegisterNewBook}
+            handleSubmitForm={handleSubmitFormregisterBook}
           />
 
           <div className="rounded-md overflow-hidden">
