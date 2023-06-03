@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 const prisma = new PrismaClient()
 
 export default async function getStatistics(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "GET") return res.status(400).json({ message: "invalid request" })
+  if (req.method !== "GET") return res.status(400).json("invalid request")
 
   try {
     const [registeredBooksCounter, registeredStudentsCounter, booksBorrowedCounter] =
@@ -19,11 +19,6 @@ export default async function getStatistics(req: NextApiRequest, res: NextApiRes
       booksBorrowedCounter,
     })
   } catch (error) {
-    return res.status(500).json({
-      error: {
-        message: "Erro ao carregar estatísticas",
-        status: 500,
-      },
-    })
+    return res.status(500).json("Erro ao carregar estatísticas")
   }
 }

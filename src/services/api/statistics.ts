@@ -1,6 +1,7 @@
 import { Statistics } from "@/interfaces"
 import axios from "axios"
 import { endpoints } from "@/services/api"
+import { formatApiError } from "./errors"
 
 export async function getStatistics() {
   try {
@@ -14,6 +15,7 @@ export async function getStatistics() {
     return {
       props: {
         ok: false,
+        error: formatApiError(error),
       },
     }
   }

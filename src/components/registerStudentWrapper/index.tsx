@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from "react"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import StudentForm from "../forms/Student"
-import { registerNewStudent } from "@/services/api/student"
+import { registerStudent } from "@/services/api/student"
 import message from "antd/lib/message"
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -21,7 +21,7 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
       content: "Cadastrando estudante...",
       duration: 0,
     })
-    const { ok, studentListUpdated } = await registerNewStudent(studentData)
+    const { ok, studentListUpdated, error } = await registerStudent(studentData)
 
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
@@ -30,7 +30,7 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
       message.success("Estudante cadastrado com sucesso")
     } else {
       toast.destroy()
-      message.error("Falha ao cadastrar estudante, tente novamente")
+      message.error(error?.message)
     }
 
     setLoading(false)

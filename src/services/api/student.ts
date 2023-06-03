@@ -1,8 +1,9 @@
 import { Student } from "@/interfaces"
 import axios from "axios"
 import { endpoints } from "@/services/api"
+import { formatApiError } from "./errors"
 
-export async function registerNewStudent(studentData: Omit<Student, "id">) {
+export async function registerStudent(studentData: Omit<Student, "id">) {
   try {
     const { data } = await axios.post<{ studentListUpdated: Student[] }>(
       "api/student",
@@ -16,6 +17,7 @@ export async function registerNewStudent(studentData: Omit<Student, "id">) {
     return {
       ok: false,
       studentListUpdated: null,
+      error: formatApiError(error),
     }
   }
 }
@@ -82,7 +84,7 @@ export async function getStudentRankingList() {
 export async function getStudents(pageNumber: number, studentNameFilter: string) {
   try {
     const { data } = await axios.get<{ studentList: Student[] }>(
-      `/api/student/pagination/${pageNumber}/${studentNameFilter.trim()}`
+      `/api/student/${pageNumber}/${studentNameFilter.trim()}`
     )
 
     return {
