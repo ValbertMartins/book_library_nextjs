@@ -22,7 +22,7 @@ const RegisterBookWrapper = ({ setBookList }: Props) => {
       type: "loading",
       duration: 0,
     })
-    const { ok, bookListUpdated } = await registerBook(formBookInputFields)
+    const { ok, bookListUpdated, error } = await registerBook(formBookInputFields)
     if (ok && bookListUpdated) {
       toast.destroy()
       message.success("Livro cadastrado com sucesso.")
@@ -31,7 +31,7 @@ const RegisterBookWrapper = ({ setBookList }: Props) => {
       setCoverPreview(coverPreviewPlaceholder)
     } else {
       toast.destroy()
-      message.error("Não foi possível cadastrar o livro, tente novamente")
+      message.error(error?.message)
     }
   }
 

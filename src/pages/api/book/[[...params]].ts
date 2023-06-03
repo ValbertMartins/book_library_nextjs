@@ -44,12 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         bookList,
       })
     } catch (error) {
-      res.status(500).json({
-        error: {
-          status: 500,
-          message: "Erro ao listar os livros",
-        },
-      })
+      res.status(500).json("Erro ao listar livros")
     }
   } else if (req.method == "POST") {
     const bookSchema = z.object({

@@ -90,12 +90,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (error instanceof Error) {
         message = error.message
       }
-      res.status(500).json({
-        error: {
-          message: message ? message : "Não foi possível emprestar o livro, tente novamente.",
-          status: 500,
-        },
-      })
+      res
+        .status(500)
+        .json(message ? message : "Não foi possível emprestar o livro, tente novamente.")
     }
   }
 

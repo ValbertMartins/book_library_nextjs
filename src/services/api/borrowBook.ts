@@ -1,6 +1,7 @@
 import { Book, ErrorApi, Student, StudentBookByBook } from "@/interfaces"
 import axios, { AxiosError } from "axios"
 import { endpoints } from "@/services/api"
+import { formatApiError } from "./errors"
 
 interface Props {
   bookList: Pick<Book, "id" | "name" | "quantity_available">[]
@@ -35,20 +36,12 @@ export async function registerNewBorrowBook(formInputFields: {
 
     return {
       ok: true,
-      errorMessage: false,
       bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
-    let message
-
-    if (error instanceof AxiosError) {
-      const { error: ErrorApi } = error.response?.data as { error: ErrorApi }
-
-      message = ErrorApi.message
-    }
     return {
       ok: false,
-      errorMessage: message ? message : "Não foi possível emprestar o livro ao estudante.",
+      error: formatApiError(error),
     }
   }
 }

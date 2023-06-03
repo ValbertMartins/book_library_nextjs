@@ -20,10 +20,12 @@ const DeleteBookWrapper = ({ setBookList, book }: Props) => {
   }, [])
 
   async function handlerDeleteBook() {
-    const { ok, bookListUpdated } = await deleteBook(book.id)
+    const { ok, bookListUpdated, error } = await deleteBook(book.id)
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)
       message.success("Livro deletado com sucesso")
+    } else {
+      message.error(error?.message)
     }
   }
   return (

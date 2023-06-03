@@ -48,7 +48,7 @@ const EditBookWrapper = ({ book, setBookList, page, bookNameFilter }: Props) => 
       setOpenModal(false)
     } else {
       toast.destroy()
-      message.error(error?.message ? error.message : "Falha ao atualizar o livro")
+      message.error(error?.message)
     }
   }
 
