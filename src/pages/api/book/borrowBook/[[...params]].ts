@@ -8,10 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const bookStudentSchema = z.object({
       bookId: z.string(),
       studentId: z.string(),
+      booksPage: z.number(),
     })
 
     try {
-      const { bookId, studentId } = bookStudentSchema.parse(req.body)
+      const { bookId, studentId, booksPage } = bookStudentSchema.parse(req.body)
 
       const [existentBorrowBookOnStudent, book] = await prisma.$transaction([
         prisma.studentBook.findMany({
@@ -66,6 +67,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         orderBy: {
           created_at: "desc",
         },
+        take: 10,
+        skip: 10 * booksPage,
       })
 
       const [borrowBookRegistered, _, bookListUpdated] = await prisma.$transaction([
@@ -161,12 +164,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json({ updatedStudentsOnBook, bookListUpdated })
     } catch (error) {
-      res.status(500).json({
-        error: {
-          message: "Não foi possível deletar o estudante com esse livro, tente novamente.",
-          status: 500,
-        },
-      })
+      res.status(500).json("Não foi possível deletar devolver o livro, tente novamente.")
     }
   }
 }

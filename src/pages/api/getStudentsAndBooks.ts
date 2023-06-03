@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-export default async function getStudentsBookList(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "GET") return res.status(400).json({ message: "invalid request" })
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "GET") return res.status(400).json("invalid request")
 
   try {
     const [studentList, bookList] = await Promise.all([
@@ -28,11 +28,6 @@ export default async function getStudentsBookList(req: NextApiRequest, res: Next
       bookList,
     })
   } catch (error) {
-    res.status(500).json({
-      error: {
-        message: "Não foi possível carregar os livros/estudantes.",
-        status: 500,
-      },
-    })
+    res.status(500).json("Não foi possível carregar os livros/estudantes.")
   }
 }

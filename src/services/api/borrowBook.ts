@@ -1,5 +1,5 @@
-import { Book, ErrorApi, Student, StudentBookByBook } from "@/interfaces"
-import axios, { AxiosError } from "axios"
+import { Book, Student, StudentBookByBook } from "@/interfaces"
+import axios from "axios"
 import { endpoints } from "@/services/api"
 import { formatApiError } from "./errors"
 
@@ -18,21 +18,25 @@ export async function getStudentsAndBooksNames() {
     }
   } catch (error) {
     return {
-      ok: true,
+      ok: false,
       data: null,
+      error: formatApiError(error),
     }
   }
 }
 
-export async function registerNewBorrowBook(formInputFields: {
-  studentId: string
-  bookId: string
-}) {
+export async function registerNewBorrowBook(
+  formInputFields: {
+    studentId: string
+    bookId: string
+  },
+  booksPage: number
+) {
   try {
-    const { data } = await axios.post<{ bookListUpdated: Book[] }>(
-      endpoints.borrowBook.url,
-      formInputFields
-    )
+    const { data } = await axios.post<{ bookListUpdated: Book[] }>(endpoints.borrowBook.url, {
+      ...formInputFields,
+      booksPage,
+    })
 
     return {
       ok: true,
@@ -61,6 +65,7 @@ export async function finishBorrowBook(studentId: string, bookId: string) {
   } catch (error) {
     return {
       ok: false,
+      error: formatApiError(error),
     }
   }
 }

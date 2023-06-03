@@ -50,7 +50,7 @@ export const BookDetails = ({
       duration: 0,
     })
 
-    const { ok, updatedStudentsOnBook, bookListUpdated } = await finishBorrowBook(
+    const { ok, updatedStudentsOnBook, bookListUpdated, error } = await finishBorrowBook(
       studentId,
       bookId
     )
@@ -63,7 +63,7 @@ export const BookDetails = ({
       updateStatistics()
     } else {
       toast.destroy()
-      toast.error("Não foi possível devolver o livro, tente novamente")
+      toast.error(error?.message)
     }
 
     setLoading(false)

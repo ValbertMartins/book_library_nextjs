@@ -68,6 +68,7 @@ const BooksWrapper = ({
           toast={toast}
           bookList={bookList}
           setBookList={setBookList}
+          page={page}
         />
 
         {toastContextHolder}

@@ -16,13 +16,14 @@ interface formInputValues {
 }
 
 interface Props {
+  page: number
   toast: MessageInstance
   setOpenModalBorrowBook: Dispatch<SetStateAction<boolean>>
   bookList: Book[]
   setBookList: Dispatch<SetStateAction<Book[]>>
 }
 
-const BorrowBookForm = ({ setOpenModalBorrowBook, toast, bookList, setBookList }: Props) => {
+const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Props) => {
   const [studentList, setStudentList] = useState([] as Pick<Student, "id" | "name">[])
   const [allBooks, setAllBooks] = useState(
     [] as Pick<Book, "id" | "name" | "quantity_available">[]
@@ -47,7 +48,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, bookList, setBookList }
       duration: 0,
     })
 
-    const { ok, bookListUpdated, error } = await registerNewBorrowBook(formInputValues)
+    const { ok, bookListUpdated, error } = await registerNewBorrowBook(formInputValues, page)
     if (ok && bookListUpdated) {
       toast.destroy()
       message.success("Livro emprestado com sucesso.")
