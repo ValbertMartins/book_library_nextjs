@@ -43,6 +43,7 @@ export async function updateStudent(
     return {
       ok: false,
       studentListUpdated: null,
+      error: formatApiError(error),
     }
   }
 }
@@ -60,6 +61,7 @@ export async function deleteStudent(studentId: string) {
     return {
       ok: false,
       studentListUpdated: null,
+      error: formatApiError(error),
     }
   }
 }
@@ -74,9 +76,11 @@ export async function getStudentRankingList() {
       studentsRankingList: data.studentsRankingList,
     }
   } catch (error) {
+    console.log(error, "foo")
     return {
       ok: false,
       studentsRankingList: null,
+      error: formatApiError(error),
     }
   }
 }
@@ -94,6 +98,7 @@ export async function getStudents(pageNumber: number, studentNameFilter: string)
   } catch (error) {
     return {
       ok: false,
+      error: formatApiError(error),
     }
   }
 }

@@ -10,10 +10,10 @@ export async function middleware(req: NextRequest) {
 
   if (!isAuth) {
     return req.url.includes("/api")
-      ? new NextResponse(
-          JSON.stringify({ success: false, message: "authentication failed" }),
-          { status: 401, headers: { "content-type": "application/json" } }
-        )
+      ? new NextResponse(JSON.stringify("authentication failed"), {
+          status: 401,
+          headers: { "content-type": "application/json" },
+        })
       : NextResponse.redirect(new URL("/auth/login", req.url))
   }
 

@@ -1,4 +1,4 @@
-import { formAuthFields } from "@/interfaces"
+import { ErrorApi, formAuthFields } from "@/interfaces"
 import axios, { AxiosError } from "axios"
 import React, {
   Dispatch,
@@ -75,7 +75,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
         data: { admin },
       } = await axios.post<{ admin: Admin }>("/api/auth/login", dataFields)
       setAdmin(admin)
-      push("/dashboard")
       toast.destroy()
     } catch (error) {
       toast.destroy()
@@ -103,6 +102,7 @@ export const AdminAuthProvider = ({ children }: Props) => {
   }
 
   function handlerInauthorizedUserRequest() {
+    console.log("here")
     setAdmin(null)
     push("/auth/login")
   }

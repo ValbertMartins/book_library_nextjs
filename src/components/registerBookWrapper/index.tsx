@@ -1,10 +1,11 @@
 import { Book, FormBookInputFields } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import { registerBook } from "@/services/api/book"
 import Image from "next/image"
 import BookForm from "../forms/Book"
 import message from "antd/lib/message"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
@@ -15,7 +16,7 @@ const RegisterBookWrapper = ({ setBookList }: Props) => {
   const [openModalRegisterBook, setOpenModalRegisterBook] = useState(false)
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
   const [toast, toastContextHolder] = message.useMessage()
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   async function handleSubmitFormregisterBook(formBookInputFields: FormBookInputFields) {
     toast.open({
       content: "Cadastrando livro",
@@ -31,6 +32,7 @@ const RegisterBookWrapper = ({ setBookList }: Props) => {
       setCoverPreview(coverPreviewPlaceholder)
     } else {
       toast.destroy()
+      error?.status === 401 && handlerInauthorizedUserRequest()
       message.error(error?.message)
     }
   }

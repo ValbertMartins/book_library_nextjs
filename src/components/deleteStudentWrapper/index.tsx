@@ -1,9 +1,10 @@
 import { deleteStudent } from "@/services/api/student"
 import { Student } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { MdDelete } from "react-icons/md"
 import message from "antd/lib/message"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   student: Student
@@ -12,7 +13,7 @@ interface Props {
 
 const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
   const [warningStudentWithBooks, setWarningStudentWithBooks] = useState<null | string>(null)
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
     if (student.studentProgress.collected_books > 0)
       setWarningStudentWithBooks(
@@ -21,10 +22,12 @@ const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
   }, [])
 
   async function handlerDeleteStudent() {
-    const { ok, studentListUpdated } = await deleteStudent(student.id)
+    const { ok, studentListUpdated, error } = await deleteStudent(student.id)
     if (ok && studentListUpdated) {
       setStudentList(studentListUpdated)
       message.success("Estudante deletado com sucesso")
+    } else {
+      error?.status === 401 && handlerInauthorizedUserRequest()
     }
   }
 

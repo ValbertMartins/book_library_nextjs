@@ -33,11 +33,11 @@ const Login = () => {
   const { signIn, loading, admin } = useContext(adminAuthContext)
   const { push } = useRouter()
 
-  // useEffect(() => {
-  //   if (admin) {
-  //     push("/dashboard")
-  //   }
-  // }, [admin])
+  useEffect(() => {
+    if (admin) {
+      push("/dashboard")
+    }
+  }, [admin])
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-hidden bg-white">

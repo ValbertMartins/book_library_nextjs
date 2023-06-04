@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react"
+import React, { Dispatch, SetStateAction, useContext, useState } from "react"
 import { MdModeEditOutline } from "react-icons/md"
 import StudentForm from "../forms/Student"
 import { Student } from "@/interfaces"
@@ -6,6 +6,8 @@ import ModalAntd from "antd/lib/modal"
 import { updateStudent } from "@/services/api/student"
 import Tooltip from "antd/lib/tooltip"
 import message from "antd/lib/message"
+import { error } from "console"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   student: Student
@@ -18,7 +20,7 @@ const EditStudentWrapper = ({ student, setStudentList, page, studentNameFilter }
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   async function handleSubmitForm(studentInputFields: Omit<Student, "id">) {
     toast.open({
       key: "toastEditModal",
@@ -27,7 +29,7 @@ const EditStudentWrapper = ({ student, setStudentList, page, studentNameFilter }
       duration: 0,
     })
     setLoading(true)
-    const { ok, studentListUpdated } = await updateStudent(
+    const { ok, studentListUpdated, error } = await updateStudent(
       student.id,
       studentInputFields,
       page,
@@ -41,7 +43,8 @@ const EditStudentWrapper = ({ student, setStudentList, page, studentNameFilter }
       message.success("Estudante atualizado com sucesso")
     } else {
       toast.destroy()
-      message.error("Erro ao atualizar estudante,tente novamente")
+      error?.status === 401 && handlerInauthorizedUserRequest()
+      message.error(error?.message)
     }
 
     setLoading(false)

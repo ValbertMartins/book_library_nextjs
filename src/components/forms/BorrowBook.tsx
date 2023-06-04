@@ -7,6 +7,7 @@ import Select from "antd/lib/select"
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import message from "antd/lib/message"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface formInputValues {
   bookId: string
@@ -29,13 +30,16 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Pr
     [] as Pick<Book, "id" | "name" | "quantity_available">[]
   )
   const { updateStatistics } = useContext(StatisticsContext)
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
 
   useEffect(() => {
     async function getSelectValues() {
-      const { data, ok } = await getStudentsAndBooksNames()
+      const { data, ok, error } = await getStudentsAndBooksNames()
       if (ok && data) {
         setAllBooks(data.bookList)
         setStudentList(data.studentList)
+      } else {
+        error?.status === 401 && handlerInauthorizedUserRequest()
       }
     }
     getSelectValues()
@@ -57,6 +61,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Pr
       updateStatistics()
     } else {
       toast.destroy()
+      error?.status === 401 && handlerInauthorizedUserRequest()
       message.error(error?.message)
     }
   }

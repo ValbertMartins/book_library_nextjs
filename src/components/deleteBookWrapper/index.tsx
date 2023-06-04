@@ -1,9 +1,10 @@
 import { Book } from "@/interfaces"
 import Popconfirm from "antd/lib/popconfirm"
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { MdDelete } from "react-icons/md"
 import { deleteBook } from "@/services/api/book"
 import message from "antd/lib/message"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   book: Book
@@ -12,7 +13,7 @@ interface Props {
 
 const DeleteBookWrapper = ({ setBookList, book }: Props) => {
   const [warningBookMessage, setWarningBookMessage] = useState<string | null>(null)
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
     if (book.quantity_available !== book.quantity) {
       setWarningBookMessage("Esse livro não pode ser deletado, existe alunos com ele.")
@@ -25,6 +26,7 @@ const DeleteBookWrapper = ({ setBookList, book }: Props) => {
       setBookList(bookListUpdated)
       message.success("Livro deletado com sucesso")
     } else {
+      error?.status === 401 && handlerInauthorizedUserRequest()
       message.error(error?.message)
     }
   }

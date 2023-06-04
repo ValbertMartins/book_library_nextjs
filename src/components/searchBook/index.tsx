@@ -1,6 +1,7 @@
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { Book } from "@/interfaces"
 import { getBooks } from "@/services/api/book"
-import { Dispatch, FormEvent, SetStateAction, useState } from "react"
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react"
 import { MdSearch } from "react-icons/md"
 
 interface Props {
@@ -18,14 +19,17 @@ const SearchBook = ({
   bookNameFilter,
   setPage,
 }: Props) => {
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   async function handlerSearchBook(event: FormEvent) {
     event.preventDefault()
     setLoading(true)
     setPage(0)
 
-    const { ok, bookList } = await getBooks(0, bookNameFilter)
+    const { ok, bookList, error } = await getBooks(0, bookNameFilter)
     if (ok && bookList) {
       setBookList(bookList)
+    } else {
+      error?.status === 401 && handlerInauthorizedUserRequest()
     }
     setLoading(false)
   }

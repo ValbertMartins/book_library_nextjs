@@ -20,7 +20,7 @@ const StatisticsWrapper = () => {
         setRegisteredBooksCounter(data.registeredBooksCounter)
         setBooksBorrowedCounter(data.booksBorrowedCounter)
       } else {
-        // error?.status === 401 && handlerInauthorizedUserRequest()
+        error?.status === 401 && handlerInauthorizedUserRequest()
       }
     }
 

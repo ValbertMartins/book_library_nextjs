@@ -1,5 +1,5 @@
 import { Book } from "@/interfaces"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import ModalAntd from "antd/lib/modal"
 import BookShelfList from "../bookShelfList"
 import message from "antd/lib/message"
@@ -7,6 +7,7 @@ import message from "antd/lib/message"
 import BorrowBookForm from "../forms/BorrowBook"
 import Loading from "../loading"
 import { getBooks } from "@/services/api/book"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   bookList: Book[]
@@ -29,15 +30,17 @@ const BooksWrapper = ({
 }: Props) => {
   const [openModalBorrowBook, setOpenModalBorrowBook] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   async function handlerChangePagination(pageNumber: number) {
     setPage(pageNumber)
     setLoading(true)
 
-    const { ok, bookList } = await getBooks(pageNumber, bookNameFilter)
+    const { ok, bookList, error } = await getBooks(pageNumber, bookNameFilter)
 
     if (ok && bookList) {
       setBookList(bookList)
+    } else {
+      error?.status === 401 && handlerInauthorizedUserRequest()
     }
     setLoading(false)
   }

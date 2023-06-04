@@ -1,9 +1,10 @@
 import { Student } from "@/interfaces"
 import EditStudentWrapper from "../editStudentWrapper"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import DeleteStudentWrapper from "../deleteStudentWrapper"
 import { getStudents } from "@/services/api/student"
 import SkeletonAntd from "antd/lib/skeleton"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 const Skeleton = () => {
   return (
@@ -35,15 +36,17 @@ const StudentsTable = ({
   loading,
   setLoading,
 }: Props) => {
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   async function handlerChangePagination(pageNumber: number) {
     setPage(pageNumber)
     setLoading(true)
 
-    const { ok, studentList } = await getStudents(pageNumber, studentNameFilter)
+    const { ok, studentList, error } = await getStudents(pageNumber, studentNameFilter)
 
     if (ok && studentList) {
       setStudentList(studentList)
     }
+    error?.status === 401 && handlerInauthorizedUserRequest()
     setLoading(false)
   }
 

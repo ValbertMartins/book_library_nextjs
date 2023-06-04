@@ -1,9 +1,10 @@
-import React, { Dispatch, SetStateAction, useState } from "react"
+import React, { Dispatch, SetStateAction, useContext, useState } from "react"
 import { Student } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
 import StudentForm from "../forms/Student"
 import { registerStudent } from "@/services/api/student"
 import message from "antd/lib/message"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
 }
@@ -12,7 +13,7 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   async function handleSubmitForm(studentData: Omit<Student, "id">) {
     setLoading(true)
     toast.open({
@@ -30,6 +31,7 @@ const RegisterStudentWrapper = ({ setStudentList }: Props) => {
       message.success("Estudante cadastrado com sucesso")
     } else {
       toast.destroy()
+      error?.status === 401 && handlerInauthorizedUserRequest()
       message.error(error?.message)
     }
 

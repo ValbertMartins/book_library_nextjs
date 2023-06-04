@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { MdModeEditOutline } from "react-icons/md"
 import { Book, FormBookInputFields } from "@/interfaces"
 import ModalAntd from "antd/lib/modal"
@@ -7,6 +7,7 @@ import message from "antd/lib/message"
 import BookForm from "../forms/Book"
 import { editBook } from "@/services/api/book"
 import Image from "next/image"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 const coverPreviewPlaceholder = "/book_cover_placeholder.png"
 
 interface Props {
@@ -21,7 +22,7 @@ const EditBookWrapper = ({ book, setBookList, page, bookNameFilter }: Props) => 
   const [openModal, setOpenModal] = useState(false)
   const [toast, toastContextHolder] = message.useMessage()
   const [coverPreview, setCoverPreview] = useState<File | string>(coverPreviewPlaceholder)
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
     if (book.cover) {
       setCoverPreview(book.cover)
@@ -48,6 +49,7 @@ const EditBookWrapper = ({ book, setBookList, page, bookNameFilter }: Props) => 
       setOpenModal(false)
     } else {
       toast.destroy()
+      error?.status === 401 && handlerInauthorizedUserRequest()
       message.error(error?.message)
     }
   }

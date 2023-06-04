@@ -8,6 +8,7 @@ import Button from "antd/lib/button"
 import { formatDate } from "@/utils/formatDate"
 import Loading from "../loading"
 import message from "antd/lib/message"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   setOpenModalBookDetails: Dispatch<SetStateAction<boolean>>
@@ -28,14 +29,16 @@ export const BookDetails = ({
   const [studentsOnBook, setStudentsOnBook] = useState<StudentBookByBook[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [toast, toastContexthold] = message.useMessage()
-
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
     async function handlerGetStudentsOnBook() {
       setLoading(true)
 
-      const { ok, studentsOnBook } = await getStudentBookByBook(book.id)
+      const { ok, studentsOnBook, error } = await getStudentBookByBook(book.id)
       if (ok && studentsOnBook) {
         setStudentsOnBook(studentsOnBook)
+      } else {
+        error?.status === 401 && handlerInauthorizedUserRequest()
       }
       setLoading(false)
     }

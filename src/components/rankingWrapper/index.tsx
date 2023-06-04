@@ -1,11 +1,11 @@
 import { Student } from "@/interfaces"
 import { getStudentRankingList } from "@/services/api/student"
 import Drawer from "antd/lib/drawer"
-import axios from "axios"
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { AiOutlineTrophy } from "react-icons/ai"
 import { MdPerson } from "react-icons/md"
 import Loading from "../loading"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   openDrawerRanking: boolean
@@ -15,11 +15,15 @@ interface Props {
 const RankingWrapper = ({ openDrawerRanking, setOpenDrawerRanking }: Props) => {
   const [studentsRankingList, setStudentsRankingList] = useState<Student[] | null>(null)
   const [loading, setLoading] = useState(true)
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
     async function getStudentRanking() {
-      const { ok, studentsRankingList } = await getStudentRankingList()
+      const { ok, studentsRankingList, error } = await getStudentRankingList()
       if (ok && studentsRankingList) {
         setStudentsRankingList(studentsRankingList)
+      } else {
+        console.log(error)
+        error?.status === 401 && handlerInauthorizedUserRequest()
       }
       setLoading(false)
     }

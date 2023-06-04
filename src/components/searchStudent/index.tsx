@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Book, Student } from "@/interfaces"
 import { getBooks } from "@/services/api/book"
 import { Dispatch, FormEvent, SetStateAction } from "react"
 import { MdSearch } from "react-icons/md"
 import { getStudents } from "@/services/api/student"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 interface Props {
   setStudentList: Dispatch<SetStateAction<Student[]>>
@@ -20,13 +21,17 @@ const SearchStudent = ({
   studentNameFilter,
   setPage,
 }: Props) => {
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
+
   async function handlerSearchStudent(event: FormEvent) {
     event.preventDefault()
     setLoading(true)
     setPage(0)
-    const { ok, studentList } = await getStudents(0, studentNameFilter)
+    const { ok, studentList, error } = await getStudents(0, studentNameFilter)
     if (ok && studentList) {
       setStudentList(studentList)
+    } else {
+      error?.status === 401 && handlerInauthorizedUserRequest()
     }
     setLoading(false)
   }

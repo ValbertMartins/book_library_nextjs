@@ -9,9 +9,11 @@ export function formatApiError(error: unknown) {
       }
     }
 
-    return {
-      status: error.response.status,
-      message: error.response.data,
+    if (typeof error.response.data === "string") {
+      return {
+        status: error.response.status,
+        message: error.response.data,
+      }
     }
   }
 }

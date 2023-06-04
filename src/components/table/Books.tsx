@@ -1,9 +1,10 @@
 import { Book } from "@/interfaces"
-import React, { Dispatch, SetStateAction, useState } from "react"
+import React, { Dispatch, SetStateAction, useContext, useState } from "react"
 import EditBookWrapper from "../editBookWrapper"
 import DeleteBookWrapper from "../deleteBookWrapper"
 import SkeletonAntd from "antd/lib/skeleton"
 import { getBooks } from "@/services/api/book"
+import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
 const Skeleton = () => {
   return (
@@ -35,14 +36,18 @@ const BooksTable = ({
   loading,
   setLoading,
 }: Props) => {
+  const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
+
   async function handlerChangePagination(pageNumber: number) {
     setPage(pageNumber)
     setLoading(true)
 
-    const { ok, bookList } = await getBooks(pageNumber, bookNameFilter)
+    const { ok, bookList, error } = await getBooks(pageNumber, bookNameFilter)
 
     if (ok && bookList) {
       setBookList(bookList)
+    } else {
+      error?.status === 401 && handlerInauthorizedUserRequest()
     }
     setLoading(false)
   }
