@@ -76,7 +76,6 @@ export async function getStudentRankingList() {
       studentsRankingList: data.studentsRankingList,
     }
   } catch (error) {
-    console.log(error, "foo")
     return {
       ok: false,
       studentsRankingList: null,

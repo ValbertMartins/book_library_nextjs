@@ -8,7 +8,7 @@ interface ResponseData {
   }
 }
 
-export async function verifyAuth(cookie_jwt?: RequestCookie) {
+export async function verifyAuth(baseUrl: string, cookie_jwt?: RequestCookie) {
   if (!cookie_jwt?.value) {
     return {
       isAuth: false,
@@ -16,7 +16,7 @@ export async function verifyAuth(cookie_jwt?: RequestCookie) {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/api/auth/verify-auth", {
+    const response = await fetch(`${baseUrl}/api/auth/verify-auth`, {
       headers: {
         Authorization: `Bearer ${cookie_jwt.value}`,
       },

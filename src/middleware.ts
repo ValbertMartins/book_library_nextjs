@@ -6,7 +6,7 @@ export async function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.includes("/auth")) return NextResponse.next()
   const jwt_cookie = req.cookies.get("jwt_token")
 
-  const { isAuth } = await verifyAuth(jwt_cookie)
+  const { isAuth } = await verifyAuth(req.nextUrl.origin, jwt_cookie)
 
   if (!isAuth) {
     return req.url.includes("/api")

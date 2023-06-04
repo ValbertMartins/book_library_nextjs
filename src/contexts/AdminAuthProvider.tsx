@@ -39,8 +39,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
   const [toast, toastContextHolder] = message.useMessage()
   const { push } = useRouter()
 
-  console.log(admin, "admin")
-
   useEffect(() => {
     async function handlerPersistAuthState() {
       try {
@@ -102,7 +100,6 @@ export const AdminAuthProvider = ({ children }: Props) => {
   }
 
   function handlerInauthorizedUserRequest() {
-    console.log("here")
     setAdmin(null)
     push("/auth/login")
   }
