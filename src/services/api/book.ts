@@ -110,7 +110,6 @@ export async function deleteBook(bookId: string) {
       bookListUpdated: data.bookListUpdated,
     }
   } catch (error) {
-    console.log(error)
     return {
       ok: false,
       error: formatApiError(error),

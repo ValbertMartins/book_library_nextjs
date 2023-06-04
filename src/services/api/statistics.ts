@@ -13,10 +13,8 @@ export async function getStatistics() {
     }
   } catch (error) {
     return {
-      props: {
-        ok: false,
-        error: formatApiError(error),
-      },
+      ok: false,
+      error: formatApiError(error),
     }
   }
 }

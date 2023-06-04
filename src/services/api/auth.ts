@@ -1,3 +1,5 @@
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies"
+
 interface ResponseData {
   isAuth: boolean
   admin?: {
@@ -6,11 +8,17 @@ interface ResponseData {
   }
 }
 
-export async function verifyAuth(cookie_jwt: string) {
+export async function verifyAuth(cookie_jwt?: RequestCookie) {
+  if (!cookie_jwt?.value) {
+    return {
+      isAuth: false,
+    }
+  }
+
   try {
     const response = await fetch("http://localhost:3000/api/auth/verify-auth", {
       headers: {
-        Authorization: `Bearer ${cookie_jwt}`,
+        Authorization: `Bearer ${cookie_jwt.value}`,
       },
     })
     const data: ResponseData = await response.json()

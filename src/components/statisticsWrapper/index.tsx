@@ -13,14 +13,14 @@ const StatisticsWrapper = () => {
 
   useEffect(() => {
     async function handlerStatistics() {
-      const { ok, data } = await getStatistics()
+      const { ok, data, error } = await getStatistics()
 
       if (ok && data) {
         setRegisteredStudentsCounter(data.registeredStudentsCounter)
         setRegisteredBooksCounter(data.registeredBooksCounter)
         setBooksBorrowedCounter(data.booksBorrowedCounter)
       } else {
-        // handlerInauthorizedUserRequest()
+        // error?.status === 401 && handlerInauthorizedUserRequest()
       }
     }
 

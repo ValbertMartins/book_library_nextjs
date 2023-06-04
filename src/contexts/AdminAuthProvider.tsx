@@ -39,6 +39,8 @@ export const AdminAuthProvider = ({ children }: Props) => {
   const [toast, toastContextHolder] = message.useMessage()
   const { push } = useRouter()
 
+  console.log(admin, "admin")
+
   useEffect(() => {
     async function handlerPersistAuthState() {
       try {
@@ -73,6 +75,7 @@ export const AdminAuthProvider = ({ children }: Props) => {
         data: { admin },
       } = await axios.post<{ admin: Admin }>("/api/auth/login", dataFields)
       setAdmin(admin)
+      push("/dashboard")
       toast.destroy()
     } catch (error) {
       toast.destroy()
