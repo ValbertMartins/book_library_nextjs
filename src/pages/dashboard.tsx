@@ -8,7 +8,7 @@ import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { StatisticsProvider } from "@/contexts/StatisticsProvider"
 import { Book, ErrorApi } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
-import { GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 import { useContext, useState } from "react"
 import { AiOutlineTrophy } from "react-icons/ai"
 import { IoMdPerson } from "react-icons/io"
@@ -21,7 +21,7 @@ interface Props {
   booksBorrowedCounter: number
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const prisma = new PrismaClient()
 
   try {

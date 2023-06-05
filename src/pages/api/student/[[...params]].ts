@@ -89,8 +89,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         updateStudentListQuery,
       ])
 
-      await res.revalidate("/students")
-
       return res.status(200).json({ studentListUpdated })
     } catch (error) {
       return res.status(500).json("Erro ao cadastar estudante, tente novamente")
@@ -152,8 +150,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         studentListQuery,
       ])
 
-      await res.revalidate("/students")
-
       return res.status(200).json({ studentListUpdated })
     } catch (error) {
       let message
@@ -208,8 +204,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         updateUserQuery,
         studentListUpdatedQuery,
       ])
-
-      await res.revalidate("/students")
 
       return res.status(200).json({ studentListUpdated })
     } catch (error) {

@@ -78,12 +78,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         increaseCollectedBooksOnStudentQuery,
       ])
 
-      await Promise.all([
-        res.revalidate("/dashboard"),
-        res.revalidate("/students"),
-        res.revalidate("/books"),
-      ])
-
       res.status(200).json({
         borrowBookRegistered,
         bookListUpdated,
@@ -154,12 +148,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         updateStudentsOnBookQuery,
         increaseQuantityAvailableBookQuery,
         updateBookListQuery,
-      ])
-
-      await Promise.all([
-        res.revalidate("/dashboard"),
-        res.revalidate("/students"),
-        res.revalidate("/books"),
       ])
 
       res.status(200).json({ updatedStudentsOnBook, bookListUpdated })

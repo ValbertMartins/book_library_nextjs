@@ -27,11 +27,11 @@ const BookList = ({ bookList, setBookList }: Props) => {
         >
           <div className=" rounded-xl overflow-hidden ">
             <Image
-              className={`object-cover h-full w-full ${
+              className={`object-cover h-full w-full transition-all ${
                 imagesLoading ? "blur-md scale-100" : "grayscale-0 blur-0 scale-100"
               }`}
-              width="300"
-              height="100"
+              width={300}
+              height={100}
               priority
               src={book.cover ? book.cover : coverPreviewPlaceholder}
               onLoadingComplete={() => setImagesLoading(false)}

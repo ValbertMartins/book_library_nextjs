@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 import { PrismaClient } from "@prisma/client"
 import { ErrorApi, Student } from "@/interfaces"
 import TableStudents from "@/components/table/Students"
@@ -9,7 +9,7 @@ import SearchStudent from "@/components/searchStudent"
 import Navbar from "@/components/navbar"
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const prisma = new PrismaClient()
 
   try {

@@ -5,10 +5,10 @@ import BooksTable from "@/components/table/Books"
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { Book } from "@/interfaces"
 import { PrismaClient } from "@prisma/client"
-import { GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 import { useContext, useState } from "react"
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const prisma = new PrismaClient()
 
   try {
