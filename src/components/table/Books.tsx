@@ -68,12 +68,12 @@ const BooksTable = ({
           {bookList.map(book => (
             <tr
               key={book.id}
-              className="border-b-[1px] border-zinc-100 hover:bg-primary-color cursor-pointer"
+              className="border-b-[1px] border-zinc-100 hover:bg-primary-color"
             >
               <td className="p-4">{loading ? <Skeleton /> : book.name}</td>
               <td className="p-4">{loading ? <Skeleton /> : book.quantity}</td>
               <td className="p-4">{loading ? <Skeleton /> : book.quantity_available}</td>
-              <td className="p-4">{loading ? <Skeleton /> : book.cover ? "✅" : "🚫"}</td>
+              <td className="p-4">{loading ? <Skeleton /> : book.cover ? "Sim" : "Não"}</td>
               <td className="p-4">
                 <EditBookWrapper
                   book={book}

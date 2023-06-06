@@ -18,6 +18,7 @@ const BookList = ({ bookList, setBookList }: Props) => {
           book={book}
           setBook={setBook}
           setOpenModalBookDetails={setOpenModalBookDetails}
+          key={book.id}
         />
       ))}
       {bookList.length == 0 && <p>Nenhum livro encontrado</p>}

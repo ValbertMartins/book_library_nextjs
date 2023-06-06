@@ -68,7 +68,7 @@ const StudentsTable = ({
           {studentList.map(student => (
             <tr
               key={student.id}
-              className="border-b-[1px] border-zinc-100 hover:bg-primary-color cursor-pointer"
+              className="border-b-[1px] border-zinc-100 hover:bg-primary-color "
             >
               <td className="p-4">{loading ? <Skeleton /> : student.name}</td>
               <td className="p-4">{loading ? <Skeleton /> : student.gender}</td>

@@ -17,7 +17,6 @@ const Book = ({ book, setBook, setOpenModalBookDetails }: Props) => {
         setOpenModalBookDetails(true)
         setBook(book)
       }}
-      key={book.id}
       className="flex flex-col cursor-pointer"
     >
       <div className=" rounded-xl overflow-hidden aspect-[1/1.3]">
