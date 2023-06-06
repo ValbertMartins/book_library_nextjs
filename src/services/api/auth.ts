@@ -8,22 +8,24 @@ interface ResponseData {
   }
 }
 
-export async function verifyAuth(baseUrl: string, cookie_jwt?: RequestCookie) {
-  if (!cookie_jwt?.value) {
+export async function verifyAuth(baseURL: string, cookie_jwt?: RequestCookie | string) {
+  if (!cookie_jwt) {
     return {
       isAuth: false,
     }
   }
-
   try {
-    const response = await fetch(`${baseUrl}/api/auth/verify-auth`, {
+    const response = await fetch(`${baseURL}/api/auth/verify-auth`, {
       headers: {
-        Authorization: `Bearer ${cookie_jwt.value}`,
+        Authorization: `Bearer ${cookie_jwt}`,
       },
     })
+    if (!response.ok) throw new Error("invalid user")
     const data: ResponseData = await response.json()
+
     return data
   } catch (error) {
+    console.log(error)
     return {
       isAuth: false,
     }

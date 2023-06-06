@@ -2,22 +2,47 @@ import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { formAuthFields } from "@/interfaces"
 import { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/router"
 import { GetServerSideProps } from "next"
 import { PrismaClient } from "@prisma/client"
+import { verifyAuth } from "@/services/api/auth"
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const prisma = new PrismaClient()
-  const adminRegisteredCounter = await prisma.admin.count()
+  const {
+    req: {
+      cookies,
+      headers: { host },
+    },
+  } = context
 
-  if (adminRegisteredCounter === 0) {
-    return {
-      redirect: {
-        destination: "/auth/register-admin",
-        permanent: false,
-      },
+  try {
+    console.log(process.env.NODE_ENV)
+    if (host) {
+      const baseURL =
+        process.env.NODE_ENV === "development" ? `http://${host}` : `https://${host}`
+
+      const { isAuth } = await verifyAuth(baseURL, cookies.jwt_token)
+      if (isAuth) {
+        return {
+          redirect: {
+            destination: "/dashboard",
+            permanent: false,
+          },
+        }
+      }
     }
-  }
+
+    const adminRegisteredCounter = await prisma.admin.count()
+
+    if (adminRegisteredCounter === 0) {
+      return {
+        redirect: {
+          destination: "/auth/register-admin",
+          permanent: false,
+        },
+      }
+    }
+  } catch (error) {}
 
   return {
     props: {},
@@ -30,14 +55,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Pick<formAuthFields, "email" | "password">>()
-  const { signIn, loading, admin } = useContext(adminAuthContext)
-  const { push } = useRouter()
-
-  useEffect(() => {
-    if (admin) {
-      push("/dashboard")
-    }
-  }, [admin])
+  const { signIn, loading } = useContext(adminAuthContext)
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-hidden bg-white">
@@ -82,7 +100,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="rounded-lg px-4 py-2 bg-blue-500 font-bold text-white hover:outline hover:outline-blue-300 hover:outline-2 transition-all mt-2 disabled:bg-primary-color disabled:border-2 disabled:border-zinc-300 disabled:text-zinc-300 disabled:outline-none"
+              className="rounded-lg px-4 py-2 bg-blue-500 font-bold text-white hover:outline hover:outline-blue-300 hover:outline-2 transition-all mt-2 disabled:bg-blue-300 disabled:outline-none"
               disabled={loading}
             >
               Entrar

@@ -1,7 +1,6 @@
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { formAuthFields } from "@/interfaces"
-import { useRouter } from "next/router"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { useForm } from "react-hook-form"
 import { GetServerSideProps } from "next"
 import { PrismaClient } from "@prisma/client"
@@ -25,20 +24,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const Register = () => {
-  const { signUp, admin } = useContext(adminAuthContext)
-  const { push } = useRouter()
+  const { signUp } = useContext(adminAuthContext)
 
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<formAuthFields>()
-
-  useEffect(() => {
-    if (admin) {
-      push("/dashboard")
-    }
-  }, [admin])
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2  h-screen overflow-hidden bg-white">

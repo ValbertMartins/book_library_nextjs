@@ -1,4 +1,4 @@
-import { ErrorApi, formAuthFields } from "@/interfaces"
+import { formAuthFields } from "@/interfaces"
 import axios, { AxiosError } from "axios"
 import React, {
   Dispatch,
@@ -73,9 +73,11 @@ export const AdminAuthProvider = ({ children }: Props) => {
         data: { admin },
       } = await axios.post<{ admin: Admin }>("/api/auth/login", dataFields)
       setAdmin(admin)
+      push("/dashboard")
       toast.destroy()
     } catch (error) {
       toast.destroy()
+      setLoading(false)
       if (error instanceof AxiosError) {
         toast.error(
           error.response?.status === 400
@@ -86,10 +88,10 @@ export const AdminAuthProvider = ({ children }: Props) => {
         toast.error("Falha ao entrar, tente novamente")
       }
     }
-    setLoading(false)
   }
 
   async function signOut() {
+    setLoading(false)
     const {
       data: { isAuth, ok },
     } = await axios.get<{ isAuth: boolean; ok: boolean }>("/api/auth/logout")
