@@ -9,9 +9,10 @@ import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 interface Props {
   book: Book
   setBookList: Dispatch<SetStateAction<Book[]>>
+  setPage: Dispatch<SetStateAction<number>>
 }
 
-const DeleteBookWrapper = ({ setBookList, book }: Props) => {
+const DeleteBookWrapper = ({ setBookList, book, setPage }: Props) => {
   const [warningBookMessage, setWarningBookMessage] = useState<string | null>(null)
   const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
@@ -24,6 +25,7 @@ const DeleteBookWrapper = ({ setBookList, book }: Props) => {
     const { ok, bookListUpdated, error } = await deleteBook(book.id)
     if (ok && bookListUpdated) {
       setBookList(bookListUpdated)
+      setPage(0)
       message.success("Livro deletado com sucesso")
     } else {
       error?.status === 401 && handlerInauthorizedUserRequest()

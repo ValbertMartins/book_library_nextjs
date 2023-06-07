@@ -91,6 +91,7 @@ const StudentsTable = ({
                 <DeleteStudentWrapper
                   student={student}
                   setStudentList={setStudentList}
+                  setPage={setPage}
                 />
               </td>
             </tr>

@@ -9,9 +9,10 @@ import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 interface Props {
   student: Student
   setStudentList: Dispatch<SetStateAction<Student[]>>
+  setPage: Dispatch<SetStateAction<number>>
 }
 
-const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
+const DeleteStudentWrapper = ({ setStudentList, student, setPage }: Props) => {
   const [warningStudentWithBooks, setWarningStudentWithBooks] = useState<null | string>(null)
   const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
   useEffect(() => {
@@ -24,6 +25,7 @@ const DeleteStudentWrapper = ({ setStudentList, student }: Props) => {
   async function handlerDeleteStudent() {
     const { ok, studentListUpdated, error } = await deleteStudent(student.id)
     if (ok && studentListUpdated) {
+      setPage(0)
       setStudentList(studentListUpdated)
       message.success("Estudante deletado com sucesso")
     } else {

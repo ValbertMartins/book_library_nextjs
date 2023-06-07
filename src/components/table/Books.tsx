@@ -83,8 +83,9 @@ const BooksTable = ({
                 />
 
                 <DeleteBookWrapper
-                  book={book}
                   setBookList={setBookList}
+                  book={book}
+                  setPage={setPage}
                 />
               </td>
             </tr>
