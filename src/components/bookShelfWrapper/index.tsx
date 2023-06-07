@@ -92,14 +92,14 @@ const BooksWrapper = ({
         <button
           onClick={() => handlerChangePagination(page - 1)}
           disabled={page === 0}
-          className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-2 py-1  hover:bg-blue-400 transition-all disabled:bg-blue-300 disabled:cursor-not-allowed "
+          className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-2 py-1  hover:bg-blue-400 transition-all disabled:bg-blue-300  "
         >
           Anterior
         </button>
 
         <p className="font-bold text-md mx-4">{page + 1}</p>
         <button
-          className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-2 py-1 hover:bg-blue-400 transition-all disabled:bg-blue-300 disabled:cursor-not-allowed"
+          className="flex items-center justify-around text-sm text-white bg-blue-500 rounded-md px-2 py-1 hover:bg-blue-400 transition-all disabled:bg-blue-300 "
           onClick={() => handlerChangePagination(page + 1)}
           disabled={bookList.length < 10}
         >

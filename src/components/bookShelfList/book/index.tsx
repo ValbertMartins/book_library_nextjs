@@ -17,7 +17,7 @@ const Book = ({ book, setBook, setOpenModalBookDetails }: Props) => {
         setOpenModalBookDetails(true)
         setBook(book)
       }}
-      className="flex flex-col cursor-pointer"
+      className="cursor-pointer"
     >
       <div className=" rounded-xl overflow-hidden aspect-[1/1.3]">
         <Image
