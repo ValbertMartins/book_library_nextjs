@@ -1,10 +1,12 @@
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
 import { formAuthFields } from "@/interfaces"
-import { useContext, useEffect } from "react"
+import { useContext, useState } from "react"
 import { useForm } from "react-hook-form"
 import { GetServerSideProps } from "next"
 import { PrismaClient } from "@prisma/client"
 import { verifyAuth } from "@/services/api/auth"
+import { useRouter } from "next/router"
+import message from "antd/lib/message"
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const prisma = new PrismaClient()
@@ -16,7 +18,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   } = context
 
   try {
-    console.log(process.env.NODE_ENV)
     if (host) {
       const baseURL =
         process.env.NODE_ENV === "development" ? `http://${host}` : `https://${host}`
@@ -55,7 +56,29 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Pick<formAuthFields, "email" | "password">>()
-  const { signIn, loading } = useContext(adminAuthContext)
+  const { signIn } = useContext(adminAuthContext)
+  const [loading, setLoading] = useState(false)
+  const { push } = useRouter()
+  const [toast, toastContextHolder] = message.useMessage()
+
+  async function handlerSignIn(inputFields: Pick<formAuthFields, "email" | "password">) {
+    setLoading(true)
+    toast.open({ content: "Aguarde...", type: "loading", duration: 0 })
+    const { ok, error } = await signIn(inputFields)
+    if (ok) {
+      toast.destroy()
+      push("/dashboard")
+    }
+    if (error) {
+      toast.destroy()
+      toast.error(
+        error.status === 404
+          ? "Email ou senha inválidos, tente novamente"
+          : "Falha ao entrar, tente novamente"
+      )
+    }
+    setLoading(false)
+  }
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 h-screen overflow-hidden bg-white">
@@ -67,7 +90,7 @@ const Login = () => {
           </p>
 
           <form
-            onSubmit={handleSubmit(inputFields => signIn(inputFields))}
+            onSubmit={handleSubmit(inputFields => handlerSignIn(inputFields))}
             className="flex flex-col gap-4"
           >
             <label className="font-semibold">
@@ -115,6 +138,8 @@ const Login = () => {
           alt="Mulher segurando celular enquanto caminha"
         />
       </div>
+
+      {toastContextHolder}
     </section>
   )
 }

@@ -20,9 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const alreadyExistAdminRegistered = await prisma.admin.count()
 
     if (alreadyExistAdminRegistered) {
-      return res.status(401).json({
-        message: "already exists admin",
-      })
+      return res.status(402).json("already exists admin")
     }
 
     const hashPassword = await bcrypt.hash(password, 10)
@@ -38,8 +36,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       admin: { name: admin.name, email: admin.email, id: admin.id },
     })
   } catch (error) {
-    res.status(500).json({
-      message: "internal server error",
-    })
+    res.status(500).json("internal server error")
   }
 }

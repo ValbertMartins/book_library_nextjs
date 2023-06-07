@@ -1,5 +1,5 @@
 import { formAuthFields } from "@/interfaces"
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import React, {
   Dispatch,
   ReactNode,
@@ -9,7 +9,7 @@ import React, {
   useState,
 } from "react"
 import { useRouter } from "next/router"
-import message from "antd/lib/message"
+import { formatApiError } from "@/services/api/errors"
 
 interface Admin {
   name: string
@@ -17,12 +17,15 @@ interface Admin {
   id: string
 }
 
+type authResponse =
+  | { ok: boolean; error?: undefined }
+  | { ok: boolean; error: { status: number; message: string } }
+
 interface ProviderValues {
   admin: Admin | null
   setAdmin: Dispatch<SetStateAction<Admin | null>>
-  loading: boolean
-  signUp: (dataFields: formAuthFields) => Promise<void>
-  signIn: (dataFields: Pick<formAuthFields, "email" | "password">) => Promise<void>
+  signUp: (dataFields: formAuthFields) => Promise<authResponse>
+  signIn: (dataFields: Pick<formAuthFields, "email" | "password">) => Promise<authResponse>
   signOut: () => Promise<void>
   handlerInauthorizedUserRequest: () => void
 }
@@ -35,8 +38,6 @@ interface Props {
 
 export const AdminAuthProvider = ({ children }: Props) => {
   const [admin, setAdmin] = useState<Admin | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [toast, toastContextHolder] = message.useMessage()
   const { push } = useRouter()
 
   useEffect(() => {
@@ -53,45 +54,36 @@ export const AdminAuthProvider = ({ children }: Props) => {
   }, [])
 
   async function signUp(dataFields: formAuthFields) {
-    setLoading(true)
     try {
       await axios.post<{ admin: Admin }>("/api/auth/register", dataFields)
-      push("/auth/login")
-    } catch (error) {
-      console.error(error)
-    }
 
-    setLoading(false)
+      return {
+        ok: true,
+      }
+    } catch (error) {
+      return {
+        ok: false,
+        error: formatApiError(error),
+      }
+    }
   }
 
   async function signIn(dataFields: Pick<formAuthFields, "email" | "password">) {
-    setLoading(true)
-
-    toast.open({ content: "Aguarde...", type: "loading", duration: 0 })
     try {
       const {
         data: { admin },
       } = await axios.post<{ admin: Admin }>("/api/auth/login", dataFields)
       setAdmin(admin)
-      push("/dashboard")
-      toast.destroy()
-    } catch (error) {
-      toast.destroy()
-      setLoading(false)
-      if (error instanceof AxiosError) {
-        toast.error(
-          error.response?.status === 400
-            ? "Email ou senha inválidos, tente novamente"
-            : "Falha ao entrar, tente novamente"
-        )
-      } else {
-        toast.error("Falha ao entrar, tente novamente")
+
+      return {
+        ok: true,
       }
+    } catch (error) {
+      return { ok: false, error: formatApiError(error) }
     }
   }
 
   async function signOut() {
-    setLoading(false)
     const {
       data: { isAuth, ok },
     } = await axios.get<{ isAuth: boolean; ok: boolean }>("/api/auth/logout")
@@ -114,12 +106,10 @@ export const AdminAuthProvider = ({ children }: Props) => {
         signUp,
         signIn,
         signOut,
-        loading,
         handlerInauthorizedUserRequest,
       }}
     >
       {children}
-      {toastContextHolder}
     </adminAuthContext.Provider>
   )
 }

@@ -16,4 +16,9 @@ export function formatApiError(error: unknown) {
       }
     }
   }
+
+  return {
+    status: 500,
+    message: "unknown error",
+  }
 }
