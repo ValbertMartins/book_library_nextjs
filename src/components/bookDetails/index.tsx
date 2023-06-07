@@ -1,8 +1,8 @@
 import ModalAntd from "antd/lib/modal"
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
-import { Book, StudentBookByBook } from "@/interfaces"
+import { Book, StudentsOnBook } from "@/interfaces"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
-import { getStudentBookByBook } from "@/services/api/book"
+import { getStudentsByBook } from "@/services/api/book"
 import { finishBorrowBook } from "@/services/api/borrowBook"
 import Button from "antd/lib/button"
 import { formatDate } from "@/utils/formatDate"
@@ -26,7 +26,7 @@ export const BookDetails = ({
   setBookList,
 }: Props) => {
   const { updateStatistics } = useContext(StatisticsContext)
-  const [studentsOnBook, setStudentsOnBook] = useState<StudentBookByBook[] | null>(null)
+  const [studentsOnBook, setStudentsOnBook] = useState<StudentsOnBook[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [toast, toastContexthold] = message.useMessage()
   const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
@@ -34,7 +34,7 @@ export const BookDetails = ({
     async function handlerGetStudentsOnBook() {
       setLoading(true)
 
-      const { ok, studentsOnBook, error } = await getStudentBookByBook(book.id)
+      const { ok, studentsOnBook, error } = await getStudentsByBook(book.id)
       if (ok && studentsOnBook) {
         setStudentsOnBook(studentsOnBook)
       } else {

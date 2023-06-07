@@ -1,5 +1,5 @@
 import { Book, Student } from "@/interfaces"
-import { getStudentsAndBooksNames, registerNewBorrowBook } from "@/services/api/borrowBook"
+import { getStudentsAndBooks, registerNewBorrowBook } from "@/services/api/borrowBook"
 import Button from "antd/lib/button"
 import Form from "antd/lib/form"
 import { MessageInstance } from "antd/lib/message/interface"
@@ -34,7 +34,7 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Pr
 
   useEffect(() => {
     async function getSelectValues() {
-      const { data, ok, error } = await getStudentsAndBooksNames()
+      const { data, ok, error } = await getStudentsAndBooks()
       if (ok && data) {
         setAllBooks(data.bookList)
         setStudentList(data.studentList)

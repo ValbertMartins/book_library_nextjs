@@ -68,7 +68,7 @@ export default function Home({ initialBookList, apiError }: Props) {
         <section className="bg-primary-color mx-4 pt-6 flex-1 flex overflow-scroll h-screen">
           <section className="flex-1">
             <header className="flex items-center justify-between">
-              <div className="text-2xl font-bold">Libook</div>
+              <div className="text-2xl font-bold"></div>
 
               <div className="flex items-center gap-x-4">
                 <button

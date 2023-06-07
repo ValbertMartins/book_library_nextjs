@@ -1,6 +1,5 @@
-import { Book, Student, StudentBookByBook } from "@/interfaces"
+import { Book, Student, StudentsOnBook } from "@/interfaces"
 import axios from "axios"
-import { endpoints } from "@/services/api"
 import { formatApiError } from "./errors"
 
 interface Props {
@@ -8,9 +7,9 @@ interface Props {
   studentList: Pick<Student, "id" | "name">[]
 }
 
-export async function getStudentsAndBooksNames() {
+export async function getStudentsAndBooks() {
   try {
-    const { data } = await axios.get<Props>(endpoints.getStudentsAndBooks.url)
+    const { data } = await axios.get<Props>("/api/studentbook/get-students-books")
 
     return {
       ok: true,
@@ -33,7 +32,7 @@ export async function registerNewBorrowBook(
   booksPage: number
 ) {
   try {
-    const { data } = await axios.post<{ bookListUpdated: Book[] }>(endpoints.borrowBook.url, {
+    const { data } = await axios.post<{ bookListUpdated: Book[] }>("/api/book/borrowbook", {
       ...formInputFields,
       booksPage,
     })
@@ -53,9 +52,9 @@ export async function registerNewBorrowBook(
 export async function finishBorrowBook(studentId: string, bookId: string) {
   try {
     const { data } = await axios.delete<{
-      updatedStudentsOnBook: StudentBookByBook[]
+      updatedStudentsOnBook: StudentsOnBook[]
       bookListUpdated: Book[]
-    }>(`${endpoints.borrowBook.url}/${studentId}/${bookId}`)
+    }>(`${"/api/book/borrowbook"}/${studentId}/${bookId}`)
 
     return {
       ok: true,

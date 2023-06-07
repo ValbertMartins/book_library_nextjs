@@ -1,6 +1,5 @@
 import { Student } from "@/interfaces"
 import axios from "axios"
-import { endpoints } from "@/services/api"
 import { formatApiError } from "./errors"
 
 export async function registerStudent(studentData: Omit<Student, "id">) {
@@ -69,7 +68,7 @@ export async function deleteStudent(studentId: string) {
 export async function getStudentRankingList() {
   try {
     const { data } = await axios.get<{ studentsRankingList: Student[] }>(
-      endpoints.getStudentsRankingList.url
+      "/api/student/ranking-list"
     )
     return {
       ok: true,

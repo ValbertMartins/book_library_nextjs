@@ -1,6 +1,6 @@
 import axios from "axios"
 import { convertImageToBase64 } from "@/utils/convertImageToBase64"
-import { Book, FormBookInputFields, StudentBookByBook } from "@/interfaces"
+import { Book, FormBookInputFields, StudentsOnBook } from "@/interfaces"
 import { formatApiError } from "./errors"
 
 export async function getBooks(pageNumber: number, inputBook: string) {
@@ -117,10 +117,10 @@ export async function deleteBook(bookId: string) {
   }
 }
 
-export async function getStudentBookByBook(bookId: string) {
+export async function getStudentsByBook(bookId: string) {
   try {
-    const { data: studentsOnBook } = await axios.post<StudentBookByBook[]>(
-      "/api/getStudentsByBook",
+    const { data: studentsOnBook } = await axios.post<StudentsOnBook[]>(
+      "/api/studentbook/get-students-by-book",
       {
         bookId,
       }

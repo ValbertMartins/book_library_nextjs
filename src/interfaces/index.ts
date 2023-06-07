@@ -39,17 +39,9 @@ export interface StudentBook {
   book: Book
 }
 
-export interface StudentBookByBook {
-  created_at: string
-  student: Student
-  bookId: string
-}
+export type StudentsOnBook = Pick<StudentBook, "created_at" | "student"> & { bookId: string }
 
-export interface StudentBookByStudent {
-  created_at: string
-  book: Book
-  studentId: string
-}
+export type BooksOnStudent = Pick<StudentBook, "created_at" | "book"> & { studentId: string }
 
 export interface FormBookInputFields {
   name: string
