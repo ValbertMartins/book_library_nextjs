@@ -32,8 +32,7 @@ Then, create a <strong>.env</strong> file in your root folder and add the follow
 </li>
 
 ```bash
-DB_PASSWORD="root"
-DATABASE_URL="mysql://root:root@localhost:3306/bookerfly" # if change the password, change to  same password in DB_PASSWORD environment
+DATABASE_URL="mysql://root:root@localhost:3306/bookerfly"
 CLOUD_NAME="" #cloudinary image provider name, sign in cloudinary https://cloudinary.com/ to get your credentials
 API_KEY="" #cloudinary api key
 API_SECRET="" #cloudinary api secret
@@ -43,10 +42,15 @@ JWT_SECRET="" #Generate a strong jwt secret
 Then, run the following commands:
 
 ```bash
-npx prisma migrate dev
-npm run db
 npm run dev
-
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<ul>
+<li>⚠️
+The first time that you clone this repo, its necessary run the above commands twice to generate db and create the volumes, because this maybe migrations doesnt running in the first time.
+</li>
+</ul>
+
+&nbsp;
+
+- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
