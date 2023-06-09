@@ -38,4 +38,4 @@ next-env.d.ts
 
 #db backup
 
-db/*
+infra/mysql_volume

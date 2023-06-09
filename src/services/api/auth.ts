@@ -25,7 +25,6 @@ export async function verifyAuth(baseURL: string, cookie_jwt?: RequestCookie | s
 
     return data
   } catch (error) {
-    console.log(error)
     return {
       isAuth: false,
     }

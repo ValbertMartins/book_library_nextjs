@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  database:
+    image: mysql
+    ports: 
+      - 3306:3306
+    container_name: dev_db_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql_volume:/var/lib/mysql

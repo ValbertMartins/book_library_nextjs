@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run db && npx prisma migrate dev && next dev",
+    "db": "docker compose -f infra/docker-compose.yaml up -d",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch",
-    "db": "docker compose up -d"
+    "test": "jest --watch"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",

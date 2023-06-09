@@ -22,7 +22,7 @@ const RankingWrapper = ({ openDrawerRanking, setOpenDrawerRanking }: Props) => {
       if (ok && studentsRankingList) {
         setStudentsRankingList(studentsRankingList)
       } else {
-        console.log(error)
+        // console.log(error)
         error?.status === 401 && handlerInauthorizedUserRequest()
       }
       setLoading(false)
