@@ -37,9 +37,12 @@ export interface StudentBook {
   created_at: string
   student: Student
   book: Book
+  expires_in: number
 }
 
-export type StudentsOnBook = Pick<StudentBook, "created_at" | "student"> & { bookId: string }
+export type StudentsOnBook = Pick<StudentBook, "created_at" | "expires_in" | "student"> & {
+  bookId: string
+}
 
 export type BooksOnStudent = Pick<StudentBook, "created_at" | "book"> & { studentId: string }
 

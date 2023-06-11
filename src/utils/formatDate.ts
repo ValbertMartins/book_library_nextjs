@@ -1,7 +1,12 @@
 import dayjs from "dayjs"
 
-export function formatDate(date: string) {
-  const dateFormatted = dayjs(date)
+export function formatDate(date: string | number) {
+  let dateFormatted
+  if (typeof date === "number") {
+    dateFormatted = dayjs.unix(date)
+  } else {
+    dateFormatted = dayjs(date)
+  }
   const day = dateFormatted.date()
   const month = dateFormatted.month() + 1
   const year = dateFormatted.year()

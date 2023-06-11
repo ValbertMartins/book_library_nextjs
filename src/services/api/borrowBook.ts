@@ -29,12 +29,14 @@ export async function registerNewBorrowBook(
     studentId: string
     bookId: string
   },
-  booksPage: number
+  booksPage: number,
+  expires_in: number
 ) {
   try {
     const { data } = await axios.post<{ bookListUpdated: Book[] }>("/api/book/borrowbook", {
       ...formInputFields,
       booksPage,
+      expires_in,
     })
 
     return {

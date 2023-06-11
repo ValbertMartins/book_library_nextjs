@@ -44,6 +44,7 @@ model StudentBook {
   student    Student  @relation(fields: [studentId], references: [id])
   studentId  String
   created_at DateTime @default(now())
+  expires_in Int
 
   // @@index([studentId])
   // @@index([bookId])

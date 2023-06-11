@@ -4,10 +4,14 @@ import Button from "antd/lib/button"
 import Form from "antd/lib/form"
 import { MessageInstance } from "antd/lib/message/interface"
 import Select from "antd/lib/select"
+import DatePicker from "antd/lib/date-picker"
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import message from "antd/lib/message"
 import { StatisticsContext } from "@/contexts/StatisticsProvider"
 import { adminAuthContext } from "@/contexts/AdminAuthProvider"
+import dayjs from "dayjs"
+import "dayjs/locale/pt-br"
+import locale from "antd/lib/date-picker/locale/pt_BR"
 
 interface formInputValues {
   bookId: string
@@ -31,6 +35,8 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Pr
   )
   const { updateStatistics } = useContext(StatisticsContext)
   const { handlerInauthorizedUserRequest } = useContext(adminAuthContext)
+  const tomorrow = dayjs.unix(dayjs().unix() + 60 * 60 * 24) //1 day
+  const [date, setDate] = useState(tomorrow)
 
   useEffect(() => {
     async function getSelectValues() {
@@ -52,7 +58,11 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Pr
       duration: 0,
     })
 
-    const { ok, bookListUpdated, error } = await registerNewBorrowBook(formInputValues, page)
+    const { ok, bookListUpdated, error } = await registerNewBorrowBook(
+      formInputValues,
+      page,
+      date.unix()
+    )
     if (ok && bookListUpdated) {
       toast.destroy()
       message.success("Livro emprestado com sucesso.")
@@ -101,6 +111,23 @@ const BorrowBookForm = ({ setOpenModalBorrowBook, toast, setBookList, page }: Pr
         ></Select>
       </Form.Item>
 
+      <Form.Item rules={[{ required: true, message: "Esse campo é obrigatório" }]}>
+        <p className="mb-2 ml-[2px]">Devolução em: </p>
+        <DatePicker
+          onChange={date => {
+            if (date) setDate(date)
+          }}
+          locale={locale}
+          format={"DD/MM/YYYY"}
+          allowClear={false}
+          showToday={false}
+          defaultValue={tomorrow}
+          disabledDate={currentDate => {
+            if (currentDate.isBefore(dayjs())) return true
+            return false
+          }}
+        />
+      </Form.Item>
       <Form.Item>
         <Button
           type="primary"

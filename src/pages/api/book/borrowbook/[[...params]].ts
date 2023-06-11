@@ -2,17 +2,26 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { PrismaClient } from "@prisma/client"
 import { z } from "zod"
 const prisma = new PrismaClient()
+import dayjs from "dayjs"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == "POST") {
     const bookStudentSchema = z.object({
       bookId: z.string(),
       studentId: z.string(),
+      expires_in: z.number(),
       booksPage: z.number(),
     })
 
     try {
-      const { bookId, studentId, booksPage } = bookStudentSchema.parse(req.body)
+      const { bookId, studentId, expires_in, booksPage } = bookStudentSchema.parse(req.body)
+
+      const today = dayjs()
+      const expires_Date = dayjs.unix(expires_in)
+
+      if (expires_Date.isBefore(today)) {
+        throw new Error("invalide devolution date")
+      }
 
       const [existentBorrowBookOnStudent, book] = await prisma.$transaction([
         prisma.studentBook.findMany({
@@ -38,6 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: {
           bookId,
           studentId,
+          expires_in,
         },
       })
 

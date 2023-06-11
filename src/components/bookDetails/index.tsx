@@ -92,11 +92,12 @@ export const BookDetails = ({
               <th className="rounded-lg p-4">Série</th>
               <th className="rounded-lg p-4">Turma</th>
               <th className="rounded-lg p-4">Emprestado em</th>
+              <th className="rounded-lg p-4">Devolução em</th>
               <th className="rounded-lg p-4">Ações</th>
             </tr>
           </thead>
           <tbody>
-            {studentsOnBook?.map(({ created_at, student, bookId }) => (
+            {studentsOnBook?.map(({ created_at, expires_in, student, bookId }) => (
               <tr
                 key={student.id}
                 className="border-b-[1px] border-zinc-100 hover:bg-primary-color cursor-pointer"
@@ -105,6 +106,7 @@ export const BookDetails = ({
                 <td className="p-4">{student.grade}</td>
                 <td className="p-4">{student.class}</td>
                 <td className="p-4">{formatDate(created_at)}</td>
+                <td className="p-4">{formatDate(expires_in)}</td>
                 <td className="p-4">
                   <Button
                     onClick={() => {
